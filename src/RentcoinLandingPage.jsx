@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import {
   Building2,
   TrendingUp,
@@ -296,12 +297,12 @@ export default function RentcoinLandingPage() {
                 )}
               </button>
             ))}
-            <button
-              onClick={() => scrollTo("waitlist")}
+            <Link
+              to="/app"
               className="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-5 rounded-lg transition"
             >
-              Warteliste
-            </button>
+              App öffnen
+            </Link>
           </div>
 
           {/* Mobile burger */}
@@ -461,11 +462,11 @@ export default function RentcoinLandingPage() {
         >
           <SectionLabel color="text-red-500">Das Problem</SectionLabel>
           <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
-            Der Immobilienmarkt ist kaputt
+            Der Immobilienmarkt ist nicht kaputt — <span className="text-red-500">er ist unfair</span>
           </h2>
           <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
             Immobilien sind die stabilste Anlage der Welt — aber nur für
-            wenige zugänglich. Das ändern wir.
+            wenige zugänglich. Das ändern wir mit Blockchain-Technologie.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8">
