@@ -389,9 +389,71 @@ function PropertyDetailPage() {
 
 /* ───────── PORTFOLIO ───────── */
 function PortfolioPage() {
+  const totalTokens = PORTFOLIO.reduce((s, p) => s + p.tokens, 0);
+  const totalValue = totalTokens * RENT_TOKEN_PRICE;
+  const totalInvested = PORTFOLIO.reduce((s, p) => s + p.tokens * p.avgPrice, 0);
+  const totalProfit = totalValue - totalInvested;
+  const totalProfitPct = ((totalProfit / totalInvested) * 100).toFixed(1);
+  const monthlyYield = TRANSACTIONS.filter(t => t.type === "yield").reduce((s, t) => s + t.yieldEur, 0);
+
   return (
     <div>
       <div className="mb-8"><h1 className="text-2xl font-bold">Mein Portfolio</h1><p className="text-gray-500 mt-1">Deine tokenisierten Immobilien-Investments</p></div>
+
+      {/* Portfolio Summary Banner */}
+      <div className="bg-gradient-to-r from-slate-900 to-slate-700 rounded-2xl p-6 md:p-8 text-white mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div>
+            <p className="text-slate-400 text-xs mb-1">Gesamtwert</p>
+            <p className="text-2xl md:text-3xl font-extrabold">{fmt(totalValue)} €</p>
+            <p className="text-slate-400 text-xs mt-1">{fmtInt(totalTokens)} RENT</p>
+          </div>
+          <div>
+            <p className="text-slate-400 text-xs mb-1">Gesamtrendite</p>
+            <p className={`text-2xl md:text-3xl font-extrabold ${totalProfit >= 0 ? "text-green-400" : "text-red-400"}`}>{totalProfit >= 0 ? "+" : ""}{fmt(totalProfit)} €</p>
+            <p className={`text-xs mt-1 ${totalProfit >= 0 ? "text-green-400" : "text-red-400"}`}>{totalProfit >= 0 ? "+" : ""}{totalProfitPct}%</p>
+          </div>
+          <div>
+            <p className="text-slate-400 text-xs mb-1">Monatl. Ausschüttung</p>
+            <p className="text-2xl md:text-3xl font-extrabold text-green-400">{fmt(monthlyYield)} €</p>
+            <p className="text-slate-400 text-xs mt-1">Letzte: April 2026</p>
+          </div>
+          <div>
+            <p className="text-slate-400 text-xs mb-1">Objekte im Portfolio</p>
+            <p className="text-2xl md:text-3xl font-extrabold">{PORTFOLIO.length}</p>
+            <p className="text-slate-400 text-xs mt-1">von {PROPERTIES.filter(p => p.status === "Aktiv").length} aktiven</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Allocation Overview */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
+        <h2 className="text-lg font-bold mb-4">Allocation</h2>
+        <div className="flex gap-1 h-4 rounded-full overflow-hidden mb-4">
+          {PORTFOLIO.map((pos) => {
+            const property = PROPERTIES.find(p => p.id === pos.propertyId);
+            const pct = ((pos.tokens * pos.currentPrice) / totalValue * 100);
+            const colors = ["bg-green-500", "bg-blue-500", "bg-purple-500", "bg-orange-500"];
+            return <div key={pos.propertyId} className={`${colors[PORTFOLIO.indexOf(pos) % colors.length]} transition-all`} style={{ width: `${pct}%` }} title={`${property?.name}: ${pct.toFixed(0)}%`} />;
+          })}
+        </div>
+        <div className="flex flex-wrap gap-4">
+          {PORTFOLIO.map((pos, i) => {
+            const property = PROPERTIES.find(p => p.id === pos.propertyId);
+            const pct = ((pos.tokens * pos.currentPrice) / totalValue * 100);
+            const colors = ["bg-green-500", "bg-blue-500", "bg-purple-500", "bg-orange-500"];
+            return (
+              <div key={pos.propertyId} className="flex items-center gap-2 text-sm">
+                <div className={`w-3 h-3 rounded-full ${colors[i % colors.length]}`} />
+                <span className="text-gray-600">{property?.name}</span>
+                <span className="font-bold">{pct.toFixed(0)}%</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Individual Holdings */}
       <div className="space-y-4">
         {PORTFOLIO.map((pos) => {
           const property = PROPERTIES.find((p) => p.id === pos.propertyId);
@@ -400,23 +462,35 @@ function PortfolioPage() {
           const investedValue = pos.tokens * pos.avgPrice;
           const profit = currentValue - investedValue;
           const profitPct = ((profit / investedValue) * 100).toFixed(1);
+          const monthlyEst = (currentValue * parseFloat(property.yield) / 100 / 12);
           return (
-            <Link to={`/app/property/${property.id}`} key={pos.propertyId} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition flex flex-col sm:flex-row gap-4">
-              <img src={property.image} alt={property.name} className="w-full sm:w-32 h-24 object-cover rounded-lg" />
-              <div className="flex-1">
-                <div className="flex items-start justify-between">
-                  <div><h3 className="font-bold">{property.name}, {property.city}</h3><p className="text-sm text-gray-500">{property.type} · {fmtInt(pos.tokens)} RENT</p></div>
-                  <div className="text-right"><p className="font-bold">{fmt(currentValue)} €</p><p className={`text-sm font-medium ${profit >= 0 ? "text-green-600" : "text-red-500"}`}>{profit >= 0 ? "+" : ""}{fmt(profit)} € ({profitPct}%)</p></div>
-                </div>
-                <div className="mt-3 flex gap-6 text-xs text-gray-400">
-                  <span>Kaufpreis: {fmt(pos.avgPrice)} €/RENT</span>
-                  <span>Aktuell: {fmt(pos.currentPrice)} €/RENT</span>
-                  <span>Rendite: {property.yield}</span>
+            <Link to={`/app/property/${property.id}`} key={pos.propertyId} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition block">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <img src={property.image} alt={property.name} className="w-full sm:w-40 h-28 object-cover rounded-lg" />
+                <div className="flex-1">
+                  <div className="flex items-start justify-between mb-3">
+                    <div><h3 className="font-bold text-lg">{property.name}, {property.city}</h3><p className="text-sm text-gray-500">{property.type}</p></div>
+                    <div className="text-right"><p className="text-xl font-bold">{fmt(currentValue)} €</p><p className={`text-sm font-bold ${profit >= 0 ? "text-green-600" : "text-red-500"}`}>{profit >= 0 ? "+" : ""}{fmt(profit)} € ({profitPct}%)</p></div>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                    <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Tokens</p><p className="font-bold">{fmtInt(pos.tokens)} RENT</p></div>
+                    <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Kaufpreis</p><p className="font-bold">{fmt(pos.avgPrice)} €</p></div>
+                    <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Rendite p.a.</p><p className="font-bold text-green-600">{property.yield}</p></div>
+                    <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Est. monatl.</p><p className="font-bold text-green-600">{fmt(monthlyEst)} €</p></div>
+                  </div>
                 </div>
               </div>
             </Link>
           );
         })}
+      </div>
+
+      {/* CTA: Explore more */}
+      <div className="mt-8 bg-green-50 border border-green-200 rounded-xl p-6 text-center">
+        <p className="text-gray-700 mb-3">Diversifiziere dein Portfolio mit weiteren Immobilien</p>
+        <Link to="/app/properties" className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl transition">
+          Immobilien entdecken <ArrowRight size={16} />
+        </Link>
       </div>
     </div>
   );

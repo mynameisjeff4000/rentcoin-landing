@@ -21,6 +21,17 @@ import {
   Briefcase,
   Code,
   MapPin,
+  Coins,
+  Eye,
+  Zap,
+  Shield,
+  Check,
+  Scale,
+  Globe,
+  FileText,
+  Users,
+  Target,
+  Layers,
 } from "lucide-react";
 
 /* ───────── brand constants ───────── */
@@ -136,10 +147,6 @@ function SliderField({ label, value, display, min, max, step, onChange, minLabel
    MAIN COMPONENT
    ═══════════════════════════════════════════════ */
 export default function RentcoinLandingPage() {
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [registeredCount] = useState(247);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
@@ -151,7 +158,7 @@ export default function RentcoinLandingPage() {
 
   /* scroll detection for sticky nav + active section */
   useEffect(() => {
-    const sections = ["problem", "solution", "property", "map", "calculator", "testimonials", "faq"];
+    const sections = ["problem", "solution", "property", "tokenomics", "transparency", "ai", "codex", "faq"];
     const onScroll = () => {
       setScrolled(window.scrollY > 40);
       let current = "";
@@ -173,7 +180,6 @@ export default function RentcoinLandingPage() {
   const [calcRef, calcVis] = useInView();
   const [benefitsRef, benefitsVis] = useInView();
   const [faqRef, faqVis] = useInView();
-  const [waitlistRef, waitlistVis] = useInView();
   const [testimonialRef, testimonialVis] = useInView();
   const [teamRef, teamVis] = useInView();
 
@@ -185,26 +191,6 @@ export default function RentcoinLandingPage() {
 
   /* hero counter */
   const heroCount = useCounter(100, 1800, 0, true);
-
-  /* email validation */
-  const validateEmail = (v) => {
-    if (!v.trim()) return "Bitte gib deine E-Mail-Adresse ein.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "Bitte gib eine gültige E-Mail ein.";
-    return "";
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const err = validateEmail(email);
-    if (err) {
-      setEmailError(err);
-      return;
-    }
-    setEmailError("");
-    setSubmitted(true);
-    setEmail("");
-    setTimeout(() => setSubmitted(false), 5000);
-  };
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -234,11 +220,11 @@ export default function RentcoinLandingPage() {
     show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6";
 
   const navLinks = [
-    { label: "Problem", id: "problem" },
     { label: "Lösung", id: "solution" },
     { label: "Objekte", id: "property" },
-    { label: "Karte", id: "map" },
-    { label: "Rechner", id: "calculator" },
+    { label: "Tokenomics", id: "tokenomics" },
+    { label: "Transparenz", id: "transparency" },
+    { label: "Kodex", id: "codex" },
     { label: "FAQ", id: "faq" },
   ];
 
@@ -297,12 +283,12 @@ export default function RentcoinLandingPage() {
                 )}
               </button>
             ))}
-            <Link
-              to="/app"
+            <button
+              onClick={() => scrollTo("tokenomics")}
               className="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-5 rounded-lg transition"
             >
-              App öffnen
-            </Link>
+              Mehr erfahren
+            </button>
           </div>
 
           {/* Mobile burger */}
@@ -340,10 +326,10 @@ export default function RentcoinLandingPage() {
               </button>
             ))}
             <button
-              onClick={() => scrollTo("waitlist")}
+              onClick={() => scrollTo("tokenomics")}
               className="block w-full bg-green-600 text-white font-bold py-3 rounded-lg text-center mt-2"
             >
-              Auf die Warteliste
+              Mehr erfahren
             </button>
           </div>
         </div>
@@ -412,10 +398,10 @@ export default function RentcoinLandingPage() {
           {/* CTA */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => scrollTo("waitlist")}
+              onClick={() => scrollTo("tokenomics")}
               className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center gap-2 shadow-lg shadow-green-500/30"
             >
-              Jetzt Platz sichern
+              Alles erfahren
               <ArrowRight size={20} />
             </button>
             <button
@@ -429,22 +415,12 @@ export default function RentcoinLandingPage() {
 
           {/* social proof pill */}
           <div className="mt-12 inline-flex items-center gap-3 bg-white/10 rounded-full px-5 py-2" style={{ backdropFilter: "blur(4px)" }}>
-            <div className="flex -space-x-2">
-              {["bg-green-400", "bg-blue-400", "bg-yellow-400", "bg-pink-400"].map(
-                (c, i) => (
-                  <div
-                    key={i}
-                    className={`w-7 h-7 rounded-full ${c} border-2 border-blue-900 flex items-center justify-center text-xs font-bold text-white`}
-                  >
-                    {String.fromCharCode(65 + i)}
-                  </div>
-                )
-              )}
+            <div className="flex items-center gap-2">
+              <Shield size={16} className="text-green-400" />
+              <p className="text-blue-100 text-sm">
+                EU-reguliert · Grundbuch-gesichert · Blockchain-transparent
+              </p>
             </div>
-            <p className="text-blue-100 text-sm">
-              <span className="text-white font-bold">{registeredCount}+</span>{" "}
-              Interessenten auf der Warteliste
-            </p>
           </div>
         </div>
 
@@ -648,10 +624,10 @@ export default function RentcoinLandingPage() {
                   </div>
                 </div>
                 <button
-                  onClick={() => scrollTo("waitlist")}
+                  onClick={() => scrollTo("tokenomics")}
                   className="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
                 >
-                  Benachrichtigung erhalten
+                  Details ansehen
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -719,10 +695,10 @@ export default function RentcoinLandingPage() {
                   </div>
                 </div>
                 <button
-                  onClick={() => scrollTo("waitlist")}
+                  onClick={() => scrollTo("tokenomics")}
                   className="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
                 >
-                  Benachrichtigung erhalten
+                  Details ansehen
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -1089,6 +1065,340 @@ export default function RentcoinLandingPage() {
         </div>
       </section>
 
+      {/* ════════════ TOKENOMICS ════════════ */}
+      <section id="tokenomics" className="py-24 md:py-32 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <SectionLabel color="text-green-600">Tokenomics</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
+            Der RENT Token
+          </h2>
+          <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
+            ERC-20 Token auf Polygon PoS — gedeckt durch reale Immobilienwerte. 1 Milliarde Total Supply, faire Verteilung, echte Utility.
+          </p>
+
+          {/* Token Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {[
+              { label: "Total Supply", value: "1 Mrd. RC", icon: <Coins size={20} className="text-green-600" /> },
+              { label: "Blockchain", value: "Polygon PoS", icon: <Globe size={20} className="text-blue-600" /> },
+              { label: "Standard", value: "ERC-20", icon: <Layers size={20} className="text-purple-600" /> },
+              { label: "Akzeptiert", value: "EUR, BTC, ETH", icon: <Wallet size={20} className="text-orange-600" /> },
+            ].map((s, i) => (
+              <div key={i} className="bg-gray-50 rounded-xl p-5 border border-gray-200 text-center">
+                <div className="flex justify-center mb-3">{s.icon}</div>
+                <p className="text-xs text-gray-500 mb-1">{s.label}</p>
+                <p className="text-lg font-extrabold text-blue-900">{s.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Token Distribution */}
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 md:p-10 mb-12 text-white">
+            <h3 className="text-xl font-bold mb-8 text-center">Token-Verteilung</h3>
+            <div className="grid md:grid-cols-2 gap-x-10 gap-y-5">
+              {[
+                { name: "Investoren (Public Sale + Private)", pct: 45, color: "bg-green-500" },
+                { name: "Team & Gründer (3J Vesting)", pct: 25, color: "bg-blue-500" },
+                { name: "Unternehmensreserve", pct: 10, color: "bg-orange-500" },
+                { name: "Community & Academy", pct: 10, color: "bg-pink-500" },
+                { name: "Staking Rewards", pct: 5, color: "bg-purple-500" },
+                { name: "Berater & Partner (36M Vesting)", pct: 5, color: "bg-indigo-400" },
+              ].map((d, i) => (
+                <div key={i}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-slate-300">{d.name}</span>
+                    <span className="text-sm font-bold">{d.pct}%</span>
+                  </div>
+                  <div className="h-2.5 bg-slate-700 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${d.color}`} style={{ width: `${d.pct}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Token Utility + Stabilization */}
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-green-50 rounded-2xl p-8 border border-green-200">
+              <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-2">
+                <Coins size={24} className="text-green-600" /> Token Utility
+              </h3>
+              <ul className="space-y-4">
+                {[
+                  "Frühzugang zu neuen Objekten",
+                  "Stimmrechte auf DAO-Ebene",
+                  "Vergünstigte Gebühren (bis 30%)",
+                  "Academy-Zugang (Fortbildung)",
+                  "Beta-Funktionen vor Release",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check size={18} className="text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-200">
+              <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-2">
+                <Shield size={24} className="text-blue-600" /> Stabilisierung
+              </h3>
+              <ul className="space-y-4">
+                {[
+                  { title: "90-Tage Haltefrist", desc: "nach Erstkauf" },
+                  { title: "Staking-Belohnungen", desc: "5% Pool für Beliehung" },
+                  { title: "Buy-Back-Programm", desc: "10% der Gewinne automatisch" },
+                  { title: "Liquiditätsreserve", desc: "5% aller Verkaufserlöse" },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check size={18} className="text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold text-gray-900">{item.title}</span>
+                      <p className="text-sm text-gray-500">{item.desc}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Revenue Model */}
+          <div className="mt-12 bg-gray-50 rounded-2xl p-8 border border-gray-200">
+            <h3 className="text-xl font-bold text-blue-900 mb-6 text-center">Ertragsmodell</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { name: "Verwaltungsgebühren", value: "0,5% p.a.", pct: "60%" },
+                { name: "Transaktionsgebühren", value: "0,5–1,5%", pct: "30%" },
+                { name: "Partnerprovisionen", value: "Variable", pct: "7%" },
+                { name: "White-Label", value: "Modular", pct: "3%" },
+              ].map((r, i) => (
+                <div key={i} className="bg-white rounded-xl p-5 border border-gray-200 text-center">
+                  <p className="text-sm text-gray-500 mb-1">{r.name}</p>
+                  <p className="text-xl font-extrabold text-blue-900">{r.value}</p>
+                  <p className="text-xs text-gray-400 mt-1">~{r.pct} Umsatzanteil</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════ TRANSPARENZ ════════════ */}
+      <section
+        id="transparency"
+        className="py-24 md:py-32 px-6"
+        style={{ background: "linear-gradient(180deg, #f0f7ff 0%, #fff 100%)" }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <SectionLabel color="text-blue-600">Transparenz</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
+            100% nachvollziehbar
+          </h2>
+          <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
+            Jeder Schritt — von der Akquise bis zur Ausschüttung — ist transparent dokumentiert. Keine Black Box.
+          </p>
+
+          {/* Deal Flow Pipeline */}
+          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm mb-12">
+            <h3 className="text-lg font-bold text-blue-900 mb-6 text-center">Deal Flow — Wie Immobilien ausgewählt werden</h3>
+            <div className="flex flex-col md:flex-row gap-3 items-stretch">
+              {[
+                { step: "1", name: "Akquise", desc: "Qualifizierte Immobilien identifizieren" },
+                { step: "2", name: "AI-Bewertung", desc: "Automatisierte Marktanalyse" },
+                { step: "3", name: "Due Diligence", desc: "Juristische & finanzielle Prüfung" },
+                { step: "4", name: "Tokenisierung", desc: "Smart Contract Deployment" },
+                { step: "5", name: "Investoren", desc: "Kauf über Plattform" },
+              ].map((s, i) => (
+                <div key={i} className="flex-1 flex flex-col items-center">
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-4 w-full text-center flex-1">
+                    <div className="w-8 h-8 rounded-full bg-green-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">{s.step}</div>
+                    <p className="font-bold text-gray-900 text-sm">{s.name}</p>
+                    <p className="text-xs text-gray-600 mt-1">{s.desc}</p>
+                  </div>
+                  {i < 4 && <ArrowRight size={18} className="text-gray-300 mt-2 hidden md:block rotate-0 md:rotate-0" />}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Fee Comparison */}
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="bg-white rounded-2xl p-8 border border-gray-200">
+              <h3 className="font-bold text-blue-900 mb-4 flex items-center gap-2">
+                <Eye size={20} className="text-green-600" /> Rentcoin Gebühren
+              </h3>
+              <ul className="space-y-3 text-sm">
+                <li className="flex justify-between py-2 border-b border-gray-100"><span className="text-gray-600">Verwaltungsgebühr</span><span className="font-bold text-green-600">0,5% p.a.</span></li>
+                <li className="flex justify-between py-2 border-b border-gray-100"><span className="text-gray-600">Transaktionsgebühr</span><span className="font-bold text-green-600">0,5–1,5%</span></li>
+                <li className="flex justify-between py-2"><span className="text-gray-600">Versteckte Kosten</span><span className="font-bold text-green-600">Keine</span></li>
+              </ul>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
+              <h3 className="font-bold text-gray-500 mb-4">Traditionelle Immobilien</h3>
+              <ul className="space-y-3 text-sm">
+                <li className="flex justify-between py-2 border-b border-gray-200"><span className="text-gray-600">Makler / Broker</span><span className="font-bold text-red-500">3–7%</span></li>
+                <li className="flex justify-between py-2 border-b border-gray-200"><span className="text-gray-600">Verwaltung</span><span className="font-bold text-red-500">1–3% p.a.</span></li>
+                <li className="flex justify-between py-2"><span className="text-gray-600">Gesamtkosten</span><span className="font-bold text-red-500">4–10%</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
+            <p className="text-lg">
+              <span className="font-bold text-blue-900">Rentcoin Vorteil:</span>{" "}
+              <span className="text-green-700 font-extrabold text-xl">&lt;1,5% Gesamtkosten</span>{" "}
+              <span className="text-gray-600">— bis zu 80% günstiger als traditionelle Wege</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════ AI ════════════ */}
+      <section
+        id="ai"
+        className="py-24 md:py-32 px-6 bg-white"
+      >
+        <div className="max-w-6xl mx-auto">
+          <SectionLabel color="text-purple-600">Technologie</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
+            AI-gestützte Immobilienanalyse
+          </h2>
+          <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
+            Wir nutzen State-of-the-Art KI, um Immobilien schneller, genauer und günstiger zu bewerten als jeder Mensch.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {[
+              {
+                icon: <Target size={28} className="text-purple-600" />,
+                title: "Automatisierte Bewertung",
+                desc: "ML-Modelle analysieren Marktdaten, Vergleichsobjekte und Makro-Trends für präzise Preisfindung.",
+                items: ["Marktdaten-Integration", "Preisprognosen (6-12 Monate)", "Vergleichswertanalyse"],
+              },
+              {
+                icon: <FileText size={28} className="text-purple-600" />,
+                title: "Deal Scoring",
+                desc: "Jedes potenzielle Objekt wird automatisch nach Risiko, Rendite und Standort bewertet.",
+                items: ["Automatische Risikobewertung", "Standort-Analyse (A/B/C Lage)", "Rendite-Projektion"],
+              },
+              {
+                icon: <Zap size={28} className="text-purple-600" />,
+                title: "Dokumentenprüfung",
+                desc: "OCR + NLP analysieren Verträge, Grundbuchauszüge und Finanzberichte in Minuten statt Wochen.",
+                items: ["OCR + NLP für Verträge", "Grundbuchauszüge analysieren", "Fraud Detection"],
+              },
+            ].map((card, i) => (
+              <div key={i} className="bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-all duration-300">
+                <div className="w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center mb-5">
+                  {card.icon}
+                </div>
+                <h3 className="text-xl font-bold text-blue-900 mb-3">{card.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-5">{card.desc}</p>
+                <ul className="space-y-2">
+                  {card.items.map((item, j) => (
+                    <li key={j} className="flex items-center gap-2 text-sm text-gray-700">
+                      <Check size={14} className="text-green-600 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Speed Comparison */}
+          <div className="bg-gradient-to-br from-purple-900 to-blue-900 rounded-2xl p-8 md:p-10 text-white">
+            <h3 className="text-xl font-bold mb-8 text-center">Geschwindigkeit: Rentcoin AI vs. Traditionell</h3>
+            <div className="grid grid-cols-3 gap-4 text-center">
+              {[
+                { process: "Bewertung", ai: "48 Stunden", trad: "2–4 Wochen" },
+                { process: "Due Diligence", ai: "2–4 Tage", trad: "4–8 Wochen" },
+                { process: "Dokumentenprüfung", ai: "Automatisch", trad: "Manuell" },
+              ].map((row, i) => (
+                <div key={i}>
+                  <p className="text-purple-300 text-xs mb-3 font-semibold uppercase tracking-wider">{row.process}</p>
+                  <p className="text-xl md:text-2xl font-extrabold text-green-400 mb-1">{row.ai}</p>
+                  <p className="text-sm text-purple-300 line-through">{row.trad}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════ KODEX ════════════ */}
+      <section
+        id="codex"
+        className="py-24 md:py-32 px-6"
+        style={{ background: "linear-gradient(180deg, #f8fbff 0%, #fff 100%)" }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <SectionLabel color="text-blue-600">Rentcoin Kodex</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
+            Unser Regelwerk
+          </h2>
+          <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
+            Der Rentcoin Kodex definiert unsere Prinzipien: EU-Regulierung, SPV-Struktur und dezentrale Governance.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {[
+              {
+                icon: <Scale size={32} className="text-blue-600" />,
+                title: "ECSP-Regulierung",
+                desc: "Wir arbeiten in Phase 1 mit lizenzierten Partnern und streben eine ECSP-Lizenz (European Crowdfunding Service Provider) an. Keine BaFin-Vollbanklizenz nötig.",
+                color: "from-blue-500 to-blue-700",
+              },
+              {
+                icon: <Building2 size={32} className="text-green-600" />,
+                title: "SPV-Struktur",
+                desc: "Jede Immobilie wird über eine eigene Zweckgesellschaft (SPV) gehalten. Das Grundbuch sichert dein Investment — vollständig rechtlich geschützt.",
+                color: "from-green-500 to-green-700",
+              },
+              {
+                icon: <Users size={32} className="text-purple-600" />,
+                title: "DAO-Governance",
+                desc: "RENT Token-Holder haben Stimmrechte. Wesentliche Entscheidungen — wie Objektverkauf oder Reinvestment — werden dezentral abgestimmt.",
+                color: "from-purple-500 to-purple-700",
+              },
+            ].map((card, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300">
+                <div className={`h-2 bg-gradient-to-r ${card.color}`} />
+                <div className="p-8">
+                  <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center mb-5">
+                    {card.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-blue-900 mb-3">{card.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{card.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Principles */}
+          <div className="bg-blue-900 rounded-2xl p-8 md:p-10 text-white">
+            <h3 className="text-xl font-bold mb-8 text-center">Unsere Prinzipien</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                { title: "Investorenschutz", desc: "90/10 Mietausschüttung — 90% für Investoren, 10% Verwaltung." },
+                { title: "Keine versteckten Gebühren", desc: "Alle Kosten sind vorab offengelegt und unveränderlich im Smart Contract." },
+                { title: "Grundbuch-gesichert", desc: "Jede SPV wird im deutschen Grundbuch eingetragen — dein reales Eigentum." },
+                { title: "Open Reporting", desc: "Quartalsbericht mit Mieteinnahmen, Kosten, Bewertung und Performance." },
+              ].map((p, i) => (
+                <div key={i} className="flex gap-4">
+                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-1">
+                    <Check size={16} className="text-white" />
+                  </div>
+                  <div>
+                    <p className="font-bold mb-1">{p.title}</p>
+                    <p className="text-blue-200 text-sm leading-relaxed">{p.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ════════════ FAQ ════════════ */}
       <section id="faq" className="py-24 md:py-32 px-6 bg-white">
         <div
@@ -1137,95 +1447,39 @@ export default function RentcoinLandingPage() {
         </div>
       </section>
 
-      {/* ════════════ WAITLIST ════════════ */}
+      {/* ════════════ KONTAKT CTA ════════════ */}
       <section
-        id="waitlist"
+        id="contact"
         className="py-24 md:py-32 px-6"
         style={{
           background: `linear-gradient(135deg, ${BRAND.navy} 0%, ${BRAND.blue} 100%)`,
         }}
       >
-        <div
-          ref={waitlistRef}
-          className={`max-w-2xl mx-auto text-center transition-all duration-700 ${fade(waitlistVis)}`}
-        >
+        <div className="max-w-2xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-green-500/20 rounded-full px-4 py-1 mb-6">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
             <span className="text-green-400 text-sm font-medium">
-              Early Access geöffnet
+              Coming Soon
             </span>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
-            Sei dabei von Anfang an
+            Interesse geweckt?
           </h2>
           <p className="text-xl text-blue-200 mb-10 max-w-lg mx-auto leading-relaxed">
-            Sichere dir als Early Adopter exklusiven Zugang und erfahre als
-            Erster, wenn unser erstes Objekt live geht.
+            Wir arbeiten am Launch unserer Plattform. Schreib uns — wir halten dich auf dem Laufenden.
           </p>
 
-          <form onSubmit={handleSubmit} className="mb-8" noValidate>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
-              <div className="flex-1">
-                <input
-                  type="email"
-                  placeholder="deine@email.com"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (emailError) setEmailError("");
-                  }}
-                  aria-label="E-Mail-Adresse"
-                  className={`w-full px-5 py-4 rounded-xl text-base border-2 bg-blue-800/50 text-white placeholder-blue-300 focus:outline-none transition ${
-                    emailError
-                      ? "border-red-400 focus:border-red-400"
-                      : "border-blue-600 focus:border-green-400"
-                  }`}
-                />
-                {emailError && (
-                  <p className="text-red-400 text-xs mt-2 text-left">{emailError}</p>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl text-base transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 shadow-lg shadow-green-500/30 whitespace-nowrap"
-              >
-                Platz sichern
-                <ArrowRight size={18} />
-              </button>
-            </div>
+          <a
+            href="mailto:hello@rentcoin.de"
+            className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/30"
+          >
+            Kontakt aufnehmen
+            <ArrowRight size={20} />
+          </a>
 
-            {submitted && (
-              <div className="mt-6 bg-green-500/20 border border-green-400 text-green-300 p-4 rounded-xl flex items-center justify-center gap-3 max-w-lg mx-auto">
-                <CheckCircle size={22} />
-                <p className="font-semibold">
-                  Du bist dabei! Wir melden uns, sobald es losgeht.
-                </p>
-              </div>
-            )}
-          </form>
-
-          {/* Social Proof */}
-          <div className="inline-flex items-center gap-3 bg-white/10 rounded-full px-5 py-2">
-            <div className="flex -space-x-2">
-              {["bg-green-400", "bg-blue-400", "bg-yellow-400"].map(
-                (c, i) => (
-                  <div
-                    key={i}
-                    className={`w-6 h-6 rounded-full ${c} border-2 border-blue-900`}
-                  />
-                )
-              )}
-            </div>
-            <p className="text-blue-200 text-sm">
-              Bereits{" "}
-              <span className="text-white font-bold">{registeredCount}+</span>{" "}
-              Interessenten
-            </p>
-          </div>
-
-          <p className="text-blue-400 text-xs mt-6">
-            Kein Spam, keine Weitergabe. Du kannst dich jederzeit abmelden.
+          <p className="text-blue-300 text-sm mt-6">
+            hello@rentcoin.de
           </p>
         </div>
       </section>
@@ -1255,13 +1509,18 @@ export default function RentcoinLandingPage() {
               </h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <button onClick={() => scrollTo("solution")} className="hover:text-white transition">
-                    So funktioniert es
+                  <button onClick={() => scrollTo("tokenomics")} className="hover:text-white transition">
+                    Tokenomics
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => scrollTo("calculator")} className="hover:text-white transition">
-                    Renditerechner
+                  <button onClick={() => scrollTo("transparency")} className="hover:text-white transition">
+                    Transparenz
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => scrollTo("codex")} className="hover:text-white transition">
+                    Kodex
                   </button>
                 </li>
                 <li>
