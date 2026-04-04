@@ -5,10 +5,10 @@ import { useInvestments } from "./useInvestments";
 import { usePortfolioData } from "./usePortfolioData";
 import {
   Home, Building2, Wallet, BarChart3, LogOut, TrendingUp,
-  ArrowUpRight, ArrowDownRight, Bell, User,
-  Shield, Coins, ArrowRight, Check,
+  ArrowUpRight, ArrowDownRight, Bell, User, Settings,
+  Shield, Coins, ArrowRight, Check, Calculator,
   Clock, PieChart, Lock, MapPin, Menu, X,
-  FileText, Zap, Eye,
+  FileText, Zap, Eye, Mail, Phone,
 } from "lucide-react";
 import {
   RENT_TOKEN_PRICE, TOTAL_SUPPLY, CIRCULATING,
@@ -47,6 +47,7 @@ function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen, onLogout,
     { to: "/app/report", icon: BarChart3, label: "Report" },
     { to: "/app/sell", icon: Home, label: "Verkaufen" },
     { to: "/app/codex", icon: Shield, label: "Codex" },
+    { to: "/app/settings", icon: Settings, label: "Einstellungen" },
     { to: "/app/impressum", icon: FileText, label: "Impressum" },
   ];
   const isActive = (to, exact) => exact ? location.pathname === to : location.pathname.startsWith(to);
@@ -272,17 +273,23 @@ function PropertyDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const property = PROPERTIES.find((p) => p.id === id);
+  const [calcAmount, setCalcAmount] = useState(1000);
 
   if (!property) return <div className="text-center py-20"><p className="text-gray-500">Nicht gefunden</p><Link to="/app/properties" className="text-blue-600">← Zurück</Link></div>;
 
   const pctSold = Math.round((property.tokensSold / property.tokensTotal) * 100);
+  const yieldPct = parseFloat(property.yield) || 5.5;
+  const calcTokens = Math.floor(calcAmount / RENT_TOKEN_PRICE);
+  const yearlyYield = calcAmount * (yieldPct / 100);
+  const monthlyYield = yearlyYield / 12;
+  const fiveYearTotal = calcAmount + yearlyYield * 5;
 
   return (
     <div>
       <button onClick={() => navigate("/app/properties")} className="text-sm text-gray-500 hover:text-gray-700 mb-4 flex items-center gap-1">← Zurück</button>
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="relative rounded-xl overflow-hidden h-72">
+          <div className="relative rounded-xl overflow-hidden h-56 sm:h-72">
             <img src={property.image} alt={property.name} className="w-full h-full object-cover" />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
               <h1 className="text-2xl font-bold text-white">{property.name}</h1>
@@ -298,6 +305,43 @@ function PropertyDetailPage() {
               ))}
             </div>
           </div>
+
+          {/* Rendite-Rechner */}
+          <div className="bg-white rounded-xl border border-gray-100 p-6">
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-2"><Calculator size={18} className="text-green-600" /> Rendite-Rechner</h2>
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-2">Dein Investment</label>
+                <div className="relative mb-3">
+                  <input type="number" value={calcAmount} onChange={(e) => setCalcAmount(Math.max(50, Number(e.target.value)))} min={50} step={50}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-xl font-bold pr-10 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none" />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  {[500, 1000, 2500, 5000, 10000].map((v) => (
+                    <button key={v} onClick={() => setCalcAmount(v)} className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${calcAmount === v ? "bg-green-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+                      {v.toLocaleString("de-DE")} €
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-3">
+                {[
+                  { icon: Coins, label: "RENT Tokens", value: fmtInt(calcTokens), cls: "" },
+                  { icon: TrendingUp, label: "Monatl. Ertrag", value: `${fmt(monthlyYield)} €`, cls: "text-green-600" },
+                  { icon: TrendingUp, label: "Jährliche Rendite", value: `${fmt(yearlyYield)} €`, cls: "" },
+                  { icon: Clock, label: "Wert nach 5 Jahren", value: `${fmt(fiveYearTotal)} €`, cls: "" },
+                ].map((r) => (
+                  <div key={r.label} className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3">
+                    <div className="flex items-center gap-2"><r.icon size={16} className="text-green-500" /><span className="text-sm text-gray-600">{r.label}</span></div>
+                    <span className={`font-bold ${r.cls}`}>{r.value}</span>
+                  </div>
+                ))}
+                <p className="text-xs text-gray-400">* Prognose basierend auf aktueller Rendite</p>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-white rounded-xl border border-gray-100 p-6">
             <h2 className="text-lg font-bold mb-3 flex items-center gap-2"><Shield size={18} className="text-green-600" /> Blockchain-Verifizierung</h2>
             <div className="space-y-2 text-sm">
@@ -316,9 +360,7 @@ function PropertyDetailPage() {
               ))}
             </div>
             <div className="mb-4"><div className="flex justify-between text-xs mb-1"><span className="text-gray-400">{pctSold}% finanziert</span><span className="font-medium text-gray-600">{fmtInt(property.tokensSold)} / {fmtInt(property.tokensTotal)}</span></div><div className="h-3 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-green-500 rounded-full" style={{ width: `${pctSold}%` }} /></div></div>
-            <button disabled className="w-full py-3 rounded-xl font-bold text-white bg-gray-300 cursor-not-allowed">
-              Coming Soon
-            </button>
+            <button disabled className="w-full py-3 rounded-xl font-bold text-white bg-gray-300 cursor-not-allowed">Coming Soon</button>
             <p className="text-xs text-gray-400 text-center mt-2">Kauf wird nach Plattform-Launch freigeschaltet</p>
           </div>
         </div>
@@ -842,6 +884,90 @@ function CodexPage() {
   );
 }
 
+/* ───────── SETTINGS ───────── */
+function SettingsPage({ session }) {
+  const meta = session?.user?.user_metadata || {};
+  const [fullName, setFullName] = useState(meta.full_name || "");
+  const [phone, setPhone] = useState(meta.phone || "");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    await supabase.auth.updateUser({ data: { full_name: fullName, phone } });
+    await supabase.from("profiles").upsert({ id: session.user.id, full_name: fullName, phone, updated_at: new Date().toISOString() });
+    setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000);
+  };
+
+  return (
+    <div className="max-w-2xl">
+      <div className="mb-8"><h1 className="text-2xl font-bold">Einstellungen</h1><p className="text-gray-500 mt-1">Profil und Kontoinformationen</p></div>
+
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
+        <h2 className="text-lg font-bold mb-4">Profil</h2>
+        <div className="flex items-center gap-4 mb-6">
+          <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center text-2xl font-bold text-white">{(fullName || "U")[0].toUpperCase()}</div>
+          <div>
+            <p className="font-bold text-lg">{fullName || "Nutzer"}</p>
+            <p className="text-sm text-gray-500">{session?.user?.email}</p>
+            <p className="text-xs text-gray-400 mt-1">Mitglied seit {meta.joined || "2026"}</p>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-1">Name</label>
+            <div className="relative">
+              <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} className="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-green-500 outline-none" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-1">E-Mail</label>
+            <div className="relative">
+              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input type="email" value={session?.user?.email || ""} disabled className="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-3 bg-gray-50 text-gray-500 cursor-not-allowed" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-1">Telefon</label>
+            <div className="relative">
+              <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+49 170 1234567" className="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-green-500 outline-none" />
+            </div>
+          </div>
+          <button onClick={handleSave} disabled={saving} className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-2.5 px-6 rounded-lg transition flex items-center gap-2">
+            {saving ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : saved ? <Check size={16} /> : null}
+            {saved ? "Gespeichert!" : saving ? "Speichern..." : "Speichern"}
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
+        <h2 className="text-lg font-bold mb-4">Investoren-Profil</h2>
+        <div className="space-y-3 text-sm">
+          {[["Investorentyp", meta.investor_type || "—"], ["Erfahrung", meta.experience || "—"], ["Wallet", USER.walletAddress], ["Blockchain", "Polygon PoS"]].map(([k, v]) => (
+            <div key={k} className="flex justify-between py-2 border-b border-gray-50 last:border-0"><span className="text-gray-500">{k}</span><span className="font-bold">{v}</span></div>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+        <h2 className="text-lg font-bold mb-4">Sicherheit</h2>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between py-2">
+            <div><p className="font-medium">Passwort ändern</p><p className="text-xs text-gray-400">Über E-Mail-Link</p></div>
+            <button onClick={async () => { await supabase.auth.resetPasswordForEmail(session?.user?.email); alert("Reset-Link gesendet!"); }} className="text-sm text-green-600 font-bold hover:text-green-700">Reset senden</button>
+          </div>
+          <div className="flex items-center justify-between py-2 border-t border-gray-50">
+            <div><p className="font-medium">2-Faktor-Authentifizierung</p><p className="text-xs text-gray-400">Kommt bald</p></div>
+            <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded font-bold">Coming Soon</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ───────── IMPRESSUM ───────── */
 function ImpressumPage() {
   return (
@@ -1026,6 +1152,7 @@ export default function RentcoinApp() {
             <Route path="report" element={<TokenReportPage />} />
             <Route path="sell" element={<SellPropertyPage />} />
             <Route path="codex" element={<CodexPage />} />
+            <Route path="settings" element={<SettingsPage session={session} />} />
             <Route path="impressum" element={<ImpressumPage />} />
           </Routes>
         </main>
