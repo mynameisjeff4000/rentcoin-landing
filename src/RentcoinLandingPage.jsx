@@ -1068,7 +1068,7 @@ export default function RentcoinLandingPage() {
                 className={`rounded-2xl p-8 border hover:shadow-lg transition-all duration-500 flex flex-col ${dm('bg-zinc-900 border-zinc-800', 'bg-white border-gray-200')} ${staggerFade(testimonialStagger[idx])}`}
               >
                 <div className="flex items-center gap-1 mb-4">
-                  {Array.from({ length: item.stars }).map((_, j) => (
+                  {Array.from({ length: 5 }).map((_, j) => (
                     <Star key={j} size={16} className="text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
@@ -1079,10 +1079,10 @@ export default function RentcoinLandingPage() {
                   <div
                     className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-sm"
                   >
-                    {item.name[0]}
+                    {item.author[0]}
                   </div>
                   <div>
-                    <p className={`font-bold text-sm ${dm('text-white', 'text-gray-900')}`}>{item.name}</p>
+                    <p className={`font-bold text-sm ${dm('text-white', 'text-gray-900')}`}>{item.author}</p>
                     <p className={`text-xs ${dm('text-gray-500', 'text-gray-500')}`}>{item.role}</p>
                   </div>
                 </div>
