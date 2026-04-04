@@ -170,6 +170,44 @@ export default function RentcoinLandingPage() {
   const [darkMode, setDarkMode] = useState(true);
   const { properties: dbProperties } = useProperties();
   const t = translations[lang];
+
+  /* waitlist state */
+  const [waitlistEmail, setWaitlistEmail] = useState("");
+  const [waitlistStatus, setWaitlistStatus] = useState("idle"); // idle | loading | success | error
+  const [waitlistMsg, setWaitlistMsg] = useState("");
+  const [waitlistCount, setWaitlistCount] = useState(null);
+
+  /* fetch waitlist count on mount */
+  useEffect(() => {
+    supabase.from("waitlist").select("id", { count: "exact", head: true }).then(({ count }) => {
+      if (count !== null) setWaitlistCount(count);
+    });
+  }, []);
+
+  async function handleWaitlistSubmit(e) {
+    e.preventDefault();
+    if (!waitlistEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(waitlistEmail)) {
+      setWaitlistStatus("error");
+      setWaitlistMsg(lang === "de" ? "Bitte gib eine gültige E-Mail ein." : "Please enter a valid email.");
+      return;
+    }
+    setWaitlistStatus("loading");
+    const { error } = await supabase.from("waitlist").insert({ email: waitlistEmail.toLowerCase().trim(), source: "landing_hero" });
+    if (error) {
+      if (error.code === "23505") {
+        setWaitlistStatus("success");
+        setWaitlistMsg(lang === "de" ? "Du bist bereits auf der Warteliste! 🎉" : "You're already on the waitlist! 🎉");
+      } else {
+        setWaitlistStatus("error");
+        setWaitlistMsg(lang === "de" ? "Fehler aufgetreten. Bitte versuche es erneut." : "Something went wrong. Please try again.");
+      }
+    } else {
+      setWaitlistStatus("success");
+      setWaitlistMsg(lang === "de" ? "Du bist dabei! Wir melden uns bald. 🚀" : "You're in! We'll be in touch soon. 🚀");
+      setWaitlistCount((c) => (c !== null ? c + 1 : 1));
+      trackEvent(Events.SIGNUP_COMPLETED, { source: "waitlist" });
+    }
+  }
   const dm = (dark, light) => darkMode ? dark : light;
 
   /* scroll detection for sticky nav + active section */
@@ -458,32 +496,72 @@ export default function RentcoinLandingPage() {
             ))}
           </div>
 
-          {/* CTA */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          {/* Waitlist Signup */}
+          <div className="max-w-lg mx-auto">
+            {waitlistStatus === "success" ? (
+              <div className={`rounded-2xl px-8 py-6 ${dm('bg-green-500/10 border border-green-500/30', 'bg-green-50 border border-green-200')}`}>
+                <CheckCircle size={32} className="text-green-400 mx-auto mb-3" />
+                <p className={`text-lg font-semibold ${dm('text-white', 'text-gray-900')}`}>{waitlistMsg}</p>
+                {waitlistCount !== null && (
+                  <p className={`text-sm mt-2 ${dm('text-gray-400', 'text-gray-500')}`}>
+                    {lang === "de" ? `#${waitlistCount} auf der Warteliste` : `#${waitlistCount} on the waitlist`}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <form onSubmit={handleWaitlistSubmit} className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="email"
+                  value={waitlistEmail}
+                  onChange={(e) => { setWaitlistEmail(e.target.value); setWaitlistStatus("idle"); }}
+                  placeholder={lang === "de" ? "Deine E-Mail-Adresse" : "Your email address"}
+                  className={`flex-1 px-5 py-4 rounded-xl text-lg border outline-none transition-all focus:ring-2 focus:ring-green-500 ${dm('bg-white/10 border-white/20 text-white placeholder-gray-400', 'bg-white border-gray-300 text-gray-900 placeholder-gray-400')}`}
+                />
+                <button
+                  type="submit"
+                  disabled={waitlistStatus === "loading"}
+                  className="bg-green-500 hover:bg-green-600 disabled:opacity-60 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 shadow-lg shadow-green-500/30 whitespace-nowrap"
+                >
+                  {waitlistStatus === "loading" ? (
+                    <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>{lang === "de" ? "Auf die Warteliste" : "Join Waitlist"}<ArrowRight size={20} /></>
+                  )}
+                </button>
+              </form>
+            )}
+            {waitlistStatus === "error" && (
+              <p className="text-red-400 text-sm mt-2">{waitlistMsg}</p>
+            )}
+          </div>
+
+          {/* Social proof + waitlist count */}
+          <div className={`mt-8 inline-flex items-center gap-3 rounded-full px-5 py-2 ${dm('bg-zinc-950/10', 'bg-gray-100')}`} style={{ backdropFilter: "blur(4px)" }}>
+            <div className="flex items-center gap-2">
+              <Users size={16} className="text-green-400" />
+              <p className={`text-sm ${dm('text-gray-300', 'text-gray-600')}`}>
+                {waitlistCount !== null && waitlistCount > 0
+                  ? (lang === "de" ? `Bereits ${waitlistCount} Interessent${waitlistCount === 1 ? '' : 'en'} auf der Warteliste` : `${waitlistCount} people already on the waitlist`)
+                  : (lang === "de" ? "Sei einer der Ersten — sichere dir deinen Platz" : "Be one of the first — secure your spot")
+                }
+              </p>
+            </div>
+          </div>
+
+          {/* Secondary links */}
+          <div className="mt-4 flex items-center justify-center gap-6">
             <button
               onClick={() => scrollTo("property")}
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center gap-2 shadow-lg shadow-green-500/30"
+              className={`font-medium text-sm hover:text-green-400 transition inline-flex items-center gap-1 ${dm('text-gray-400', 'text-gray-500')}`}
             >
-              {t.hero.learnMore}
-              <ArrowRight size={20} />
+              {t.hero.learnMore} <ChevronDown size={16} />
             </button>
             <button
               onClick={() => scrollTo("solution")}
-              className={`font-medium py-4 px-6 rounded-xl text-lg hover:bg-zinc-950/10 transition inline-flex items-center gap-2 ${dm('text-white', 'text-gray-700')}`}
+              className={`font-medium text-sm hover:text-green-400 transition inline-flex items-center gap-1 ${dm('text-gray-400', 'text-gray-500')}`}
             >
-              {t.hero.howItWorks}
-              <ChevronDown size={20} />
+              {t.hero.howItWorks} <ChevronDown size={16} />
             </button>
-          </div>
-
-          {/* social proof pill */}
-          <div className={`mt-12 inline-flex items-center gap-3 rounded-full px-5 py-2 ${dm('bg-zinc-950/10', 'bg-gray-100')}`} style={{ backdropFilter: "blur(4px)" }}>
-            <div className="flex items-center gap-2">
-              <Shield size={16} className="text-green-400" />
-              <p className={`text-sm ${dm('text-gray-300', 'text-gray-600')}`}>
-                {t.hero.features}
-              </p>
-            </div>
           </div>
         </div>
 
