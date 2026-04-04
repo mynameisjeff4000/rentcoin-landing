@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Routes, Route, Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "./supabase";
 import { useInvestments } from "./useInvestments";
+import { usePortfolioData } from "./usePortfolioData";
 import {
   Home, Building2, Wallet, BarChart3, Settings, LogOut, TrendingUp,
   ArrowUpRight, ArrowDownRight, ChevronRight, Bell, Search, User,
@@ -153,116 +154,111 @@ function StatCard({ icon: Icon, label, value, sub, color = "green" }) {
 
 /* ───────── DASHBOARD ───────── */
 function DashboardPage({ userName, realInvestments = [] }) {
-  // Merge real investments into portfolio view
-  const hasReal = realInvestments.length > 0;
-  const portfolio = hasReal
-    ? realInvestments.map(inv => ({
-        propertyId: inv.property_slug || inv.property_id,
-        propertyName: inv.property_name || inv.property_slug,
-        tokens: inv.tokens,
-        avgPrice: inv.avg_price,
-        currentPrice: RENT_TOKEN_PRICE,
-        amountEur: inv.amount_eur,
-        txHash: inv.tx_hash,
-        date: inv.created_at?.split("T")[0],
-        status: inv.status,
-      }))
-    : PORTFOLIO.map(p => ({ ...p, propertyName: PROPERTIES.find(pr => pr.id === p.propertyId)?.name }));
-
-  const transactions = hasReal
-    ? realInvestments.map((inv, i) => ({
-        id: inv.id || i,
-        type: "buy",
-        tokens: inv.tokens,
-        property: inv.property_name || inv.property_slug,
-        price: inv.avg_price,
-        date: inv.created_at?.split("T")[0],
-        status: inv.status || "confirmed",
-        txHash: inv.tx_hash,
-        yieldEur: 0,
-      }))
-    : TRANSACTIONS;
-
-  const totalTokens = portfolio.reduce((s, p) => s + p.tokens, 0);
-  const totalValue = totalTokens * RENT_TOKEN_PRICE;
-  const totalInvested = hasReal
-    ? realInvestments.reduce((s, inv) => s + (inv.amount_eur || inv.tokens * inv.avg_price), 0)
-    : PORTFOLIO.reduce((s, p) => s + p.tokens * p.avgPrice, 0);
-  const totalReturn = totalValue - totalInvested;
-  const returnPct = totalInvested > 0 ? ((totalReturn / totalInvested) * 100).toFixed(1) : "0.0";
-  const monthlyYield = transactions.filter(t => t.type === "yield").reduce((s, t) => s + (t.yieldEur || 0), 0);
+  const data = usePortfolioData(realInvestments, { PORTFOLIO, TRANSACTIONS, PROPERTIES, RENT_TOKEN_PRICE });
+  const { portfolio, transactions, totalTokens, totalValue, totalInvested, totalReturn, returnPct, monthlyYield } = data;
 
   return (
     <div>
-      <div className="mb-8"><h1 className="text-2xl font-bold text-gray-900">Willkommen zurück, {userName || "Investor"}</h1><p className="text-gray-500 mt-1">Dein Rentcoin Portfolio auf einen Blick</p></div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard icon={Coins} label="Portfolio Wert" value={`${fmt(totalValue)} €`} sub={`${fmtInt(totalTokens)} RENT Tokens`} color="green" />
-        <StatCard icon={TrendingUp} label="Gesamtrendite" value={`+${fmt(totalReturn)} €`} sub={`+${returnPct}% seit Start`} color="blue" />
-        <StatCard icon={Wallet} label="Monatl. Ausschüttung" value={`${fmt(monthlyYield)} €`} sub="Letzte: 01.04.2026" color="purple" />
-        <StatCard icon={Building2} label="Objekte" value={portfolio.length.toString()} sub={`von ${PROPERTIES.length} verfügbar`} color="orange" />
+      <div className="mb-6"><h1 className="text-2xl font-bold text-gray-900">Willkommen, {userName || "Investor"}</h1><p className="text-gray-500 mt-1">Dein Portfolio auf einen Blick</p></div>
+
+      {/* KPI Strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <StatCard icon={Coins} label="Portfolio" value={`${fmt(totalValue)} €`} sub={`${fmtInt(totalTokens)} RENT`} color="green" />
+        <StatCard icon={TrendingUp} label="Rendite" value={`+${fmt(totalReturn)} €`} sub={`+${returnPct}%`} color="blue" />
+        <StatCard icon={Wallet} label="Monatl. Ertrag" value={`${fmt(monthlyYield)} €`} sub="Nächste: 01.05.2026" color="purple" />
+        <StatCard icon={Building2} label="Objekte" value={portfolio.length.toString()} sub={`von ${PROPERTIES.length}`} color="orange" />
       </div>
+
+      {/* Main Content: Holdings + Quick Actions */}
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">Portfolio Performance</h2>
-            <span className="text-sm text-green-600 font-semibold flex items-center gap-1"><ArrowUpRight size={16} />+{returnPct}%</span>
+        {/* Holdings */}
+        <div className="lg:col-span-2 space-y-3">
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="text-lg font-bold text-gray-900">Deine Positionen</h2>
+            <Link to="/app/portfolio" className="text-sm text-green-600 hover:text-green-700 font-medium">Details →</Link>
           </div>
-          <div className="h-48 flex items-end gap-1.5">
-            {[35, 42, 38, 55, 48, 62, 58, 72, 68, 78, 85, 92].map((h, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                <div className="w-full rounded-t bg-gradient-to-t from-green-500 to-green-300 transition-all duration-500" style={{ height: `${h}%` }} />
-                <span className="text-[10px] text-gray-400">{["M", "A", "M", "J", "J", "A", "S", "O", "N", "D", "J", "F"][i]}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-            <div><p className="text-xs text-gray-400">Investiert</p><p className="text-sm font-bold">{fmt(totalInvested)} €</p></div>
-            <div><p className="text-xs text-gray-400">Aktueller Wert</p><p className="text-sm font-bold text-green-600">{fmt(totalValue)} €</p></div>
-            <div><p className="text-xs text-gray-400">RENT Preis</p><p className="text-sm font-bold">{fmt(RENT_TOKEN_PRICE)} €</p></div>
-          </div>
+          {portfolio.map((pos) => {
+            const property = PROPERTIES.find((p) => p.id === pos.propertyId);
+            const value = pos.tokens * RENT_TOKEN_PRICE;
+            const invested = pos.totalSpent || pos.tokens * pos.avgPrice;
+            const profit = value - invested;
+            const profitPct = invested > 0 ? ((profit / invested) * 100).toFixed(1) : "0.0";
+            return (
+              <Link to={`/app/property/${pos.propertyId}`} key={pos.propertyId} className="flex items-center gap-4 bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition">
+                {property?.image && <img src={property.image} alt={property?.name} className="w-16 h-16 rounded-lg object-cover flex-shrink-0" />}
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-sm truncate">{property?.name || pos.propertyName}</p>
+                  <p className="text-xs text-gray-400">{fmtInt(pos.tokens)} RENT · {property?.yield || "—"} p.a.</p>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  <p className="font-bold text-sm">{fmt(value)} €</p>
+                  <p className={`text-xs font-semibold ${profit >= 0 ? "text-green-600" : "text-red-500"}`}>{profit >= 0 ? "+" : ""}{fmt(profit)} € ({profitPct}%)</p>
+                </div>
+              </Link>
+            );
+          })}
+          {portfolio.length === 0 && (
+            <div className="bg-white rounded-xl border border-gray-100 p-8 text-center">
+              <Building2 size={32} className="mx-auto text-gray-300 mb-3" />
+              <p className="text-gray-500 text-sm mb-3">Noch keine Investments</p>
+              <Link to="/app/properties" className="text-green-600 font-bold text-sm hover:text-green-700">Immobilien entdecken →</Link>
+            </div>
+          )}
         </div>
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">RENT Token</h2>
-          <div className="bg-gradient-to-br from-slate-900 to-slate-700 rounded-xl p-5 text-white mb-4">
+
+        {/* Quick Actions + Token Card */}
+        <div className="space-y-4">
+          <div className="bg-gradient-to-br from-slate-900 to-slate-700 rounded-xl p-5 text-white">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-sm font-bold">R</div>
-              <span className="font-bold">RENT</span>
+              <span className="font-bold">RENT Token</span>
               <span className="text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full ml-auto">ERC-20</span>
             </div>
             <p className="text-2xl font-bold">{fmt(RENT_TOKEN_PRICE)} €</p>
-            <p className="text-green-300 text-sm flex items-center gap-1 mt-1"><ArrowUpRight size={14} /> +12% seit Launch</p>
-            <p className="text-xs text-slate-400 mt-2">Backed by: {fmtInt(PROPERTIES.reduce((s, p) => s + p.totalValue, 0))} € Immobilienwert</p>
-          </div>
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between"><span className="text-gray-500">Dein Guthaben</span><span className="font-bold">{fmtInt(USER.rentBalance)} RENT</span></div>
-            <div className="flex justify-between"><span className="text-gray-500">EUR Guthaben</span><span className="font-bold">{fmt(USER.eurBalance)} €</span></div>
-            <div className="flex justify-between"><span className="text-gray-500">Blockchain</span><span className="font-medium">Polygon PoS</span></div>
-            <div className="flex justify-between"><span className="text-gray-500">Akzeptiert</span><span className="font-medium">EUR, BTC, ETH</span></div>
-          </div>
-          <Link to="/app/tokenomics" className="mt-4 block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-lg text-center text-sm transition">Tokenomics ansehen</Link>
-        </div>
-      </div>
-      <div className="mt-6 bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold">Letzte Transaktionen</h2>
-          <Link to="/app/transactions" className="text-sm text-blue-600 hover:text-blue-700 font-medium">Alle →</Link>
-        </div>
-        <div className="space-y-3">
-          {transactions.slice(0, 3).map((tx) => (
-            <div key={tx.id} className="flex items-center gap-4 py-3 border-b border-gray-50 last:border-0">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.type === "buy" ? "bg-blue-50 text-blue-600" : "bg-green-50 text-green-600"}`}>
-                {tx.type === "buy" ? <ArrowDownRight size={20} /> : <TrendingUp size={20} />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium">{tx.type === "buy" ? `${fmtInt(tx.tokens)} RENT gekauft` : "Mietausschüttung"}</p>
-                <p className="text-xs text-gray-400">{tx.property} · {tx.date}</p>
-              </div>
-              <div className="text-right">
-                <p className={`text-sm font-bold ${tx.type === "yield" ? "text-green-600" : "text-gray-900"}`}>{tx.type === "buy" ? `-${fmt(tx.tokens * tx.price)} €` : `+${fmt(tx.yieldEur)} €`}</p>
-                <p className="text-xs text-gray-400 font-mono">{tx.txHash}</p>
-              </div>
+            <div className="flex justify-between mt-3 pt-3 border-t border-slate-600 text-sm">
+              <div><p className="text-slate-400 text-xs">Dein Guthaben</p><p className="font-bold">{fmtInt(USER.rentBalance)} RENT</p></div>
+              <div className="text-right"><p className="text-slate-400 text-xs">EUR</p><p className="font-bold">{fmt(USER.eurBalance)} €</p></div>
             </div>
-          ))}
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+            <h3 className="font-bold text-sm text-gray-900 mb-3">Quick Actions</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { to: "/app/properties", icon: Building2, label: "Investieren", color: "bg-green-50 text-green-600 hover:bg-green-100" },
+                { to: "/app/portfolio", icon: PieChart, label: "Portfolio", color: "bg-blue-50 text-blue-600 hover:bg-blue-100" },
+                { to: "/app/wallet", icon: Wallet, label: "Wallet", color: "bg-purple-50 text-purple-600 hover:bg-purple-100" },
+                { to: "/app/tokenomics", icon: Coins, label: "Tokenomics", color: "bg-orange-50 text-orange-600 hover:bg-orange-100" },
+              ].map((a) => (
+                <Link key={a.to} to={a.to} className={`flex items-center gap-2 p-3 rounded-lg text-sm font-medium transition ${a.color}`}>
+                  <a.icon size={16} /> {a.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent Transactions (compact) */}
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-bold text-sm text-gray-900">Letzte Transaktionen</h3>
+              <Link to="/app/transactions" className="text-xs text-green-600 font-medium">Alle →</Link>
+            </div>
+            <div className="space-y-2">
+              {transactions.slice(0, 3).map((tx) => (
+                <div key={tx.id} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${tx.type === "buy" ? "bg-blue-50 text-blue-600" : "bg-green-50 text-green-600"}`}>
+                    {tx.type === "buy" ? <ArrowDownRight size={14} /> : <TrendingUp size={14} />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium truncate">{tx.type === "buy" ? `${fmtInt(tx.tokens)} RENT` : "Ertrag"}</p>
+                    <p className="text-[11px] text-gray-400 truncate">{tx.property}</p>
+                  </div>
+                  <p className={`text-xs font-bold flex-shrink-0 ${tx.type === "yield" ? "text-green-600" : "text-gray-900"}`}>{tx.type === "buy" ? `-${fmt(tx.tokens * tx.price)} €` : `+${fmt(tx.yieldEur)} €`}</p>
+                </div>
+              ))}
+              {transactions.length === 0 && <p className="text-xs text-gray-400 text-center py-2">Keine Transaktionen</p>}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -310,16 +306,10 @@ function PropertyDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const property = PROPERTIES.find((p) => p.id === id);
-  const [buyAmount, setBuyAmount] = useState(100);
-  const [showBuyModal, setShowBuyModal] = useState(false);
-  const [buyConfirmed, setBuyConfirmed] = useState(false);
-  const [payMethod, setPayMethod] = useState("eur");
 
   if (!property) return <div className="text-center py-20"><p className="text-gray-500">Nicht gefunden</p><Link to="/app/properties" className="text-blue-600">← Zurück</Link></div>;
 
-  const tokensToGet = Math.floor(buyAmount / RENT_TOKEN_PRICE);
   const pctSold = Math.round((property.tokensSold / property.tokensTotal) * 100);
-  const handleBuy = () => { setBuyConfirmed(true); setTimeout(() => { setBuyConfirmed(false); setShowBuyModal(false); }, 3000); };
 
   return (
     <div>
@@ -359,96 +349,21 @@ function PropertyDetailPage() {
                 <div key={k} className="flex justify-between text-sm"><span className="text-gray-500">{k}</span><span className="font-bold">{v}</span></div>
               ))}
             </div>
-            <div className="mb-4"><div className="flex justify-between text-xs mb-1"><span className="text-gray-400">{pctSold}% finanziert</span></div><div className="h-3 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-green-500 rounded-full" style={{ width: `${pctSold}%` }} /></div></div>
-            <div className="mb-4">
-              <label className="text-sm font-medium text-gray-700 mb-2 block">Zahlungsmethode</label>
-              <div className="grid grid-cols-3 gap-2">
-                {[["eur", "EUR €"], ["btc", "BTC ₿"], ["eth", "ETH Ξ"]].map(([k, l]) => (
-                  <button key={k} onClick={() => setPayMethod(k)} className={`py-2 text-xs font-bold rounded-lg border transition ${payMethod === k ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 text-gray-500 hover:border-gray-300"}`}>{l}</button>
-                ))}
-              </div>
-              {payMethod !== "eur" && <p className="text-xs text-gray-400 mt-1">{payMethod === "btc" ? "BTC" : "ETH"} wird automatisch in EUR konvertiert.</p>}
-            </div>
-            <div className="mb-4">
-              <label className="text-sm font-medium text-gray-700 mb-1 block">Betrag</label>
-              <div className="relative">
-                <input type="number" value={buyAmount} onChange={(e) => setBuyAmount(Math.max(100, Number(e.target.value)))} min={100} step={50} className="w-full border border-gray-200 rounded-lg px-4 py-3 text-lg font-bold pr-10 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none" />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
-              </div>
-              <p className="text-xs text-gray-400 mt-1">Min. 100 € · ≈ {fmtInt(tokensToGet)} RENT</p>
-            </div>
-            <div className="flex gap-2 mb-4">
-              {[100, 500, 1000, 5000].map((v) => (
-                <button key={v} onClick={() => setBuyAmount(v)} className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${buyAmount === v ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 text-gray-500"}`}>{v}€</button>
-              ))}
-            </div>
+            <div className="mb-4"><div className="flex justify-between text-xs mb-1"><span className="text-gray-400">{pctSold}% finanziert</span><span className="font-medium text-gray-600">{fmtInt(property.tokensSold)} / {fmtInt(property.tokensTotal)}</span></div><div className="h-3 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-green-500 rounded-full" style={{ width: `${pctSold}%` }} /></div></div>
             <button disabled className="w-full py-3 rounded-xl font-bold text-white bg-gray-300 cursor-not-allowed">
               Coming Soon
             </button>
-            <p className="text-xs text-gray-400 text-center mt-2">Der Kauf wird nach Plattform-Launch freigeschaltet</p>
+            <p className="text-xs text-gray-400 text-center mt-2">Kauf wird nach Plattform-Launch freigeschaltet</p>
           </div>
         </div>
       </div>
-      {showBuyModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => !buyConfirmed && setShowBuyModal(false)}>
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            {!buyConfirmed ? (
-              <>
-                <h3 className="text-xl font-bold mb-4">Kauf bestätigen</h3>
-                <div className="bg-gray-50 rounded-xl p-4 space-y-2 mb-6">
-                  {[["Objekt", property.name], ["Betrag", `${fmt(buyAmount)} €`], ["RENT Tokens", `≈ ${fmtInt(tokensToGet)} RENT`], ["Zahlung", payMethod === "eur" ? "EUR Guthaben" : payMethod === "btc" ? "Bitcoin → EUR Swap" : "Ethereum → EUR Swap"], ["Netzwerk", "Polygon PoS"], ["Gas", "0,00 € (gesponsert)"]].map(([k, v]) => (
-                    <div key={k} className="flex justify-between text-sm"><span className="text-gray-500">{k}</span><span className="font-bold">{v}</span></div>
-                  ))}
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={() => setShowBuyModal(false)} className="flex-1 py-3 border border-gray-200 rounded-xl font-medium text-gray-600 hover:bg-gray-50">Abbrechen</button>
-                  <button onClick={handleBuy} className="flex-1 py-3 bg-green-600 hover:bg-green-700 rounded-xl font-bold text-white flex items-center justify-center gap-2"><Lock size={16} /> Kaufen</button>
-                </div>
-              </>
-            ) : (
-              <div className="text-center py-6">
-                <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4"><Check size={32} className="text-green-600" /></div>
-                <h3 className="text-xl font-bold mb-2">Kauf erfolgreich!</h3>
-                <p className="text-gray-500 mb-4">{fmtInt(tokensToGet)} RENT Tokens gutgeschrieben.</p>
-                <p className="text-xs text-gray-400 font-mono">Tx: 0x9f4a...c2e1</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
 /* ───────── PORTFOLIO ───────── */
 function PortfolioPage({ realInvestments = [] }) {
-  const hasReal = realInvestments.length > 0;
-
-  // Aggregate real investments by property (user might invest multiple times in same property)
-  const aggregated = hasReal
-    ? Object.values(realInvestments.reduce((acc, inv) => {
-        const key = inv.property_slug || inv.property_id;
-        if (!acc[key]) {
-          acc[key] = { propertyId: key, propertyName: inv.property_name || key, tokens: 0, totalSpent: 0, currentPrice: RENT_TOKEN_PRICE };
-        }
-        acc[key].tokens += inv.tokens;
-        acc[key].totalSpent += inv.amount_eur || inv.tokens * inv.avg_price;
-        return acc;
-      }, {}))
-    : PORTFOLIO;
-
-  const portfolio = hasReal
-    ? aggregated.map(a => ({ ...a, avgPrice: a.tokens > 0 ? a.totalSpent / a.tokens : 0 }))
-    : PORTFOLIO;
-
-  const totalTokens = portfolio.reduce((s, p) => s + p.tokens, 0);
-  const totalValue = totalTokens * RENT_TOKEN_PRICE;
-  const totalInvested = hasReal
-    ? portfolio.reduce((s, p) => s + (p.totalSpent || p.tokens * p.avgPrice), 0)
-    : PORTFOLIO.reduce((s, p) => s + p.tokens * p.avgPrice, 0);
-  const totalProfit = totalValue - totalInvested;
-  const totalProfitPct = totalInvested > 0 ? ((totalProfit / totalInvested) * 100).toFixed(1) : "0.0";
-  const monthlyYield = hasReal ? 0 : TRANSACTIONS.filter(t => t.type === "yield").reduce((s, t) => s + t.yieldEur, 0);
+  const { portfolio, totalTokens, totalValue, totalInvested, totalReturn: totalProfit, returnPct: totalProfitPct, monthlyYield } = usePortfolioData(realInvestments, { PORTFOLIO, TRANSACTIONS, PROPERTIES, RENT_TOKEN_PRICE });
 
   return (
     <div>
@@ -552,20 +467,7 @@ function PortfolioPage({ realInvestments = [] }) {
 
 /* ───────── TRANSACTIONS ───────── */
 function TransactionsPage({ realInvestments = [] }) {
-  const hasReal = realInvestments.length > 0;
-  const txList = hasReal
-    ? realInvestments.map((inv, i) => ({
-        id: inv.id || i,
-        type: "buy",
-        tokens: inv.tokens,
-        property: inv.property_name || inv.property_slug,
-        price: inv.avg_price,
-        date: inv.created_at?.split("T")[0],
-        status: inv.status || "confirmed",
-        txHash: inv.tx_hash,
-        yieldEur: 0,
-      }))
-    : TRANSACTIONS;
+  const { transactions: txList } = usePortfolioData(realInvestments, { PORTFOLIO, TRANSACTIONS, PROPERTIES, RENT_TOKEN_PRICE });
 
   return (
     <div>
