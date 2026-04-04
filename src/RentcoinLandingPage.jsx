@@ -400,7 +400,7 @@ export default function RentcoinLandingPage() {
             ].map((badge) => (
               <div
                 key={badge}
-                className="flex items-center gap-2 bg-white bg-opacity-10 rounded-full px-4 py-2"
+                className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2"
                 style={{ backdropFilter: "blur(4px)" }}
               >
                 <CheckCircle size={16} className="text-green-400 flex-shrink-0" />
@@ -420,7 +420,7 @@ export default function RentcoinLandingPage() {
             </button>
             <button
               onClick={() => scrollTo("solution")}
-              className="text-white font-medium py-4 px-6 rounded-xl text-lg hover:bg-white hover:bg-opacity-10 transition inline-flex items-center gap-2"
+              className="text-white font-medium py-4 px-6 rounded-xl text-lg hover:bg-white/10 transition inline-flex items-center gap-2"
             >
               So funktioniert es
               <ChevronDown size={20} />
@@ -428,7 +428,7 @@ export default function RentcoinLandingPage() {
           </div>
 
           {/* social proof pill */}
-          <div className="mt-12 inline-flex items-center gap-3 bg-white bg-opacity-10 rounded-full px-5 py-2" style={{ backdropFilter: "blur(4px)" }}>
+          <div className="mt-12 inline-flex items-center gap-3 bg-white/10 rounded-full px-5 py-2" style={{ backdropFilter: "blur(4px)" }}>
             <div className="flex -space-x-2">
               {["bg-green-400", "bg-blue-400", "bg-yellow-400", "bg-pink-400"].map(
                 (c, i) => (
@@ -604,7 +604,7 @@ export default function RentcoinLandingPage() {
                 <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                   Bald verfügbar
                 </div>
-                <div className="absolute top-4 right-4 bg-white bg-opacity-90 text-blue-900 text-xs font-bold px-3 py-1 rounded-full">
+                <div className="absolute top-4 right-4 bg-white/90 text-blue-900 text-xs font-bold px-3 py-1 rounded-full">
                   Einfamilienhaus
                 </div>
               </div>
@@ -675,7 +675,7 @@ export default function RentcoinLandingPage() {
                 <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                   Neu
                 </div>
-                <div className="absolute top-4 right-4 bg-white bg-opacity-90 text-blue-900 text-xs font-bold px-3 py-1 rounded-full">
+                <div className="absolute top-4 right-4 bg-white/90 text-blue-900 text-xs font-bold px-3 py-1 rounded-full">
                   Mehrfamilienhaus
                 </div>
               </div>
@@ -1149,7 +1149,7 @@ export default function RentcoinLandingPage() {
           ref={waitlistRef}
           className={`max-w-2xl mx-auto text-center transition-all duration-700 ${fade(waitlistVis)}`}
         >
-          <div className="inline-flex items-center gap-2 bg-green-500 bg-opacity-20 rounded-full px-4 py-1 mb-6">
+          <div className="inline-flex items-center gap-2 bg-green-500/20 rounded-full px-4 py-1 mb-6">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
             <span className="text-green-400 text-sm font-medium">
               Early Access geöffnet
@@ -1176,7 +1176,7 @@ export default function RentcoinLandingPage() {
                     if (emailError) setEmailError("");
                   }}
                   aria-label="E-Mail-Adresse"
-                  className={`w-full px-5 py-4 rounded-xl text-base border-2 bg-blue-800 bg-opacity-50 text-white placeholder-blue-300 focus:outline-none transition ${
+                  className={`w-full px-5 py-4 rounded-xl text-base border-2 bg-blue-800/50 text-white placeholder-blue-300 focus:outline-none transition ${
                     emailError
                       ? "border-red-400 focus:border-red-400"
                       : "border-blue-600 focus:border-green-400"
@@ -1196,7 +1196,7 @@ export default function RentcoinLandingPage() {
             </div>
 
             {submitted && (
-              <div className="mt-6 bg-green-500 bg-opacity-20 border border-green-400 text-green-300 p-4 rounded-xl flex items-center justify-center gap-3 max-w-lg mx-auto">
+              <div className="mt-6 bg-green-500/20 border border-green-400 text-green-300 p-4 rounded-xl flex items-center justify-center gap-3 max-w-lg mx-auto">
                 <CheckCircle size={22} />
                 <p className="font-semibold">
                   Du bist dabei! Wir melden uns, sobald es losgeht.
@@ -1206,7 +1206,7 @@ export default function RentcoinLandingPage() {
           </form>
 
           {/* Social Proof */}
-          <div className="inline-flex items-center gap-3 bg-white bg-opacity-10 rounded-full px-5 py-2">
+          <div className="inline-flex items-center gap-3 bg-white/10 rounded-full px-5 py-2">
             <div className="flex -space-x-2">
               {["bg-green-400", "bg-blue-400", "bg-yellow-400"].map(
                 (c, i) => (

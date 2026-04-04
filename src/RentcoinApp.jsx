@@ -1109,20 +1109,12 @@ function ImpressumPage() {
 /* ───────── AUTH PAGE ───────── */
 function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
-  /* Check if already logged in */
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) navigate("/app");
-    });
-  }, [navigate]);
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -1133,7 +1125,7 @@ function AuthPage() {
     if (isLogin) {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) { setError(error.message); setLoading(false); return; }
-      navigate("/app");
+      /* Session state change in parent will show dashboard */
     } else {
       const { error } = await supabase.auth.signUp({
         email,
@@ -1228,46 +1220,41 @@ export default function RentcoinApp() {
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if (!session && location.pathname.startsWith("/app")) navigate("/");
     });
     return () => subscription.unsubscribe();
   }, [navigate, location.pathname]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate("/");
+    window.location.href = "/";
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-50"><div className="w-10 h-10 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div></div>;
 
-  const isAuth = location.pathname === "/";
-  const isProtected = location.pathname.startsWith("/app");
-
-  /* Redirect to login if not authenticated */
-  if (isProtected && !session) return <AuthPage />;
+  /* Not logged in → show auth page */
+  if (!session) return <AuthPage />;
 
   const userName = session?.user?.user_metadata?.full_name || session?.user?.email?.split("@")[0] || "Nutzer";
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {!isAuth && <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} onLogout={handleLogout} userName={userName} />}
-      <div className={`transition-all duration-300 ${!isAuth ? (sidebarCollapsed ? "ml-16" : "ml-64") : ""}`}>
-        <main className={`${!isAuth ? "p-8" : ""}`}>
+      <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} onLogout={handleLogout} userName={userName} />
+      <div className={`transition-all duration-300 ${sidebarCollapsed ? "ml-16" : "ml-64"}`}>
+        <main className="p-8">
           <Routes>
-            <Route path="/" element={<AuthPage />} />
-            <Route path="/app" element={<DashboardPage userName={userName} />} />
-            <Route path="/app/properties" element={<PropertiesPage />} />
-            <Route path="/app/property/:id" element={<PropertyDetailPage />} />
-            <Route path="/app/portfolio" element={<PortfolioPage />} />
-            <Route path="/app/transactions" element={<TransactionsPage />} />
-            <Route path="/app/wallet" element={<WalletPage />} />
-            <Route path="/app/tokenomics" element={<TokenomicsPage />} />
-            <Route path="/app/transparency" element={<TransparencyPage />} />
-            <Route path="/app/ai" element={<AIPage />} />
-            <Route path="/app/report" element={<TokenReportPage />} />
-            <Route path="/app/sell" element={<SellPropertyPage />} />
-            <Route path="/app/codex" element={<CodexPage />} />
-            <Route path="/app/impressum" element={<ImpressumPage />} />
+            <Route index element={<DashboardPage userName={userName} />} />
+            <Route path="properties" element={<PropertiesPage />} />
+            <Route path="property/:id" element={<PropertyDetailPage />} />
+            <Route path="portfolio" element={<PortfolioPage />} />
+            <Route path="transactions" element={<TransactionsPage />} />
+            <Route path="wallet" element={<WalletPage />} />
+            <Route path="tokenomics" element={<TokenomicsPage />} />
+            <Route path="transparency" element={<TransparencyPage />} />
+            <Route path="ai" element={<AIPage />} />
+            <Route path="report" element={<TokenReportPage />} />
+            <Route path="sell" element={<SellPropertyPage />} />
+            <Route path="codex" element={<CodexPage />} />
+            <Route path="impressum" element={<ImpressumPage />} />
           </Routes>
         </main>
       </div>
