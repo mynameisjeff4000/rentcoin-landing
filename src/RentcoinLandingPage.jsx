@@ -108,7 +108,7 @@ function useStagger(count, visible, delayMs = 120) {
 }
 
 /* ───────── reusable section label ───────── */
-function SectionLabel({ color = "text-blue-600", children }) {
+function SectionLabel({ color = "text-green-600", children }) {
   return (
     <p
       className={`text-center text-sm font-semibold ${color} tracking-wider uppercase mb-3`}
@@ -124,7 +124,7 @@ function SliderField({ label, value, display, min, max, step, onChange, minLabel
     <div>
       <div className="flex justify-between mb-3">
         <label className="text-sm font-medium text-gray-700">{label}</label>
-        <span className="text-lg font-extrabold text-blue-900">{display}</span>
+        <span className="text-lg font-extrabold text-gray-900">{display}</span>
       </div>
       <input
         type="range"
@@ -133,7 +133,7 @@ function SliderField({ label, value, display, min, max, step, onChange, minLabel
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-900"
+        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-500"
         aria-label={label}
       />
       <div className="flex justify-between text-xs text-gray-400 mt-1">
@@ -251,14 +251,14 @@ export default function RentcoinLandingPage() {
           >
             <div
               className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm transition-colors ${
-                scrolled ? "bg-blue-900 text-white" : "bg-white text-blue-900"
+                scrolled ? "bg-gray-900 text-white" : "bg-white text-gray-900"
               }`}
             >
               R
             </div>
             <span
               className={`text-xl font-bold transition-colors ${
-                scrolled ? "text-blue-900" : "text-white"
+                scrolled ? "text-gray-900" : "text-white"
               }`}
             >
               Rentcoin
@@ -319,7 +319,7 @@ export default function RentcoinLandingPage() {
                 onClick={() => scrollTo(l.id)}
                 className={`block w-full text-left font-medium py-3 px-3 rounded-lg transition ${
                   activeSection === l.id
-                    ? "text-blue-900 bg-blue-50"
+                    ? "text-gray-900 bg-green-50"
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
@@ -371,7 +371,7 @@ export default function RentcoinLandingPage() {
             <span className="text-green-400">ab {heroCount}&euro;</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-blue-100 mb-10 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-200 mb-10 leading-relaxed max-w-2xl mx-auto">
             Rentcoin macht den Immobilienmarkt für alle zugänglich.
             Investiere in digitale Immobilienanteile — transparent,
             flexibel, renditeorientiert.
@@ -418,7 +418,7 @@ export default function RentcoinLandingPage() {
           <div className="mt-12 inline-flex items-center gap-3 bg-white/10 rounded-full px-5 py-2" style={{ backdropFilter: "blur(4px)" }}>
             <div className="flex items-center gap-2">
               <Shield size={16} className="text-green-400" />
-              <p className="text-blue-100 text-sm">
+              <p className="text-gray-200 text-sm">
                 EU-reguliert · Grundbuch-gesichert · Blockchain-transparent
               </p>
             </div>
@@ -437,9 +437,9 @@ export default function RentcoinLandingPage() {
           ref={problemRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(problemVis)}`}
         >
-          <SectionLabel color="text-red-500">Das Problem</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
-            Der Immobilienmarkt ist nicht kaputt — <span className="text-red-500">er ist unfair</span>
+          <SectionLabel color="text-green-600">Das Problem</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-5 text-center leading-tight">
+            Der Immobilienmarkt ist nicht kaputt — <span className="text-green-500">er ist unfair</span>
           </h2>
           <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
             Immobilien sind die stabilste Anlage der Welt — aber nur für
@@ -449,19 +449,19 @@ export default function RentcoinLandingPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: <Euro size={36} className="text-red-500" />,
+                icon: <Euro size={36} className="text-green-500" />,
                 stat: "50.000€+",
                 title: "Einstiegshürde",
                 desc: "40% der Deutschen können sich kein Immobilien-Investment leisten. Der Markt bleibt den Reichen vorbehalten.",
               },
               {
-                icon: <Clock size={36} className="text-red-500" />,
+                icon: <Clock size={36} className="text-green-500" />,
                 stat: "3–6 Monate",
                 title: "Verkaufsdauer",
                 desc: "Immobilien sind das illiquideste Asset. Dein Geld ist gebunden — keine Flexibilität, keine Kontrolle.",
               },
               {
-                icon: <EyeOff size={36} className="text-red-500" />,
+                icon: <EyeOff size={36} className="text-green-500" />,
                 stat: "0%",
                 title: "Transparenz",
                 desc: "Traditionelle Immobilienfonds sind Black Boxes. Wohin dein Geld fließt, erfährst du meist nie.",
@@ -472,10 +472,10 @@ export default function RentcoinLandingPage() {
                 className={`relative bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-all duration-500 group ${staggerFade(problemStagger[i])}`}
               >
                 <div className="mb-5">{c.icon}</div>
-                <p className="text-3xl font-extrabold text-blue-900 mb-1">
+                <p className="text-3xl font-extrabold text-gray-900 mb-1">
                   {c.stat}
                 </p>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
                   {c.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">{c.desc}</p>
@@ -489,14 +489,14 @@ export default function RentcoinLandingPage() {
       <section
         id="solution"
         className="min-h-screen flex items-center py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #eaf4fb 0%, #fff 100%)" }}
+        style={{ background: "linear-gradient(180deg, #f9fafb 0%, #fff 100%)" }}
       >
         <div
           ref={solutionRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(solutionVis)}`}
         >
           <SectionLabel color="text-green-600">Die Lösung</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-5 text-center leading-tight">
             In 3 Schritten zum Immobilieninvestor
           </h2>
           <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
@@ -535,10 +535,10 @@ export default function RentcoinLandingPage() {
                 <div className="relative z-10 w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
                   {s.icon}
                 </div>
-                <span className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-2 bg-blue-900 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center z-20">
+                <span className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-2 bg-gray-900 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center z-20">
                   {s.step}
                 </span>
-                <h3 className="text-xl font-bold text-blue-900 mb-3">
+                <h3 className="text-xl font-bold text-gray-900 mb-3">
                   {s.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">{s.desc}</p>
@@ -554,8 +554,8 @@ export default function RentcoinLandingPage() {
           ref={propertyRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(propertyVis)}`}
         >
-          <SectionLabel color="text-blue-600">Unsere Objekte</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-6 text-center leading-tight">
+          <SectionLabel color="text-green-600">Unsere Objekte</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 text-center leading-tight">
             Investiere in echte Immobilien
           </h2>
           <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
@@ -573,7 +573,7 @@ export default function RentcoinLandingPage() {
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-5">
                   <p className="text-white text-lg font-bold">Mispelstieg 13</p>
-                  <div className="flex items-center gap-1 text-blue-200 text-sm">
+                  <div className="flex items-center gap-1 text-gray-300 text-sm">
                     <MapPin size={14} />
                     <span>Hamburg-Wandsbek</span>
                   </div>
@@ -581,7 +581,7 @@ export default function RentcoinLandingPage() {
                 <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                   Bald verfügbar
                 </div>
-                <div className="absolute top-4 right-4 bg-white/90 text-blue-900 text-xs font-bold px-3 py-1 rounded-full">
+                <div className="absolute top-4 right-4 bg-white/90 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
                   Einfamilienhaus
                 </div>
               </div>
@@ -604,7 +604,7 @@ export default function RentcoinLandingPage() {
                       <p className="text-xs text-gray-500 mb-1">{d.label}</p>
                       <p
                         className={`text-xl font-extrabold ${
-                          d.accent ? "text-green-600" : "text-blue-900"
+                          d.accent ? "text-green-600" : "text-gray-900"
                         }`}
                       >
                         {d.value}
@@ -615,18 +615,18 @@ export default function RentcoinLandingPage() {
                 <div className="mb-5">
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-gray-600 font-medium">Tokenisierung</span>
-                    <span className="text-blue-900 font-bold">12% abgeschlossen</span>
+                    <span className="text-gray-900 font-bold">12% abgeschlossen</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-1000"
+                      className="bg-green-500 h-3 rounded-full transition-all duration-1000"
                       style={{ width: propertyVis ? "12%" : "0%" }}
                     />
                   </div>
                 </div>
                 <button
                   onClick={() => scrollTo("tokenomics")}
-                  className="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
                 >
                   Details ansehen
                   <ArrowRight size={16} />
@@ -644,7 +644,7 @@ export default function RentcoinLandingPage() {
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-5">
                   <p className="text-white text-lg font-bold">Turmstraße 5</p>
-                  <div className="flex items-center gap-1 text-blue-200 text-sm">
+                  <div className="flex items-center gap-1 text-gray-300 text-sm">
                     <MapPin size={14} />
                     <span>Berlin-Moabit</span>
                   </div>
@@ -652,7 +652,7 @@ export default function RentcoinLandingPage() {
                 <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                   Neu
                 </div>
-                <div className="absolute top-4 right-4 bg-white/90 text-blue-900 text-xs font-bold px-3 py-1 rounded-full">
+                <div className="absolute top-4 right-4 bg-white/90 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">
                   Mehrfamilienhaus
                 </div>
               </div>
@@ -675,7 +675,7 @@ export default function RentcoinLandingPage() {
                       <p className="text-xs text-gray-500 mb-1">{d.label}</p>
                       <p
                         className={`text-xl font-extrabold ${
-                          d.accent ? "text-green-600" : "text-blue-900"
+                          d.accent ? "text-green-600" : "text-gray-900"
                         }`}
                       >
                         {d.value}
@@ -686,18 +686,18 @@ export default function RentcoinLandingPage() {
                 <div className="mb-5">
                   <div className="flex justify-between text-sm mb-2">
                     <span className="text-gray-600 font-medium">Tokenisierung</span>
-                    <span className="text-blue-900 font-bold">5% abgeschlossen</span>
+                    <span className="text-gray-900 font-bold">5% abgeschlossen</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-1000"
+                      className="bg-green-500 h-3 rounded-full transition-all duration-1000"
                       style={{ width: propertyVis ? "5%" : "0%" }}
                     />
                   </div>
                 </div>
                 <button
                   onClick={() => scrollTo("tokenomics")}
-                  className="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
                 >
                   Details ansehen
                   <ArrowRight size={16} />
@@ -709,10 +709,10 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ MAP ════════════ */}
-      <section id="map" className="min-h-screen flex items-center py-24 md:py-32 px-6" style={{ background: "linear-gradient(180deg, #f0f7ff 0%, #fff 100%)" }}>
+      <section id="map" className="min-h-screen flex items-center py-24 md:py-32 px-6" style={{ background: "linear-gradient(180deg, #f9fafb 0%, #fff 100%)" }}>
         <div className={`max-w-6xl mx-auto`}>
-          <SectionLabel color="text-blue-600">Standorte</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-6 text-center leading-tight">
+          <SectionLabel color="text-green-600">Standorte</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 text-center leading-tight">
             Unsere Immobilien auf der Karte
           </h2>
           <p className="text-center text-gray-600 text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
@@ -729,7 +729,7 @@ export default function RentcoinLandingPage() {
               <div key={i} className="flex items-center gap-3 bg-white rounded-xl px-5 py-3 border border-gray-200 shadow-sm">
                 <div className="w-3 h-3 rounded-full bg-green-500" />
                 <div>
-                  <p className="text-blue-900 font-bold text-sm">{p.address}, {p.city}</p>
+                  <p className="text-gray-900 font-bold text-sm">{p.address}, {p.city}</p>
                   <p className="text-gray-500 text-xs">{p.type}</p>
                 </div>
               </div>
@@ -742,14 +742,14 @@ export default function RentcoinLandingPage() {
       <section
         id="compare"
         className="min-h-screen flex items-center py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #f8fbff 0%, #fff 100%)" }}
+        style={{ background: "linear-gradient(180deg, #f9fafb 0%, #fff 100%)" }}
       >
         <div
           ref={compareRef}
           className={`max-w-4xl mx-auto transition-all duration-700 ${fade(compareVis)}`}
         >
-          <SectionLabel color="text-blue-600">Vergleich</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-16 text-center leading-tight">
+          <SectionLabel color="text-green-600">Vergleich</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-16 text-center leading-tight">
             Traditionell vs. Rentcoin
           </h2>
 
@@ -761,7 +761,7 @@ export default function RentcoinLandingPage() {
                   <th className="py-4 px-5 text-gray-500 font-medium text-sm bg-gray-50">
                     Traditionell
                   </th>
-                  <th className="py-4 px-5 text-sm font-bold text-white bg-blue-900">
+                  <th className="py-4 px-5 text-sm font-bold text-white bg-gray-900">
                     Rentcoin
                   </th>
                 </tr>
@@ -780,7 +780,7 @@ export default function RentcoinLandingPage() {
                       {label}
                     </td>
                     <td className="py-4 px-5 text-gray-500 text-sm">{trad}</td>
-                    <td className="py-4 px-5 font-bold text-green-600 text-sm bg-blue-50">
+                    <td className="py-4 px-5 font-bold text-green-600 text-sm bg-green-50">
                       <span className="inline-flex items-center gap-1">
                         <CheckCircle size={14} className="text-green-500" />
                         {rc}
@@ -801,7 +801,7 @@ export default function RentcoinLandingPage() {
           className={`max-w-4xl mx-auto transition-all duration-700 ${fade(calcVis)}`}
         >
           <SectionLabel color="text-green-600">Renditerechner</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-5 text-center leading-tight">
             Was wäre dein Investment wert?
           </h2>
           <p className="text-center text-gray-600 text-lg mb-12 max-w-xl mx-auto leading-relaxed">
@@ -848,41 +848,41 @@ export default function RentcoinLandingPage() {
             </div>
 
             {/* Results */}
-            <div className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-2xl p-8 text-white">
+            <div className="bg-gray-950 rounded-2xl p-8 text-white">
               <div className="space-y-5">
                 <div>
-                  <p className="text-blue-300 text-sm mb-1">Gesamt investiert</p>
+                  <p className="text-gray-400 text-sm mb-1">Gesamt investiert</p>
                   <p className="text-2xl font-extrabold">
                     {totalInvested.toLocaleString("de-DE")}€
                   </p>
-                  <p className="text-blue-400 text-xs mt-1">
+                  <p className="text-gray-500 text-xs mt-1">
                     {investAmount.toLocaleString("de-DE")}€ Einmalanlage + {(monthlyContrib * totalMonths).toLocaleString("de-DE")}€ Sparplan
                   </p>
                 </div>
                 <div>
-                  <p className="text-blue-300 text-sm mb-1">
+                  <p className="text-gray-400 text-sm mb-1">
                     Geschätzter Wert nach {investYears} Jahren
                   </p>
                   <p className="text-4xl font-extrabold text-green-400">
                     {Math.round(futureValue).toLocaleString("de-DE")}€
                   </p>
                 </div>
-                <div className="border-t border-blue-700 pt-4 grid grid-cols-2 gap-4">
+                <div className="border-t border-gray-800 pt-4 grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-blue-300 text-xs mb-1">Gesamtrendite</p>
+                    <p className="text-gray-400 text-xs mb-1">Gesamtrendite</p>
                     <p className="text-xl font-bold text-green-400">
                       +{Math.round(totalReturn).toLocaleString("de-DE")}€
                     </p>
                   </div>
                   <div>
-                    <p className="text-blue-300 text-xs mb-1">Monatl. Ertrag (dann)</p>
+                    <p className="text-gray-400 text-xs mb-1">Monatl. Ertrag (dann)</p>
                     <p className="text-xl font-bold">
                       {monthlyIncome.toFixed(2).replace(".", ",")}€
                     </p>
                   </div>
                 </div>
               </div>
-              <p className="text-blue-400 text-xs mt-6">
+              <p className="text-gray-500 text-xs mt-6">
                 * Prognose basierend auf 6% p.a. Keine Anlageberatung.
                 Vergangene Ergebnisse sind keine Garantie.
               </p>
@@ -895,48 +895,48 @@ export default function RentcoinLandingPage() {
       <section
         id="benefits"
         className="min-h-screen flex items-center py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #eaf4fb 0%, #fff 100%)" }}
+        style={{ background: "linear-gradient(180deg, #f9fafb 0%, #fff 100%)" }}
       >
         <div
           ref={benefitsRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(benefitsVis)}`}
         >
-          <SectionLabel color="text-blue-600">Vorteile</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-16 text-center leading-tight">
+          <SectionLabel color="text-green-600">Vorteile</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-16 text-center leading-tight">
             Warum Rentcoin?
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: <PieChart size={28} className="text-blue-900" />,
+                icon: <PieChart size={28} className="text-green-600" />,
                 title: "Ab 100€ investieren",
                 desc: "Kein Vermögen nötig. Starte mit einem Betrag, der für dich passt.",
               },
               {
-                icon: <BarChart3 size={28} className="text-blue-900" />,
+                icon: <BarChart3 size={28} className="text-green-600" />,
                 title: "Monatliche Rendite",
                 desc: "Mieteinnahmen werden automatisch jeden Monat ausgeschüttet.",
               },
               {
-                icon: <ArrowUpRight size={28} className="text-blue-900" />,
+                icon: <ArrowUpRight size={28} className="text-green-600" />,
                 title: "Jederzeit handeln",
                 desc: "Verkaufe deine Anteile auf dem Sekundärmarkt — in Minuten, nicht Monaten.",
               },
               {
-                icon: <Lock size={28} className="text-blue-900" />,
+                icon: <Lock size={28} className="text-green-600" />,
                 title: "100% Transparent",
                 desc: "Alle Finanzen, Mietverträge und Entscheidungen sind einsehbar.",
               },
             ].map((b, i) => (
               <div
                 key={i}
-                className={`bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-500 group ${staggerFade(benefitsStagger[i])}`}
+                className={`bg-white rounded-2xl p-6 border border-gray-200 hover:border-green-200 hover:shadow-lg transition-all duration-500 group ${staggerFade(benefitsStagger[i])}`}
               >
-                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-100 transition">
+                <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-100 transition">
                   {b.icon}
                 </div>
-                <h3 className="text-lg font-bold text-blue-900 mb-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
                   {b.title}
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed">{b.desc}</p>
@@ -953,7 +953,7 @@ export default function RentcoinLandingPage() {
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(testimonialVis)}`}
         >
           <SectionLabel color="text-green-600">Stimmen</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-16 text-center leading-tight">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-16 text-center leading-tight">
             Was unsere Community sagt
           </h2>
 
@@ -992,12 +992,12 @@ export default function RentcoinLandingPage() {
                 </p>
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-10 h-10 rounded-full bg-blue-900 flex items-center justify-center text-white font-bold text-sm"
+                    className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-white font-bold text-sm"
                   >
                     {t.name[0]}
                   </div>
                   <div>
-                    <p className="text-blue-900 font-bold text-sm">{t.name}</p>
+                    <p className="text-gray-900 font-bold text-sm">{t.name}</p>
                     <p className="text-gray-500 text-xs">{t.role}</p>
                   </div>
                 </div>
@@ -1015,14 +1015,14 @@ export default function RentcoinLandingPage() {
       <section
         id="team"
         className="min-h-screen flex items-center py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #f8fbff 0%, #fff 100%)" }}
+        style={{ background: "linear-gradient(180deg, #f9fafb 0%, #fff 100%)" }}
       >
         <div
           ref={teamRef}
           className={`max-w-4xl mx-auto transition-all duration-700 ${fade(teamVis)}`}
         >
-          <SectionLabel color="text-blue-600">Das Team</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
+          <SectionLabel color="text-green-600">Das Team</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-5 text-center leading-tight">
             Die Köpfe hinter Rentcoin
           </h2>
           <p className="text-center text-gray-600 text-lg mb-16 max-w-xl mx-auto leading-relaxed">
@@ -1036,7 +1036,7 @@ export default function RentcoinLandingPage() {
                 role: "Tech & Produkt",
                 icon: <Code size={24} className="text-white" />,
                 desc: "Product Owner Digital Services mit Leidenschaft für FinTech und dezentrale Systeme.",
-                color: "from-blue-600 to-blue-900",
+                color: "from-gray-700 to-gray-900",
               },
               {
                 name: "Dew Mazumder",
@@ -1055,7 +1055,7 @@ export default function RentcoinLandingPage() {
                 >
                   {m.icon}
                 </div>
-                <h3 className="text-xl font-bold text-blue-900 mb-1">{m.name}</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-1">{m.name}</h3>
                 <p className="text-green-600 font-semibold text-sm mb-4">
                   {m.role}
                 </p>
@@ -1070,7 +1070,7 @@ export default function RentcoinLandingPage() {
       <section id="tokenomics" className="min-h-screen py-32 md:py-44 px-6 bg-white relative overflow-hidden">
         {/* Subtle decorative elements */}
         <div className="absolute top-20 right-0 w-96 h-96 bg-green-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
-        <div className="absolute bottom-20 left-0 w-80 h-80 bg-blue-50 rounded-full blur-3xl opacity-40 pointer-events-none" />
+        <div className="absolute bottom-20 left-0 w-80 h-80 bg-green-50 rounded-full blur-3xl opacity-40 pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative">
           <p className="text-center text-green-600 font-bold tracking-widest uppercase text-xs mb-6 letter-spacing-4">
@@ -1107,20 +1107,20 @@ export default function RentcoinLandingPage() {
             {/* Visual bar */}
             <div className="h-4 rounded-full overflow-hidden flex mb-10">
               <div className="bg-green-500 h-full" style={{ width: "45%" }} />
-              <div className="bg-blue-500 h-full" style={{ width: "25%" }} />
+              <div className="bg-emerald-400 h-full" style={{ width: "25%" }} />
               <div className="bg-amber-500 h-full" style={{ width: "10%" }} />
               <div className="bg-pink-500 h-full" style={{ width: "10%" }} />
-              <div className="bg-purple-500 h-full" style={{ width: "5%" }} />
+              <div className="bg-teal-400 h-full" style={{ width: "5%" }} />
               <div className="bg-indigo-400 h-full" style={{ width: "5%" }} />
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {[
                 { name: "Investoren", detail: "Public + Private Sale", pct: 45, color: "bg-green-500" },
-                { name: "Team & Gründer", detail: "3 Jahre Vesting", pct: 25, color: "bg-blue-500" },
+                { name: "Team & Gründer", detail: "3 Jahre Vesting", pct: 25, color: "bg-emerald-400" },
                 { name: "Reserve", detail: "Unternehmensreserve", pct: 10, color: "bg-amber-500" },
                 { name: "Community", detail: "Academy & Rewards", pct: 10, color: "bg-pink-500" },
-                { name: "Staking", detail: "Staking Rewards Pool", pct: 5, color: "bg-purple-500" },
+                { name: "Staking", detail: "Staking Rewards Pool", pct: 5, color: "bg-teal-400" },
                 { name: "Berater", detail: "36M Vesting", pct: 5, color: "bg-indigo-400" },
               ].map((d, i) => (
                 <div key={i} className="flex items-start gap-3">
@@ -1160,8 +1160,8 @@ export default function RentcoinLandingPage() {
             </div>
 
             <div className="rounded-3xl p-10 border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6">
-                <Shield size={24} className="text-blue-600" />
+              <div className="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center mb-6">
+                <Shield size={24} className="text-green-600" />
               </div>
               <h3 className="text-2xl font-black text-gray-900 mb-6 tracking-tight">STABILISIERUNG</h3>
               <div className="space-y-5">
@@ -1172,7 +1172,7 @@ export default function RentcoinLandingPage() {
                   { title: "Liquiditätsreserve", desc: "5% Verkaufserlöse" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
-                    <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center flex-shrink-0">
                       <Check size={12} className="text-white" />
                     </div>
                     <div>
@@ -1208,7 +1208,7 @@ export default function RentcoinLandingPage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-blue-600 font-bold tracking-widest uppercase text-xs mb-6">
+          <p className="text-center text-green-600 font-bold tracking-widest uppercase text-xs mb-6">
             Transparenz
           </p>
           <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 text-center leading-none tracking-tight">
@@ -1299,10 +1299,10 @@ export default function RentcoinLandingPage() {
 
       {/* ════════════ AI ════════════ */}
       <section id="ai" className="min-h-screen py-32 md:py-44 px-6 bg-white relative overflow-hidden">
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-50 rounded-full blur-3xl opacity-40 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-green-50 rounded-full blur-3xl opacity-40 pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative">
-          <p className="text-center text-purple-600 font-bold tracking-widest uppercase text-xs mb-6">
+          <p className="text-center text-green-600 font-bold tracking-widest uppercase text-xs mb-6">
             Technologie
           </p>
           <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 text-center leading-none tracking-tight">
@@ -1378,7 +1378,7 @@ export default function RentcoinLandingPage() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-blue-600 font-bold tracking-widest uppercase text-xs mb-6">
+          <p className="text-center text-green-600 font-bold tracking-widest uppercase text-xs mb-6">
             Rentcoin Kodex
           </p>
           <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 text-center leading-none tracking-tight">
@@ -1392,10 +1392,10 @@ export default function RentcoinLandingPage() {
           <div className="grid md:grid-cols-3 gap-6 mb-16">
             {[
               {
-                icon: <Scale size={32} className="text-blue-600" />,
+                icon: <Scale size={32} className="text-green-600" />,
                 title: "ECSP-REGULIERUNG",
                 desc: "Phase 1 mit lizenzierten Partnern. Ziel: ECSP-Lizenz (European Crowdfunding Service Provider). Keine BaFin-Vollbanklizenz nötig.",
-                accent: "bg-blue-500",
+                accent: "bg-green-500",
               },
               {
                 icon: <Building2 size={32} className="text-green-600" />,
@@ -1404,10 +1404,10 @@ export default function RentcoinLandingPage() {
                 accent: "bg-green-500",
               },
               {
-                icon: <Users size={32} className="text-purple-600" />,
+                icon: <Users size={32} className="text-green-600" />,
                 title: "DAO-GOVERNANCE",
                 desc: "RENT Token-Holder haben Stimmrechte. Wesentliche Entscheidungen werden dezentral abgestimmt — Verkauf, Reinvestment, Strategie.",
-                accent: "bg-purple-500",
+                accent: "bg-green-600",
               },
             ].map((card, i) => (
               <div key={i} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-500 group">
@@ -1454,8 +1454,8 @@ export default function RentcoinLandingPage() {
           ref={faqRef}
           className={`max-w-3xl mx-auto transition-all duration-700 ${fade(faqVis)}`}
         >
-          <SectionLabel color="text-blue-600">Häufige Fragen</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-16 text-center leading-tight">
+          <SectionLabel color="text-green-600">Häufige Fragen</SectionLabel>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-16 text-center leading-tight">
             FAQ
           </h2>
 
@@ -1515,7 +1515,7 @@ export default function RentcoinLandingPage() {
               <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
                 Werde Teil von Rentcoin
               </h2>
-              <p className="text-xl text-blue-200 mb-8 leading-relaxed">
+              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
                 Erstelle dein Konto und entdecke die Zukunft des Immobilieninvestments — transparent, digital, ab 100€.
               </p>
               <div className="space-y-4">
@@ -1527,7 +1527,7 @@ export default function RentcoinLandingPage() {
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
-                    <span className="text-blue-100">{item}</span>
+                    <span className="text-gray-200">{item}</span>
                   </div>
                 ))}
               </div>
@@ -1546,7 +1546,7 @@ export default function RentcoinLandingPage() {
             {/* Brand */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-blue-900 flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-bold text-sm">
                   R
                 </div>
                 <span className="text-xl font-bold text-white">Rentcoin</span>
@@ -1805,19 +1805,19 @@ function FaqItem({ question, answer }) {
   const contentRef = useRef(null);
 
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden transition-all hover:border-blue-300">
+    <div className="border border-gray-200 rounded-xl overflow-hidden transition-all hover:border-green-200">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between p-5 text-left"
         aria-expanded={open}
       >
-        <span className="font-bold text-blue-900 pr-4">{question}</span>
+        <span className="font-bold text-gray-900 pr-4">{question}</span>
         <span
           className={`flex-shrink-0 transition-transform duration-300 ${
             open ? "rotate-180" : ""
           }`}
         >
-          <ChevronDown size={20} className="text-blue-900" />
+          <ChevronDown size={20} className="text-gray-900" />
         </span>
       </button>
       <div
