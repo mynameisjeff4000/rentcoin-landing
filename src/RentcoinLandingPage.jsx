@@ -432,7 +432,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ PROBLEM ════════════ */}
-      <section id="problem" className="py-24 md:py-32 px-6 bg-white">
+      <section id="problem" className="min-h-screen flex items-center py-24 md:py-32 px-6 bg-white">
         <div
           ref={problemRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(problemVis)}`}
@@ -488,7 +488,7 @@ export default function RentcoinLandingPage() {
       {/* ════════════ SOLUTION ════════════ */}
       <section
         id="solution"
-        className="py-24 md:py-32 px-6"
+        className="min-h-screen flex items-center py-24 md:py-32 px-6"
         style={{ background: "linear-gradient(180deg, #eaf4fb 0%, #fff 100%)" }}
       >
         <div
@@ -549,7 +549,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ PROPERTIES ════════════ */}
-      <section id="property" className="py-24 md:py-32 px-6 bg-white">
+      <section id="property" className="min-h-screen flex items-center py-24 md:py-32 px-6 bg-white">
         <div
           ref={propertyRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(propertyVis)}`}
@@ -709,7 +709,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ MAP ════════════ */}
-      <section id="map" className="py-24 md:py-32 px-6" style={{ background: "linear-gradient(180deg, #f0f7ff 0%, #fff 100%)" }}>
+      <section id="map" className="min-h-screen flex items-center py-24 md:py-32 px-6" style={{ background: "linear-gradient(180deg, #f0f7ff 0%, #fff 100%)" }}>
         <div className={`max-w-6xl mx-auto`}>
           <SectionLabel color="text-blue-600">Standorte</SectionLabel>
           <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-6 text-center leading-tight">
@@ -741,7 +741,7 @@ export default function RentcoinLandingPage() {
       {/* ════════════ COMPARISON TABLE ════════════ */}
       <section
         id="compare"
-        className="py-24 md:py-32 px-6"
+        className="min-h-screen flex items-center py-24 md:py-32 px-6"
         style={{ background: "linear-gradient(180deg, #f8fbff 0%, #fff 100%)" }}
       >
         <div
@@ -795,7 +795,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ CALCULATOR ════════════ */}
-      <section id="calculator" className="py-24 md:py-32 px-6 bg-white">
+      <section id="calculator" className="min-h-screen flex items-center py-24 md:py-32 px-6 bg-white">
         <div
           ref={calcRef}
           className={`max-w-4xl mx-auto transition-all duration-700 ${fade(calcVis)}`}
@@ -894,7 +894,7 @@ export default function RentcoinLandingPage() {
       {/* ════════════ BENEFITS ════════════ */}
       <section
         id="benefits"
-        className="py-24 md:py-32 px-6"
+        className="min-h-screen flex items-center py-24 md:py-32 px-6"
         style={{ background: "linear-gradient(180deg, #eaf4fb 0%, #fff 100%)" }}
       >
         <div
@@ -947,7 +947,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ TESTIMONIALS ════════════ */}
-      <section id="testimonials" className="py-24 md:py-32 px-6 bg-white">
+      <section id="testimonials" className="min-h-screen flex items-center py-24 md:py-32 px-6 bg-white">
         <div
           ref={testimonialRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(testimonialVis)}`}
@@ -1014,7 +1014,7 @@ export default function RentcoinLandingPage() {
       {/* ════════════ TEAM ════════════ */}
       <section
         id="team"
-        className="py-24 md:py-32 px-6"
+        className="min-h-screen flex items-center py-24 md:py-32 px-6"
         style={{ background: "linear-gradient(180deg, #f8fbff 0%, #fff 100%)" }}
       >
         <div
@@ -1067,7 +1067,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ TOKENOMICS ════════════ */}
-      <section id="tokenomics" className="py-32 md:py-44 px-6 bg-white relative overflow-hidden">
+      <section id="tokenomics" className="min-h-screen py-32 md:py-44 px-6 bg-white relative overflow-hidden">
         {/* Subtle decorative elements */}
         <div className="absolute top-20 right-0 w-96 h-96 bg-green-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
         <div className="absolute bottom-20 left-0 w-80 h-80 bg-blue-50 rounded-full blur-3xl opacity-40 pointer-events-none" />
@@ -1204,7 +1204,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ TRANSPARENZ ════════════ */}
-      <section id="transparency" className="py-32 md:py-44 px-6 bg-gray-50 relative overflow-hidden">
+      <section id="transparency" className="min-h-screen py-32 md:py-44 px-6 bg-gray-50 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
         <div className="max-w-6xl mx-auto">
@@ -1298,7 +1298,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ AI ════════════ */}
-      <section id="ai" className="py-32 md:py-44 px-6 bg-white relative overflow-hidden">
+      <section id="ai" className="min-h-screen py-32 md:py-44 px-6 bg-white relative overflow-hidden">
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-50 rounded-full blur-3xl opacity-40 pointer-events-none" />
 
         <div className="max-w-6xl mx-auto relative">
@@ -1374,7 +1374,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ KODEX ════════════ */}
-      <section id="codex" className="py-32 md:py-44 px-6 bg-gray-50 relative overflow-hidden">
+      <section id="codex" className="min-h-screen py-32 md:py-44 px-6 bg-gray-50 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
         <div className="max-w-6xl mx-auto">
@@ -1449,7 +1449,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ FAQ ════════════ */}
-      <section id="faq" className="py-24 md:py-32 px-6 bg-white">
+      <section id="faq" className="min-h-screen flex items-center py-24 md:py-32 px-6 bg-white">
         <div
           ref={faqRef}
           className={`max-w-3xl mx-auto transition-all duration-700 ${fade(faqVis)}`}
@@ -1499,7 +1499,7 @@ export default function RentcoinLandingPage() {
       {/* ════════════ REGISTER / LOGIN ════════════ */}
       <section
         id="register"
-        className="py-24 md:py-32 px-6"
+        className="min-h-screen flex items-center py-24 md:py-32 px-6"
         style={{
           background: `linear-gradient(135deg, ${BRAND.navy} 0%, ${BRAND.blue} 100%)`,
         }}
