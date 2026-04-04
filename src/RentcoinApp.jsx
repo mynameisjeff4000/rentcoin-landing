@@ -1279,21 +1279,153 @@ function AuthPage() {
   );
 }
 
+/* ───────── PROFILE COMPLETION ───────── */
+function ProfileCompletionPage({ session, onComplete }) {
+  const [fullName, setFullName] = useState(session?.user?.user_metadata?.full_name || "");
+  const [phone, setPhone] = useState("");
+  const [investorType, setInvestorType] = useState("");
+  const [experience, setExperience] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    // Update user metadata
+    const { error: metaError } = await supabase.auth.updateUser({
+      data: { full_name: fullName, phone, investor_type: investorType, experience, profile_completed: true }
+    });
+    if (metaError) { setError(metaError.message); setLoading(false); return; }
+
+    // Update profiles table
+    const { error: profileError } = await supabase.from("profiles").upsert({
+      id: session.user.id,
+      full_name: fullName,
+      phone,
+      investor_type: investorType,
+      experience,
+      updated_at: new Date().toISOString(),
+    });
+    if (profileError) console.warn("Profile table update failed:", profileError.message);
+
+    setLoading(false);
+    onComplete();
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-green-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-lg">
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-lg bg-green-500 flex items-center justify-center font-bold text-2xl text-white mx-auto mb-4">R</div>
+          <h1 className="text-3xl font-bold text-white">Willkommen bei Rentcoin!</h1>
+          <p className="text-gray-300 mt-2">Vervollständige dein Profil, um loszulegen.</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-2xl p-8">
+          {/* Progress steps */}
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold">✓</div>
+              <span className="text-sm text-gray-500">Registriert</span>
+            </div>
+            <div className="w-8 h-0.5 bg-green-500" />
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold">2</div>
+              <span className="text-sm font-bold text-gray-900">Profil</span>
+            </div>
+            <div className="w-8 h-0.5 bg-gray-200" />
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-sm font-bold">3</div>
+              <span className="text-sm text-gray-400">Fertig</span>
+            </div>
+          </div>
+
+          {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-4">{error}</div>}
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Vollständiger Name *</label>
+              <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Max Mustermann" className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none" required />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">Telefonnummer (optional)</label>
+              <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+49 170 1234567" className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Investorentyp *</label>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { value: "beginner", label: "Einsteiger", desc: "Erstes Investment" },
+                  { value: "experienced", label: "Erfahren", desc: "Aktien/Fonds Erfahrung" },
+                  { value: "crypto", label: "Krypto-Investor", desc: "Blockchain-erfahren" },
+                  { value: "professional", label: "Professionell", desc: "Institutionell / HNWI" },
+                ].map((opt) => (
+                  <button type="button" key={opt.value} onClick={() => setInvestorType(opt.value)}
+                    className={`p-3 rounded-lg border-2 text-left transition ${investorType === opt.value ? "border-green-500 bg-green-50" : "border-gray-200 hover:border-gray-300"}`}>
+                    <p className="font-bold text-sm text-gray-900">{opt.label}</p>
+                    <p className="text-xs text-gray-500">{opt.desc}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">Immobilien-Erfahrung *</label>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { value: "none", label: "Keine" },
+                  { value: "some", label: "Etwas" },
+                  { value: "lots", label: "Viel" },
+                ].map((opt) => (
+                  <button type="button" key={opt.value} onClick={() => setExperience(opt.value)}
+                    className={`py-2.5 rounded-lg border-2 font-bold text-sm transition ${experience === opt.value ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}>
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button type="submit" disabled={loading || !fullName || !investorType || !experience}
+              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-lg transition flex items-center justify-center gap-2 text-lg">
+              {loading && <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+              Profil speichern & loslegen
+            </button>
+          </form>
+
+          <button onClick={onComplete} className="w-full text-center text-sm text-gray-400 hover:text-gray-600 mt-4 transition">
+            Später vervollständigen
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ───────── MAIN APP ───────── */
 export default function RentcoinApp() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [needsProfile, setNeedsProfile] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session) {
+        const meta = session.user?.user_metadata;
+        setNeedsProfile(!meta?.profile_completed && !meta?.investor_type);
+      }
       setLoading(false);
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session) {
+        const meta = session.user?.user_metadata;
+        setNeedsProfile(!meta?.profile_completed && !meta?.investor_type);
+      }
     });
     return () => subscription.unsubscribe();
   }, [navigate, location.pathname]);
@@ -1307,6 +1439,9 @@ export default function RentcoinApp() {
 
   /* Not logged in → show auth page */
   if (!session) return <AuthPage />;
+
+  /* Profile not completed → show completion */
+  if (needsProfile) return <ProfileCompletionPage session={session} onComplete={() => setNeedsProfile(false)} />;
 
   const userName = session?.user?.user_metadata?.full_name || session?.user?.email?.split("@")[0] || "Nutzer";
 

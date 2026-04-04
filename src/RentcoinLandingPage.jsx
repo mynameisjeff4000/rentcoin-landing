@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "./supabase";
 import {
   Building2,
   TrendingUp,
@@ -283,12 +284,12 @@ export default function RentcoinLandingPage() {
                 )}
               </button>
             ))}
-            <Link
-              to="/app"
+            <button
+              onClick={() => scrollTo("register")}
               className="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-5 rounded-lg transition"
             >
               Anmelden
-            </Link>
+            </button>
           </div>
 
           {/* Mobile burger */}
@@ -1447,40 +1448,46 @@ export default function RentcoinLandingPage() {
         </div>
       </section>
 
-      {/* ════════════ KONTAKT CTA ════════════ */}
+      {/* ════════════ REGISTER / LOGIN ════════════ */}
       <section
-        id="contact"
+        id="register"
         className="py-24 md:py-32 px-6"
         style={{
           background: `linear-gradient(135deg, ${BRAND.navy} 0%, ${BRAND.blue} 100%)`,
         }}
       >
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-green-500/20 rounded-full px-4 py-1 mb-6">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-green-400 text-sm font-medium">
-              Coming Soon
-            </span>
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Left: Text */}
+            <div className="text-center md:text-left">
+              <div className="inline-flex items-center gap-2 bg-green-500/20 rounded-full px-4 py-1 mb-6">
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-green-400 text-sm font-medium">Jetzt registrieren</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+                Werde Teil von Rentcoin
+              </h2>
+              <p className="text-xl text-blue-200 mb-8 leading-relaxed">
+                Erstelle dein Konto und entdecke die Zukunft des Immobilieninvestments — transparent, digital, ab 100€.
+              </p>
+              <div className="space-y-4">
+                {[
+                  "Kostenlose Registrierung",
+                  "Zugang zu allen Immobilien-Daten",
+                  "Portfolio-Übersicht & Renditerechner",
+                  "Keine versteckten Kosten",
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
+                    <span className="text-blue-100">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Auth Form */}
+            <LandingAuthForm />
           </div>
-
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
-            Interesse geweckt?
-          </h2>
-          <p className="text-xl text-blue-200 mb-10 max-w-lg mx-auto leading-relaxed">
-            Wir arbeiten am Launch unserer Plattform. Schreib uns — wir halten dich auf dem Laufenden.
-          </p>
-
-          <a
-            href="mailto:hello@rentcoin.de"
-            className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/30"
-          >
-            Kontakt aufnehmen
-            <ArrowRight size={20} />
-          </a>
-
-          <p className="text-blue-300 text-sm mt-6">
-            hello@rentcoin.de
-          </p>
         </div>
       </section>
 
@@ -1562,6 +1569,105 @@ export default function RentcoinLandingPage() {
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+/* ───────── Landing Page Auth Form ───────── */
+function LandingAuthForm() {
+  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    if (isLogin) {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) { setError(error.message); setLoading(false); return; }
+      navigate("/app");
+    } else {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName } },
+      });
+      if (error) { setError(error.message); setLoading(false); return; }
+      setSuccess("Bestätigungs-E-Mail gesendet! Prüfe deinen Posteingang.");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="bg-white rounded-2xl shadow-2xl p-8">
+      <h3 className="text-2xl font-bold text-gray-900 mb-6">
+        {isLogin ? "Anmelden" : "Konto erstellen"}
+      </h3>
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-4">{error}</div>
+      )}
+      {success && (
+        <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg p-3 mb-4">{success}</div>
+      )}
+
+      <form onSubmit={handleAuth} className="space-y-4 mb-6">
+        {!isLogin && (
+          <input
+            type="text"
+            placeholder="Vollständiger Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+            required
+          />
+        )}
+        <input
+          type="email"
+          placeholder="E-Mail-Adresse"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Passwort (min. 6 Zeichen)"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+          required
+          minLength={6}
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-bold py-3.5 rounded-lg transition flex items-center justify-center gap-2 text-lg"
+        >
+          {loading && <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+          {isLogin ? "Anmelden" : "Kostenlos registrieren"}
+        </button>
+      </form>
+
+      <div className="text-center">
+        <p className="text-gray-600 text-sm">
+          {isLogin ? "Noch kein Konto?" : "Bereits registriert?"}{" "}
+          <button
+            onClick={() => { setIsLogin(!isLogin); setError(""); setSuccess(""); }}
+            className="text-green-600 hover:text-green-700 font-bold"
+          >
+            {isLogin ? "Jetzt registrieren" : "Anmelden"}
+          </button>
+        </p>
+      </div>
     </div>
   );
 }
