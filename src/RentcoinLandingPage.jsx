@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase";
 import { translations } from "./translations";
+import { trackEvent, Events } from "./analytics";
 import {
   Building2,
   TrendingUp,
@@ -458,7 +459,7 @@ export default function RentcoinLandingPage() {
           {/* CTA */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => scrollTo("tokenomics")}
+              onClick={() => scrollTo("property")}
               className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center gap-2 shadow-lg shadow-green-500/30"
             >
               {t.hero.learnMore}
@@ -1627,6 +1628,16 @@ export default function RentcoinLandingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile sticky CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 p-3 md:hidden" style={{background: 'linear-gradient(transparent, rgba(0,0,0,0.9) 30%)'}}>
+        <button
+          onClick={() => scrollTo("register")}
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl text-center transition-all duration-300 transform hover:scale-105"
+        >
+          {lang === "de" ? "Kostenlos registrieren" : "Register Free"}
+        </button>
+      </div>
     </div>
   );
 }
@@ -1653,6 +1664,7 @@ function LandingAuthForm({ darkMode, lang }) {
     if (isLogin) {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) { setError(error.message); setLoading(false); return; }
+      trackEvent(Events.LOGIN);
       navigate("/app");
     } else {
       const { error } = await supabase.auth.signUp({
@@ -1661,6 +1673,7 @@ function LandingAuthForm({ darkMode, lang }) {
         options: { data: { full_name: fullName } },
       });
       if (error) { setError(error.message); setLoading(false); return; }
+      trackEvent(Events.SIGNUP_COMPLETED);
       setSuccess(t.auth.confirmationSent);
     }
     setLoading(false);
@@ -1673,10 +1686,10 @@ function LandingAuthForm({ darkMode, lang }) {
       </h3>
 
       {error && (
-        <div className="bg-red-950 border border-red-900 text-red-700 text-sm rounded-lg p-3 mb-4">{error}</div>
+        <div className={`${dm('bg-red-950 border-red-900 text-red-300', 'bg-red-50 border-red-200 text-red-700')} border text-sm rounded-lg p-3 mb-4`}>{error}</div>
       )}
       {success && (
-        <div className="bg-green-950 border border-green-900 text-green-400 text-sm rounded-lg p-3 mb-4">{success}</div>
+        <div className={`${dm('bg-green-950 border-green-900 text-green-400', 'bg-green-50 border-green-200 text-green-700')} border text-sm rounded-lg p-3 mb-4`}>{success}</div>
       )}
 
       <form onSubmit={handleAuth} className="space-y-4 mb-6">

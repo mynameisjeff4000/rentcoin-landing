@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { translations } from "./translations";
 import { properties } from "./propertyData";
+import { trackEvent, Events } from "./analytics";
 import {
   ArrowLeft,
   MapPin,
@@ -21,6 +22,12 @@ export default function PropertyDetailPage() {
   const dm = (dark, light) => (darkMode ? dark : light);
 
   const property = properties.find((p) => p.id === id);
+
+  useEffect(() => {
+    if (property) {
+      trackEvent(Events.PROPERTY_VIEW, { property: property.id });
+    }
+  }, [property]);
 
   if (!property) {
     return (
@@ -240,9 +247,9 @@ export default function PropertyDetailPage() {
           <p className={`text-lg mb-8 max-w-2xl mx-auto ${dm('text-gray-400', 'text-gray-600')}`}>
             Start building your real estate portfolio with just €{property.minInvestment}.
           </p>
-          <button className="bg-green-500 hover:bg-green-400 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 text-lg">
+          <Link to="/#register" className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 text-lg">
             {tPropertyDetail.investNow || "Invest Now"}
-          </button>
+          </Link>
         </div>
       </section>
 
