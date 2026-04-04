@@ -888,9 +888,9 @@ export default function RentcoinLandingPage() {
               </thead>
               <tbody>
                 {[
-                  [t.comparison.minInvestment, t.problem.barriers[0].title, "Ab 100€"],
-                  [t.comparison.saleDuration, t.problem.barriers[1].title, lang === "de" ? "Minuten" : "Minutes"],
-                  [t.comparison.costs, "3–7%", "Unter 1,5%"],
+                  [t.comparison.minInvestment, t.problem.barriers?.[0]?.title || "€50.000+", lang === "de" ? "Ab 100€" : "From €100"],
+                  [t.comparison.saleDuration, t.problem.barriers?.[1]?.title || "3–6 Monate", lang === "de" ? "Minuten" : "Minutes"],
+                  [t.comparison.costs, "3–7%", lang === "de" ? "Unter 1,5%" : "Under 1.5%"],
                   [t.comparison.transparency, lang === "de" ? "Intransparent" : "Opaque", lang === "de" ? "100% einsehbar" : "100% traceable"],
                   [t.comparison.payouts, lang === "de" ? "Jährlich / gar nicht" : "Annual / not at all", lang === "de" ? "Monatlich" : "Monthly"],
                   [t.comparison.voting, lang === "de" ? "Keine" : "None", lang === "de" ? "Stimmrecht pro Anteil" : "Voting per share"],
@@ -1377,7 +1377,7 @@ export default function RentcoinLandingPage() {
           {/* Bottom callout */}
           <div className="text-center">
             <p className={`text-4xl md:text-5xl font-black ${dm('text-white', 'text-gray-900')} mb-2`}>
-              &lt;1,5% <span className="text-green-500">Gesamtkosten</span>
+              &lt;1,5% <span className="text-green-500">{lang === "de" ? "Gesamtkosten" : "Total Costs"}</span>
             </p>
             <p className={`${dm('text-gray-400', 'text-gray-600')} text-lg`}>{t.transparency.upTo80Percent}</p>
           </div>
@@ -1444,8 +1444,8 @@ export default function RentcoinLandingPage() {
             <h3 className={`text-xs font-bold ${dm('text-gray-500', 'text-gray-600')} tracking-widest uppercase mb-10 text-center`}>{t.ai.speed}</h3>
             <div className="grid grid-cols-3 gap-6 text-center">
               {[
-                { process: t.ai.valuation, ai: "48h", trad: "2–4 Wochen" },
-                { process: t.ai.dueDiligence, ai: "2–4 Tage", trad: "4–8 Wochen" },
+                { process: t.ai.valuation, ai: "48h", trad: lang === "de" ? "2–4 Wochen" : "2–4 Weeks" },
+                { process: t.ai.dueDiligence, ai: lang === "de" ? "2–4 Tage" : "2–4 Days", trad: lang === "de" ? "4–8 Wochen" : "4–8 Weeks" },
                 { process: t.ai.documents, ai: t.ai.auto, trad: t.ai.manual },
               ].map((row, i) => (
                 <div key={i}>
