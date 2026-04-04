@@ -1601,14 +1601,14 @@ export default function RentcoinLandingPage() {
               </h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className={`${dm('hover:text-white', 'hover:text-gray-900')} transition`}>
+                  <Link to="/impressum" className={`${dm('hover:text-white', 'hover:text-gray-900')} transition`}>
                     {t.footer.imprint}
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className={`${dm('hover:text-white', 'hover:text-gray-900')} transition`}>
+                  <Link to="/datenschutz" className={`${dm('hover:text-white', 'hover:text-gray-900')} transition`}>
                     {t.footer.privacy}
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a href="mailto:hello@rentcoin.de" className="hover:text-white transition">
