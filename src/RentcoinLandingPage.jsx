@@ -983,7 +983,7 @@ export default function RentcoinLandingPage() {
                 </div>
                 <div>
                   <p className={`text-sm mb-1 ${dm('text-gray-400', 'text-gray-600')}`}>
-                    {t.calculator.estimatedValue} {investYears} {investYears === 1 ? t.calculator.year : t.calculator.years}
+                    {lang === "de" ? `Geschätzter Wert nach ${investYears} ${investYears === 1 ? "Jahr" : "Jahren"}` : `Estimated value after ${investYears} ${investYears === 1 ? "year" : "years"}`}
                   </p>
                   <p className="text-4xl font-extrabold text-green-400">
                     {Math.round(futureValue).toLocaleString("de-DE")}€
@@ -1122,16 +1122,16 @@ export default function RentcoinLandingPage() {
             {[
               {
                 name: "Leonidas",
-                role: t.team.roles.tech,
+                role: t.team.members[0].title,
                 icon: <Code size={24} className="text-white" />,
-                desc: t.team.bios.leonidas,
+                desc: t.team.members[0].bio,
                 color: "from-zinc-700 to-zinc-900",
               },
               {
                 name: "Dew Mazumder",
-                role: t.team.roles.operations,
+                role: t.team.members[1].title,
                 icon: <Briefcase size={24} className="text-white" />,
-                desc: t.team.bios.dew,
+                desc: t.team.members[1].bio,
                 color: "from-green-600 to-green-800",
               },
             ].map((m, i) => (
@@ -1166,7 +1166,7 @@ export default function RentcoinLandingPage() {
             {t.tokenomics.title}
           </p>
           <h2 className={`text-5xl md:text-7xl font-black mb-6 text-center leading-none tracking-tight ${dm('text-white', 'text-gray-900')}`}>
-            {t.tokenomics.headline.split('RENT')[0]}<span className="text-green-500">RENT</span>{t.tokenomics.headline.split('RENT')[1]}
+            {t.tokenomics.title.split('RENT')[0]}<span className="text-green-500">RENT</span>{t.tokenomics.title.split('RENT')[1]}
           </h2>
           <p className={`text-center text-lg md:text-xl mb-20 max-w-2xl mx-auto leading-relaxed ${dm('text-gray-500', 'text-gray-600')}`}>
             {t.tokenomics.description}
@@ -1190,7 +1190,7 @@ export default function RentcoinLandingPage() {
           {/* Token Distribution — modern dark card */}
           <div className={`rounded-3xl p-10 md:p-14 mb-16 ${dm('bg-zinc-800', 'bg-gray-100')}`}>
             <h3 className={`text-2xl font-black mb-2 text-center tracking-tight ${dm('text-white', 'text-gray-900')}`}>{t.tokenomics.distribution}</h3>
-            <p className={`text-sm text-center mb-12 ${dm('text-gray-500', 'text-gray-600')}`}>{t.tokenomics.totalTokens}</p>
+            <p className={`text-sm text-center mb-12 ${dm('text-gray-500', 'text-gray-600')}`}>{t.tokenomics.transparentlyAllocated ? `1.000.000.000 RENT Token — ${t.tokenomics.transparentlyAllocated}` : "1.000.000.000 RENT Token"}</p>
 
             {/* Visual bar */}
             <div className="h-4 rounded-full overflow-hidden flex mb-10">
@@ -1203,7 +1203,14 @@ export default function RentcoinLandingPage() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              {t.tokenomics.allocation.map((d, i) => (
+              {[
+                { name: t.tokenomics.investors, detail: t.tokenomics.publicPrivateSale, pct: 45, color: "bg-green-500" },
+                { name: t.tokenomics.teamFounders, detail: t.tokenomics.vestingYears, pct: 25, color: "bg-zinc-700" },
+                { name: t.tokenomics.reserve, detail: t.tokenomics.corporateReserve, pct: 10, color: "bg-amber-500" },
+                { name: t.tokenomics.community, detail: t.tokenomics.academyRewards, pct: 10, color: "bg-pink-500" },
+                { name: t.tokenomics.staking, detail: t.tokenomics.stakingRewardsPool, pct: 5, color: "bg-zinc-700" },
+                { name: t.tokenomics.advisors, detail: t.tokenomics.vestingMonths, pct: 5, color: "bg-indigo-400" },
+              ].map((d, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className={`w-3 h-3 rounded-full ${d.color} mt-1.5 flex-shrink-0`} />
                   <div>
@@ -1221,14 +1228,14 @@ export default function RentcoinLandingPage() {
               <div className="w-12 h-12 rounded-2xl bg-green-950 flex items-center justify-center mb-6">
                 <Coins size={24} className="text-green-400" />
               </div>
-              <h3 className="text-2xl font-black text-white mb-6 tracking-tight">TOKEN UTILITY</h3>
+              <h3 className={`text-2xl font-black mb-6 tracking-tight ${dm('text-white', 'text-gray-900')}`}>{t.tokenomics.utility}</h3>
               <div className="space-y-5">
                 {[
-                  "Frühzugang zu neuen Objekten",
-                  "Stimmrechte auf DAO-Ebene",
-                  "Vergünstigte Gebühren (bis 30%)",
-                  "Academy-Zugang",
-                  "Beta-Funktionen vor Release",
+                  t.tokenomics.earlyAccessProperties,
+                  t.tokenomics.votingRights,
+                  t.tokenomics.reducedFees,
+                  t.tokenomics.academyAccess,
+                  t.tokenomics.betaFeatures,
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
@@ -1244,13 +1251,13 @@ export default function RentcoinLandingPage() {
               <div className="w-12 h-12 rounded-2xl bg-zinc-800 flex items-center justify-center mb-6">
                 <Shield size={24} className="text-green-500" />
               </div>
-              <h3 className="text-2xl font-black text-white mb-6 tracking-tight">STABILISIERUNG</h3>
+              <h3 className={`text-2xl font-black mb-6 tracking-tight ${dm('text-white', 'text-gray-900')}`}>{t.tokenomics.stabilization}</h3>
               <div className="space-y-5">
                 {[
-                  { title: "90-Tage Haltefrist", desc: "nach Erstkauf" },
-                  { title: "Staking-Belohnungen", desc: "5% Pool" },
-                  { title: "Buy-Back-Programm", desc: "10% der Gewinne" },
-                  { title: "Liquiditätsreserve", desc: "5% Verkaufserlöse" },
+                  { title: t.tokenomics.holdingPeriod, desc: t.tokenomics.afterFirstPurchase },
+                  { title: t.tokenomics.stakingRewards, desc: "5% Pool" },
+                  { title: t.tokenomics.buyBackProgram, desc: t.tokenomics.profitsPercentage },
+                  { title: t.tokenomics.liquidityReserve, desc: t.tokenomics.salesProceeds },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
                     <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center flex-shrink-0">
@@ -1269,10 +1276,10 @@ export default function RentcoinLandingPage() {
           {/* Revenue Model — minimal grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { name: "Verwaltung", value: "0,5%", sub: "p.a. · ~60% Umsatz" },
-              { name: "Transaktion", value: "0,5–1,5%", sub: "pro Trade · ~30% Umsatz" },
-              { name: "Partner", value: "Variabel", sub: "Provisionen · ~7%" },
-              { name: "White-Label", value: "Modular", sub: "Lizenzgebühren · ~3%" },
+              { name: t.tokenomics.management, value: "0,5%", sub: t.tokenomics.managementRevenue },
+              { name: t.tokenomics.transaction, value: "0,5–1,5%", sub: t.tokenomics.transactionRevenue },
+              { name: t.tokenomics.partners, value: lang === "de" ? "Variabel" : "Variable", sub: t.tokenomics.commissions },
+              { name: "White-Label", value: t.tokenomics.modular, sub: t.tokenomics.whiteLabelFees },
             ].map((r, i) => (
               <div key={i} className="bg-zinc-900 rounded-2xl p-6 text-center hover:bg-zinc-800 transition-colors">
                 <p className="text-3xl md:text-4xl font-black text-white mb-1">{r.value}</p>
@@ -1564,7 +1571,7 @@ export default function RentcoinLandingPage() {
             <div className="text-center md:text-left">
               <div className={`inline-flex items-center gap-2 rounded-full px-4 py-1 mb-6 ${dm('bg-green-500/20', 'bg-green-100')}`}>
                 <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className={`text-sm font-medium ${dm('text-green-400', 'text-green-600')}`}>{t.register.callout}</span>
+                <span className={`text-sm font-medium ${dm('text-green-400', 'text-green-600')}`}>{lang === "de" ? "Jetzt registrieren" : "Register now"}</span>
               </div>
               <h2 className={`text-4xl md:text-5xl font-extrabold mb-4 leading-tight ${dm('text-white', 'text-gray-900')}`}>
                 {t.register.title}
