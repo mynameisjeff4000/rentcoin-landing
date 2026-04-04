@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "./supabase";
+import { useInvestments } from "./useInvestments";
 import {
   Home, Building2, Wallet, BarChart3, Settings, LogOut, TrendingUp,
   ArrowUpRight, ArrowDownRight, ChevronRight, Bell, Search, User,
@@ -151,13 +152,45 @@ function StatCard({ icon: Icon, label, value, sub, color = "green" }) {
 }
 
 /* ───────── DASHBOARD ───────── */
-function DashboardPage({ userName }) {
-  const totalTokens = PORTFOLIO.reduce((s, p) => s + p.tokens, 0);
+function DashboardPage({ userName, realInvestments = [] }) {
+  // Merge real investments into portfolio view
+  const hasReal = realInvestments.length > 0;
+  const portfolio = hasReal
+    ? realInvestments.map(inv => ({
+        propertyId: inv.property_slug || inv.property_id,
+        propertyName: inv.property_name || inv.property_slug,
+        tokens: inv.tokens,
+        avgPrice: inv.avg_price,
+        currentPrice: RENT_TOKEN_PRICE,
+        amountEur: inv.amount_eur,
+        txHash: inv.tx_hash,
+        date: inv.created_at?.split("T")[0],
+        status: inv.status,
+      }))
+    : PORTFOLIO.map(p => ({ ...p, propertyName: PROPERTIES.find(pr => pr.id === p.propertyId)?.name }));
+
+  const transactions = hasReal
+    ? realInvestments.map((inv, i) => ({
+        id: inv.id || i,
+        type: "buy",
+        tokens: inv.tokens,
+        property: inv.property_name || inv.property_slug,
+        price: inv.avg_price,
+        date: inv.created_at?.split("T")[0],
+        status: inv.status || "confirmed",
+        txHash: inv.tx_hash,
+        yieldEur: 0,
+      }))
+    : TRANSACTIONS;
+
+  const totalTokens = portfolio.reduce((s, p) => s + p.tokens, 0);
   const totalValue = totalTokens * RENT_TOKEN_PRICE;
-  const totalInvested = PORTFOLIO.reduce((s, p) => s + p.tokens * p.avgPrice, 0);
+  const totalInvested = hasReal
+    ? realInvestments.reduce((s, inv) => s + (inv.amount_eur || inv.tokens * inv.avg_price), 0)
+    : PORTFOLIO.reduce((s, p) => s + p.tokens * p.avgPrice, 0);
   const totalReturn = totalValue - totalInvested;
-  const returnPct = ((totalReturn / totalInvested) * 100).toFixed(1);
-  const monthlyYield = TRANSACTIONS.filter(t => t.type === "yield").reduce((s, t) => s + t.yieldEur, 0);
+  const returnPct = totalInvested > 0 ? ((totalReturn / totalInvested) * 100).toFixed(1) : "0.0";
+  const monthlyYield = transactions.filter(t => t.type === "yield").reduce((s, t) => s + (t.yieldEur || 0), 0);
 
   return (
     <div>
@@ -166,7 +199,7 @@ function DashboardPage({ userName }) {
         <StatCard icon={Coins} label="Portfolio Wert" value={`${fmt(totalValue)} €`} sub={`${fmtInt(totalTokens)} RENT Tokens`} color="green" />
         <StatCard icon={TrendingUp} label="Gesamtrendite" value={`+${fmt(totalReturn)} €`} sub={`+${returnPct}% seit Start`} color="blue" />
         <StatCard icon={Wallet} label="Monatl. Ausschüttung" value={`${fmt(monthlyYield)} €`} sub="Letzte: 01.04.2026" color="purple" />
-        <StatCard icon={Building2} label="Objekte" value={PORTFOLIO.length.toString()} sub={`von ${PROPERTIES.length} verfügbar`} color="orange" />
+        <StatCard icon={Building2} label="Objekte" value={portfolio.length.toString()} sub={`von ${PROPERTIES.length} verfügbar`} color="orange" />
       </div>
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-6">
@@ -215,7 +248,7 @@ function DashboardPage({ userName }) {
           <Link to="/app/transactions" className="text-sm text-blue-600 hover:text-blue-700 font-medium">Alle →</Link>
         </div>
         <div className="space-y-3">
-          {TRANSACTIONS.slice(-3).reverse().map((tx) => (
+          {transactions.slice(0, 3).map((tx) => (
             <div key={tx.id} className="flex items-center gap-4 py-3 border-b border-gray-50 last:border-0">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.type === "buy" ? "bg-blue-50 text-blue-600" : "bg-green-50 text-green-600"}`}>
                 {tx.type === "buy" ? <ArrowDownRight size={20} /> : <TrendingUp size={20} />}
@@ -388,13 +421,34 @@ function PropertyDetailPage() {
 }
 
 /* ───────── PORTFOLIO ───────── */
-function PortfolioPage() {
-  const totalTokens = PORTFOLIO.reduce((s, p) => s + p.tokens, 0);
+function PortfolioPage({ realInvestments = [] }) {
+  const hasReal = realInvestments.length > 0;
+
+  // Aggregate real investments by property (user might invest multiple times in same property)
+  const aggregated = hasReal
+    ? Object.values(realInvestments.reduce((acc, inv) => {
+        const key = inv.property_slug || inv.property_id;
+        if (!acc[key]) {
+          acc[key] = { propertyId: key, propertyName: inv.property_name || key, tokens: 0, totalSpent: 0, currentPrice: RENT_TOKEN_PRICE };
+        }
+        acc[key].tokens += inv.tokens;
+        acc[key].totalSpent += inv.amount_eur || inv.tokens * inv.avg_price;
+        return acc;
+      }, {}))
+    : PORTFOLIO;
+
+  const portfolio = hasReal
+    ? aggregated.map(a => ({ ...a, avgPrice: a.tokens > 0 ? a.totalSpent / a.tokens : 0 }))
+    : PORTFOLIO;
+
+  const totalTokens = portfolio.reduce((s, p) => s + p.tokens, 0);
   const totalValue = totalTokens * RENT_TOKEN_PRICE;
-  const totalInvested = PORTFOLIO.reduce((s, p) => s + p.tokens * p.avgPrice, 0);
+  const totalInvested = hasReal
+    ? portfolio.reduce((s, p) => s + (p.totalSpent || p.tokens * p.avgPrice), 0)
+    : PORTFOLIO.reduce((s, p) => s + p.tokens * p.avgPrice, 0);
   const totalProfit = totalValue - totalInvested;
-  const totalProfitPct = ((totalProfit / totalInvested) * 100).toFixed(1);
-  const monthlyYield = TRANSACTIONS.filter(t => t.type === "yield").reduce((s, t) => s + t.yieldEur, 0);
+  const totalProfitPct = totalInvested > 0 ? ((totalProfit / totalInvested) * 100).toFixed(1) : "0.0";
+  const monthlyYield = hasReal ? 0 : TRANSACTIONS.filter(t => t.type === "yield").reduce((s, t) => s + t.yieldEur, 0);
 
   return (
     <div>
@@ -420,7 +474,7 @@ function PortfolioPage() {
           </div>
           <div>
             <p className="text-slate-400 text-xs mb-1">Objekte im Portfolio</p>
-            <p className="text-2xl md:text-3xl font-extrabold">{PORTFOLIO.length}</p>
+            <p className="text-2xl md:text-3xl font-extrabold">{portfolio.length}</p>
             <p className="text-slate-400 text-xs mt-1">von {PROPERTIES.filter(p => p.status === "Aktiv").length} aktiven</p>
           </div>
         </div>
@@ -430,22 +484,22 @@ function PortfolioPage() {
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
         <h2 className="text-lg font-bold mb-4">Allocation</h2>
         <div className="flex gap-1 h-4 rounded-full overflow-hidden mb-4">
-          {PORTFOLIO.map((pos) => {
+          {portfolio.map((pos, i) => {
             const property = PROPERTIES.find(p => p.id === pos.propertyId);
-            const pct = ((pos.tokens * pos.currentPrice) / totalValue * 100);
+            const pct = totalValue > 0 ? ((pos.tokens * (pos.currentPrice || RENT_TOKEN_PRICE)) / totalValue * 100) : 0;
             const colors = ["bg-green-500", "bg-blue-500", "bg-purple-500", "bg-orange-500"];
-            return <div key={pos.propertyId} className={`${colors[PORTFOLIO.indexOf(pos) % colors.length]} transition-all`} style={{ width: `${pct}%` }} title={`${property?.name}: ${pct.toFixed(0)}%`} />;
+            return <div key={pos.propertyId} className={`${colors[i % colors.length]} transition-all`} style={{ width: `${pct}%` }} title={`${property?.name || pos.propertyName}: ${pct.toFixed(0)}%`} />;
           })}
         </div>
         <div className="flex flex-wrap gap-4">
-          {PORTFOLIO.map((pos, i) => {
+          {portfolio.map((pos, i) => {
             const property = PROPERTIES.find(p => p.id === pos.propertyId);
-            const pct = ((pos.tokens * pos.currentPrice) / totalValue * 100);
+            const pct = totalValue > 0 ? ((pos.tokens * (pos.currentPrice || RENT_TOKEN_PRICE)) / totalValue * 100) : 0;
             const colors = ["bg-green-500", "bg-blue-500", "bg-purple-500", "bg-orange-500"];
             return (
               <div key={pos.propertyId} className="flex items-center gap-2 text-sm">
                 <div className={`w-3 h-3 rounded-full ${colors[i % colors.length]}`} />
-                <span className="text-gray-600">{property?.name}</span>
+                <span className="text-gray-600">{property?.name || pos.propertyName}</span>
                 <span className="font-bold">{pct.toFixed(0)}%</span>
               </div>
             );
@@ -455,27 +509,27 @@ function PortfolioPage() {
 
       {/* Individual Holdings */}
       <div className="space-y-4">
-        {PORTFOLIO.map((pos) => {
+        {portfolio.map((pos) => {
           const property = PROPERTIES.find((p) => p.id === pos.propertyId);
-          if (!property) return null;
-          const currentValue = pos.tokens * pos.currentPrice;
-          const investedValue = pos.tokens * pos.avgPrice;
+          const currentValue = pos.tokens * (pos.currentPrice || RENT_TOKEN_PRICE);
+          const investedValue = pos.totalSpent || pos.tokens * pos.avgPrice;
           const profit = currentValue - investedValue;
-          const profitPct = ((profit / investedValue) * 100).toFixed(1);
-          const monthlyEst = (currentValue * parseFloat(property.yield) / 100 / 12);
+          const profitPct = investedValue > 0 ? ((profit / investedValue) * 100).toFixed(1) : "0.0";
+          const yieldPct = property ? parseFloat(property.yield) : 5.0;
+          const monthlyEst = (currentValue * yieldPct / 100 / 12);
           return (
-            <Link to={`/app/property/${property.id}`} key={pos.propertyId} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition block">
+            <Link to={`/app/property/${pos.propertyId}`} key={pos.propertyId} className="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition block">
               <div className="flex flex-col sm:flex-row gap-4">
-                <img src={property.image} alt={property.name} className="w-full sm:w-40 h-28 object-cover rounded-lg" />
+                {property?.image && <img src={property.image} alt={property?.name || pos.propertyName} className="w-full sm:w-40 h-28 object-cover rounded-lg" />}
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-3">
-                    <div><h3 className="font-bold text-lg">{property.name}, {property.city}</h3><p className="text-sm text-gray-500">{property.type}</p></div>
+                    <div><h3 className="font-bold text-lg">{property?.name || pos.propertyName}{property?.city ? `, ${property.city}` : ""}</h3><p className="text-sm text-gray-500">{property?.type || "Immobilie"}</p></div>
                     <div className="text-right"><p className="text-xl font-bold">{fmt(currentValue)} €</p><p className={`text-sm font-bold ${profit >= 0 ? "text-green-600" : "text-red-500"}`}>{profit >= 0 ? "+" : ""}{fmt(profit)} € ({profitPct}%)</p></div>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
                     <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Tokens</p><p className="font-bold">{fmtInt(pos.tokens)} RENT</p></div>
                     <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Kaufpreis</p><p className="font-bold">{fmt(pos.avgPrice)} €</p></div>
-                    <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Rendite p.a.</p><p className="font-bold text-green-600">{property.yield}</p></div>
+                    <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Rendite p.a.</p><p className="font-bold text-green-600">{property?.yield || `${yieldPct}%`}</p></div>
                     <div className="bg-gray-50 rounded-lg p-2"><p className="text-xs text-gray-400">Est. monatl.</p><p className="font-bold text-green-600">{fmt(monthlyEst)} €</p></div>
                   </div>
                 </div>
@@ -497,7 +551,22 @@ function PortfolioPage() {
 }
 
 /* ───────── TRANSACTIONS ───────── */
-function TransactionsPage() {
+function TransactionsPage({ realInvestments = [] }) {
+  const hasReal = realInvestments.length > 0;
+  const txList = hasReal
+    ? realInvestments.map((inv, i) => ({
+        id: inv.id || i,
+        type: "buy",
+        tokens: inv.tokens,
+        property: inv.property_name || inv.property_slug,
+        price: inv.avg_price,
+        date: inv.created_at?.split("T")[0],
+        status: inv.status || "confirmed",
+        txHash: inv.tx_hash,
+        yieldEur: 0,
+      }))
+    : TRANSACTIONS;
+
   return (
     <div>
       <div className="mb-8"><h1 className="text-2xl font-bold">Transaktionen</h1><p className="text-gray-500 mt-1">Alle Käufe und Ausschüttungen</p></div>
@@ -515,7 +584,7 @@ function TransactionsPage() {
               </tr>
             </thead>
             <tbody>
-              {TRANSACTIONS.map((tx) => (
+              {txList.map((tx) => (
                 <tr key={tx.id} className="border-b border-gray-50 hover:bg-gray-50 transition">
                   <td className="px-6 py-4 text-sm font-bold"><span className={`px-2 py-1 rounded-full text-xs ${tx.type === "buy" ? "bg-blue-50 text-blue-600" : "bg-green-50 text-green-600"}`}>{tx.type === "buy" ? "Kauf" : "Ertrag"}</span></td>
                   <td className="px-6 py-4 text-sm font-medium">{tx.property}</td>
@@ -1503,6 +1572,7 @@ export default function RentcoinApp() {
   if (needsProfile) return <ProfileCompletionPage session={session} onComplete={() => setNeedsProfile(false)} />;
 
   const userName = session?.user?.user_metadata?.full_name || session?.user?.email?.split("@")[0] || "Nutzer";
+  const { investments: realInvestments } = useInvestments();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1510,11 +1580,11 @@ export default function RentcoinApp() {
       <div className={`transition-all duration-300 ${sidebarCollapsed ? "ml-16" : "ml-64"}`}>
         <main className="p-8">
           <Routes>
-            <Route index element={<DashboardPage userName={userName} />} />
+            <Route index element={<DashboardPage userName={userName} realInvestments={realInvestments} />} />
             <Route path="properties" element={<PropertiesPage />} />
             <Route path="property/:id" element={<PropertyDetailPage />} />
-            <Route path="portfolio" element={<PortfolioPage />} />
-            <Route path="transactions" element={<TransactionsPage />} />
+            <Route path="portfolio" element={<PortfolioPage realInvestments={realInvestments} />} />
+            <Route path="transactions" element={<TransactionsPage realInvestments={realInvestments} />} />
             <Route path="wallet" element={<WalletPage />} />
             <Route path="tokenomics" element={<TokenomicsPage />} />
             <Route path="transparency" element={<TransparencyPage />} />

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { translations } from "./translations";
 import { useProperty } from "./useProperties";
 import { trackEvent, Events } from "./analytics";
+import InvestModal from "./InvestModal";
 import {
   ArrowLeft,
   MapPin,
@@ -22,6 +23,7 @@ export default function PropertyDetailPage() {
   const t = translations[lang];
   const dm = (dark, light) => (darkMode ? dark : light);
 
+  const [showInvestModal, setShowInvestModal] = useState(false);
   const { property, loading } = useProperty(id);
 
   useEffect(() => {
@@ -256,9 +258,12 @@ export default function PropertyDetailPage() {
           <p className={`text-lg mb-8 max-w-2xl mx-auto ${dm('text-gray-400', 'text-gray-600')}`}>
             Start building your real estate portfolio with just €{property.minInvestment}.
           </p>
-          <Link to="/#register" className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 text-lg">
+          <button
+            onClick={() => setShowInvestModal(true)}
+            className="inline-block bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 text-lg cursor-pointer"
+          >
             {tPropertyDetail.investNow || "Invest Now"}
-          </Link>
+          </button>
         </div>
       </section>
 
@@ -270,6 +275,16 @@ export default function PropertyDetailPage() {
           </p>
         </div>
       </footer>
+
+      {/* ── Invest Modal ── */}
+      {showInvestModal && (
+        <InvestModal
+          property={property}
+          onClose={() => setShowInvestModal(false)}
+          lang={lang}
+          darkMode={darkMode}
+        />
+      )}
     </div>
   );
 }
