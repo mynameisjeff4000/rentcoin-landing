@@ -317,7 +317,7 @@ export default function RentcoinLandingPage() {
             </div>
             <span
               className={`text-xl font-bold transition-colors ${
-                scrolled ? "text-white" : "text-white"
+                scrolled ? dm("text-white", "text-gray-900") : dm("text-white", "text-gray-900")
               }`}
             >
               Rentcoin
@@ -331,7 +331,7 @@ export default function RentcoinLandingPage() {
                 key={l.id}
                 onClick={() => scrollTo(l.id)}
                 className={`text-sm font-medium transition-all relative pb-1 ${
-                  scrolled ? dm("text-gray-300", "text-gray-700") : "text-white"
+                  scrolled ? dm("text-gray-300", "text-gray-700") : dm("text-white", "text-gray-800")
                 } ${activeSection === l.id ? "opacity-100" : "opacity-70 hover:opacity-100"}`}
               >
                 {l.label}
@@ -722,13 +722,13 @@ export default function RentcoinLandingPage() {
                 </div>
                 <div className="mb-5">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>Tokenisierung</span>
-                    <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>12% abgeschlossen</span>
+                    <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>{t.properties.fields.tokenization}</span>
+                    <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>12% {t.properties.fields.completed}</span>
                   </div>
                   <div className={`w-full rounded-full h-3 overflow-hidden ${dm('bg-gray-700', 'bg-gray-300')}`}>
                     <div
                       className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full transition-all duration-1000"
-                      style={{ width: propertyVis ? "12%" : t.problem.barriers[2].title }}
+                      style={{ width: propertyVis ? "12%" : "0%" }}
                     />
                   </div>
                 </div>
@@ -793,13 +793,13 @@ export default function RentcoinLandingPage() {
                 </div>
                 <div className="mb-5">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>Tokenisierung</span>
-                    <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>5% abgeschlossen</span>
+                    <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>{t.properties.fields.tokenization}</span>
+                    <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>5% {t.properties.fields.completed}</span>
                   </div>
                   <div className={`w-full rounded-full h-3 overflow-hidden ${dm('bg-gray-700', 'bg-gray-300')}`}>
                     <div
                       className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full transition-all duration-1000"
-                      style={{ width: propertyVis ? "5%" : t.problem.barriers[2].title }}
+                      style={{ width: propertyVis ? "5%" : "0%" }}
                     />
                   </div>
                 </div>
@@ -888,12 +888,12 @@ export default function RentcoinLandingPage() {
               </thead>
               <tbody>
                 {[
-                  [t.properties.fields.minInvestment, t.problem.barriers[0].title, "Ab 100€"],
-                  [t.problem.barriers[1].label, t.problem.barriers[1].title, "Minuten"],
+                  [t.comparison.minInvestment, t.problem.barriers[0].title, "Ab 100€"],
+                  [t.comparison.saleDuration, t.problem.barriers[1].title, lang === "de" ? "Minuten" : "Minutes"],
                   [t.comparison.costs, "3–7%", "Unter 1,5%"],
-                  [t.problem.barriers[2].label, "Intransparent", "100% einsehbar"],
-                  [t.comparison.payouts, "Jährlich / gar nicht", "Monatlich"],
-                  [t.comparison.voting, "Keine", "Stimmrecht pro Anteil"],
+                  [t.comparison.transparency, lang === "de" ? "Intransparent" : "Opaque", lang === "de" ? "100% einsehbar" : "100% traceable"],
+                  [t.comparison.payouts, lang === "de" ? "Jährlich / gar nicht" : "Annual / not at all", lang === "de" ? "Monatlich" : "Monthly"],
+                  [t.comparison.voting, lang === "de" ? "Keine" : "None", lang === "de" ? "Stimmrecht pro Anteil" : "Voting per share"],
                 ].map(([label, trad, rc], i) => (
                   <tr key={i} className={i % 2 === 0 ? dm("bg-zinc-950", "bg-white") : dm("bg-zinc-900", "bg-gray-50")}>
                     <td className={`py-4 px-5 font-medium text-sm ${dm('text-gray-300', 'text-gray-700')}`}>
@@ -1079,7 +1079,7 @@ export default function RentcoinLandingPage() {
                   <div
                     className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-sm"
                   >
-                    {item.author[0]}
+                    {item.author?.[0] || "?"}
                   </div>
                   <div>
                     <p className={`font-bold text-sm ${dm('text-white', 'text-gray-900')}`}>{item.author}</p>
@@ -1224,9 +1224,9 @@ export default function RentcoinLandingPage() {
 
           {/* Utility + Stabilization — side by side clean */}
           <div className="grid md:grid-cols-2 gap-6 mb-16">
-            <div className="rounded-3xl p-10 border border-zinc-800 bg-zinc-950 shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-green-950 flex items-center justify-center mb-6">
-                <Coins size={24} className="text-green-400" />
+            <div className={`rounded-3xl p-10 border ${dm('border-zinc-800 bg-zinc-950', 'border-gray-200 bg-white')} shadow-sm hover:shadow-md transition-shadow duration-300`}>
+              <div className={`w-12 h-12 rounded-2xl ${dm('bg-green-950', 'bg-green-100')} flex items-center justify-center mb-6`}>
+                <Coins size={24} className={dm("text-green-400", "text-green-600")} />
               </div>
               <h3 className={`text-2xl font-black mb-6 tracking-tight ${dm('text-white', 'text-gray-900')}`}>{t.tokenomics.utility}</h3>
               <div className="space-y-5">
@@ -1241,15 +1241,15 @@ export default function RentcoinLandingPage() {
                     <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
                       <Check size={12} className="text-white" />
                     </div>
-                    <span className="text-gray-300 text-sm font-medium">{item}</span>
+                    <span className={`${dm('text-gray-300', 'text-gray-700')} text-sm font-medium`}>{item}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-3xl p-10 border border-zinc-800 bg-zinc-950 shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div className="w-12 h-12 rounded-2xl bg-zinc-800 flex items-center justify-center mb-6">
-                <Shield size={24} className="text-green-500" />
+            <div className={`rounded-3xl p-10 border ${dm('border-zinc-800 bg-zinc-950', 'border-gray-200 bg-white')} shadow-sm hover:shadow-md transition-shadow duration-300`}>
+              <div className={`w-12 h-12 rounded-2xl ${dm('bg-zinc-800', 'bg-gray-100')} flex items-center justify-center mb-6`}>
+                <Shield size={24} className={dm("text-green-500", "text-green-600")} />
               </div>
               <h3 className={`text-2xl font-black mb-6 tracking-tight ${dm('text-white', 'text-gray-900')}`}>{t.tokenomics.stabilization}</h3>
               <div className="space-y-5">
@@ -1260,12 +1260,12 @@ export default function RentcoinLandingPage() {
                   { title: t.tokenomics.liquidityReserve, desc: t.tokenomics.salesProceeds },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-4">
-                    <div className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center flex-shrink-0">
-                      <Check size={12} className="text-white" />
+                    <div className={`w-6 h-6 rounded-full ${dm('bg-zinc-700', 'bg-gray-300')} flex items-center justify-center flex-shrink-0`}>
+                      <Check size={12} className={dm("text-white", "text-gray-700")} />
                     </div>
                     <div>
-                      <span className="text-white text-sm font-bold">{item.title}</span>
-                      <span className="text-gray-400 text-sm ml-2">{item.desc}</span>
+                      <span className={`${dm('text-white', 'text-gray-900')} text-sm font-bold`}>{item.title}</span>
+                      <span className={`${dm('text-gray-400', 'text-gray-600')} text-sm ml-2`}>{item.desc}</span>
                     </div>
                   </div>
                 ))}
@@ -1281,10 +1281,10 @@ export default function RentcoinLandingPage() {
               { name: t.tokenomics.partners, value: lang === "de" ? "Variabel" : "Variable", sub: t.tokenomics.commissions },
               { name: "White-Label", value: t.tokenomics.modular, sub: t.tokenomics.whiteLabelFees },
             ].map((r, i) => (
-              <div key={i} className="bg-zinc-900 rounded-2xl p-6 text-center hover:bg-zinc-800 transition-colors">
-                <p className="text-3xl md:text-4xl font-black text-white mb-1">{r.value}</p>
-                <p className="text-sm font-bold text-gray-300 mb-1">{r.name}</p>
-                <p className="text-xs text-gray-400">{r.sub}</p>
+              <div key={i} className={`${dm('bg-zinc-900 hover:bg-zinc-800', 'bg-gray-100 hover:bg-gray-200')} rounded-2xl p-6 text-center transition-colors`}>
+                <p className={`text-3xl md:text-4xl font-black ${dm('text-white', 'text-gray-900')} mb-1`}>{r.value}</p>
+                <p className={`text-sm font-bold ${dm('text-gray-300', 'text-gray-700')} mb-1`}>{r.name}</p>
+                <p className={`text-xs ${dm('text-gray-400', 'text-gray-600')}`}>{r.sub}</p>
               </div>
             ))}
           </div>
@@ -1292,39 +1292,38 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ TRANSPARENZ ════════════ */}
-      <section id="transparency" className="py-32 md:py-44 px-6 bg-zinc-900 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+      <section id="transparency" className={`py-32 md:py-44 px-6 ${dm('bg-zinc-900', 'bg-gray-50')} relative overflow-hidden`}>
+        <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent`} />
 
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-green-500 font-bold tracking-widest uppercase text-xs mb-6">
-            Transparenz
+          <p className={`text-center ${dm('text-green-500', 'text-green-600')} font-bold tracking-widest uppercase text-xs mb-6`}>
+            {t.transparency.title}
           </p>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 text-center leading-none tracking-tight">
-            100% <span className="text-green-500">NACHVOLLZIEHBAR.</span>
+          <h2 className={`text-5xl md:text-7xl font-black ${dm('text-white', 'text-gray-900')} mb-6 text-center leading-none tracking-tight`}>
+            {t.transparency.title}
           </h2>
-          <p className="text-center text-gray-500 text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed">
-            Jeder Schritt — von der Akquise bis zur Ausschüttung —
-            ist transparent dokumentiert. Keine Black Box.
+          <p className={`text-center ${dm('text-gray-500', 'text-gray-600')} text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed`}>
+            {t.transparency.description}
           </p>
 
           {/* Deal Flow Pipeline — horizontal flow */}
           <div className="mb-20">
-            <h3 className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-8 text-center">DEAL FLOW PIPELINE</h3>
+            <h3 className={`text-xs font-bold ${dm('text-gray-400', 'text-gray-600')} tracking-widest uppercase mb-8 text-center`}>{t.transparency.dealFlow}</h3>
             <div className="flex flex-col md:flex-row gap-3 items-stretch">
               {[
-                { step: "01", name: "Akquise", desc: "Qualifizierte Objekte identifizieren" },
-                { step: "02", name: "AI-Bewertung", desc: "Automatisierte Marktanalyse" },
-                { step: "03", name: "Due Diligence", desc: "Juristische & finanzielle Prüfung" },
-                { step: "04", name: t.properties.fields.tokenization, desc: "Smart Contract Deployment" },
-                { step: "05", name: "Investoren", desc: "Kauf über Plattform" },
+                { step: "01", name: t.transparency.acquisition, desc: t.transparency.identifyProperties },
+                { step: "02", name: t.transparency.aiValuation, desc: t.transparency.automatedAnalysis },
+                { step: "03", name: t.transparency.dueDiligence, desc: t.transparency.legalReview },
+                { step: "04", name: t.transparency.tokenization, desc: t.transparency.smartContractDeployment },
+                { step: "05", name: t.transparency.investors, desc: t.transparency.purchaseViaPlattform },
               ].map((s, i) => (
                 <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-2">
-                  <div className="bg-zinc-950 rounded-2xl p-6 w-full text-center shadow-sm border border-zinc-800 hover:shadow-md transition-shadow flex-1">
+                  <div className={`${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')} rounded-2xl p-6 w-full text-center shadow-sm border hover:shadow-md transition-shadow flex-1`}>
                     <p className="text-3xl font-black text-green-500 mb-2">{s.step}</p>
-                    <p className="font-bold text-white text-sm mb-1">{s.name}</p>
-                    <p className="text-xs text-gray-400">{s.desc}</p>
+                    <p className={`font-bold ${dm('text-white', 'text-gray-900')} text-sm mb-1`}>{s.name}</p>
+                    <p className={`text-xs ${dm('text-gray-400', 'text-gray-600')}`}>{s.desc}</p>
                   </div>
-                  {i < 4 && <ArrowRight size={16} className="text-gray-300 flex-shrink-0 hidden md:block" />}
+                  {i < 4 && <ArrowRight size={16} className={`${dm('text-gray-300', 'text-gray-400')} flex-shrink-0 hidden md:block`} />}
                 </div>
               ))}
             </div>
@@ -1332,43 +1331,43 @@ export default function RentcoinLandingPage() {
 
           {/* Fee Comparison — bold visual */}
           <div className="grid md:grid-cols-2 gap-6 mb-12">
-            <div className="bg-zinc-950 rounded-3xl p-10 shadow-sm border border-zinc-800">
+            <div className={`${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')} rounded-3xl p-10 shadow-sm border`}>
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-3 h-3 rounded-full bg-green-500" />
-                <h3 className="font-black text-white text-lg tracking-tight">RENTCOIN</h3>
+                <h3 className={`font-black ${dm('text-white', 'text-gray-900')} text-lg tracking-tight`}>{t.transparency.rentcoin}</h3>
               </div>
               <div className="space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-gray-500 text-sm">Verwaltungsgebühr</span>
+                <div className={`flex justify-between items-center py-3 border-b ${dm('border-zinc-800', 'border-gray-200')}`}>
+                  <span className={`${dm('text-gray-500', 'text-gray-600')} text-sm`}>{t.transparency.managementFee}</span>
                   <span className="text-2xl font-black text-green-500">0,5%</span>
                 </div>
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-gray-500 text-sm">Transaktionsgebühr</span>
+                <div className={`flex justify-between items-center py-3 border-b ${dm('border-zinc-800', 'border-gray-200')}`}>
+                  <span className={`${dm('text-gray-500', 'text-gray-600')} text-sm`}>{t.transparency.transactionFee}</span>
                   <span className="text-2xl font-black text-green-500">0,5–1,5%</span>
                 </div>
                 <div className="flex justify-between items-center py-3">
-                  <span className="text-gray-500 text-sm">Versteckte Kosten</span>
-                  <span className="text-2xl font-black text-green-500">Keine</span>
+                  <span className={`${dm('text-gray-500', 'text-gray-600')} text-sm`}>{t.transparency.hiddenCosts}</span>
+                  <span className="text-2xl font-black text-green-500">{t.transparency.none}</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-zinc-950 rounded-3xl p-10 shadow-sm border border-zinc-800 opacity-60">
+            <div className={`${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')} rounded-3xl p-10 shadow-sm border opacity-60`}>
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-3 h-3 rounded-full bg-gray-300" />
-                <h3 className="font-black text-gray-400 text-lg tracking-tight">TRADITIONELL</h3>
+                <div className={`w-3 h-3 rounded-full ${dm('bg-gray-300', 'bg-gray-400')}`} />
+                <h3 className={`font-black ${dm('text-gray-400', 'text-gray-600')} text-lg tracking-tight`}>{t.transparency.traditional}</h3>
               </div>
               <div className="space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-gray-400 text-sm">Makler / Broker</span>
+                <div className={`flex justify-between items-center py-3 border-b ${dm('border-zinc-800', 'border-gray-200')}`}>
+                  <span className={`${dm('text-gray-400', 'text-gray-600')} text-sm`}>{t.transparency.brokerAgent}</span>
                   <span className="text-2xl font-black text-red-400 line-through">3–7%</span>
                 </div>
-                <div className="flex justify-between items-center py-3 border-b border-zinc-800">
-                  <span className="text-gray-400 text-sm">Verwaltung</span>
+                <div className={`flex justify-between items-center py-3 border-b ${dm('border-zinc-800', 'border-gray-200')}`}>
+                  <span className={`${dm('text-gray-400', 'text-gray-600')} text-sm`}>{t.transparency.management}</span>
                   <span className="text-2xl font-black text-red-400 line-through">1–3%</span>
                 </div>
                 <div className="flex justify-between items-center py-3">
-                  <span className="text-gray-400 text-sm">Gesamtkosten</span>
+                  <span className={`${dm('text-gray-400', 'text-gray-600')} text-sm`}>{t.transparency.totalCosts}</span>
                   <span className="text-2xl font-black text-red-400 line-through">4–10%</span>
                 </div>
               </div>
@@ -1377,28 +1376,27 @@ export default function RentcoinLandingPage() {
 
           {/* Bottom callout */}
           <div className="text-center">
-            <p className="text-4xl md:text-5xl font-black text-white mb-2">
+            <p className={`text-4xl md:text-5xl font-black ${dm('text-white', 'text-gray-900')} mb-2`}>
               &lt;1,5% <span className="text-green-500">Gesamtkosten</span>
             </p>
-            <p className="text-gray-400 text-lg">Bis zu 80% günstiger als traditionelle Wege</p>
+            <p className={`${dm('text-gray-400', 'text-gray-600')} text-lg`}>{t.transparency.upTo80Percent}</p>
           </div>
         </div>
       </section>
 
       {/* ════════════ AI ════════════ */}
-      <section id="ai" className="py-32 md:py-44 px-6 bg-zinc-950 relative overflow-hidden">
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-zinc-800 rounded-full blur-3xl opacity-40 pointer-events-none" />
+      <section id="ai" className={`py-32 md:py-44 px-6 ${dm('bg-zinc-950', 'bg-white')} relative overflow-hidden`}>
+        <div className={`absolute bottom-0 right-0 w-96 h-96 ${dm('bg-zinc-800', 'bg-gray-200')} rounded-full blur-3xl opacity-40 pointer-events-none`} />
 
         <div className="max-w-6xl mx-auto relative">
-          <p className="text-center text-green-500 font-bold tracking-widest uppercase text-xs mb-6">
-            Technologie
+          <p className={`text-center ${dm('text-green-500', 'text-green-600')} font-bold tracking-widest uppercase text-xs mb-6`}>
+            {t.ai.title}
           </p>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 text-center leading-none tracking-tight">
-            AI-GESTÜTZTE<br /><span className="text-green-500">ANALYSE.</span>
+          <h2 className={`text-5xl md:text-7xl font-black ${dm('text-white', 'text-gray-900')} mb-6 text-center leading-none tracking-tight`}>
+            {t.ai.subtitle}
           </h2>
-          <p className="text-center text-gray-500 text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed">
-            State-of-the-Art KI bewertet Immobilien schneller,
-            genauer und günstiger als traditionelle Methoden.
+          <p className={`text-center ${dm('text-gray-500', 'text-gray-600')} text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed`}>
+            {t.ai.description}
           </p>
 
           <div className="grid md:grid-cols-3 gap-6 mb-20">
@@ -1406,34 +1404,34 @@ export default function RentcoinLandingPage() {
               {
                 icon: <Target size={28} className="text-green-500" />,
                 num: "01",
-                title: "Automatisierte Bewertung",
-                desc: "ML-Modelle analysieren Marktdaten, Vergleichsobjekte und Makro-Trends für präzise Preisfindung.",
-                items: ["Marktdaten-Integration", "Preisprognosen 6-12M", "Vergleichswertanalyse"],
+                title: t.ai.automatedValuation,
+                desc: t.ai.mlModels,
+                items: [t.ai.marketDataIntegration, t.ai.priceForecasts, t.ai.comparableAnalysis],
               },
               {
                 icon: <FileText size={28} className="text-green-500" />,
                 num: "02",
-                title: "Deal Scoring",
-                desc: "Automatische Bewertung nach Risiko, Rendite und Standortqualität.",
-                items: ["Risikobewertung", "Standort A/B/C Lage", "Rendite-Projektion"],
+                title: t.ai.dealScoring,
+                desc: t.ai.automaticEvaluation,
+                items: [t.ai.riskAssessment, t.ai.locationRating, t.ai.returnProjection],
               },
               {
                 icon: <Zap size={28} className="text-green-500" />,
                 num: "03",
-                title: "Dokumentenprüfung",
-                desc: "OCR + NLP analysieren Verträge und Grundbuchauszüge in Minuten statt Wochen.",
-                items: ["OCR + NLP Verträge", "Grundbuch-Analyse", "Fraud Detection"],
+                title: t.ai.documentReview,
+                desc: t.ai.ocrNlp,
+                items: [t.ai.ocrNlpContracts, t.ai.landRegistryAnalysis, t.ai.fraudDetection],
               },
             ].map((card, i) => (
-              <div key={i} className="group bg-zinc-900 rounded-3xl p-10 border border-zinc-800 hover:bg-zinc-950 hover:shadow-lg hover:border-green-100 transition-all duration-500">
-                <p className="text-5xl font-black text-gray-100 group-hover:text-green-100 transition-colors mb-6">{card.num}</p>
-                <h3 className="text-xl font-black text-white mb-3 tracking-tight">{card.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">{card.desc}</p>
+              <div key={i} className={`group ${dm('bg-zinc-900 border-zinc-800 hover:bg-zinc-950 hover:border-green-100', 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-green-400')} rounded-3xl p-10 border hover:shadow-lg transition-all duration-500`}>
+                <p className={`text-5xl font-black ${dm('text-gray-100 group-hover:text-green-100', 'text-gray-400 group-hover:text-green-600')} transition-colors mb-6`}>{card.num}</p>
+                <h3 className={`text-xl font-black ${dm('text-white', 'text-gray-900')} mb-3 tracking-tight`}>{card.title}</h3>
+                <p className={`${dm('text-gray-500', 'text-gray-600')} text-sm leading-relaxed mb-6`}>{card.desc}</p>
                 <div className="space-y-3">
                   {card.items.map((item, j) => (
                     <div key={j} className="flex items-center gap-3 text-sm">
                       <div className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
-                      <span className="text-gray-400">{item}</span>
+                      <span className={dm('text-gray-400', 'text-gray-600')}>{item}</span>
                     </div>
                   ))}
                 </div>
@@ -1442,18 +1440,18 @@ export default function RentcoinLandingPage() {
           </div>
 
           {/* Speed Comparison — clean stat blocks */}
-          <div className="bg-zinc-800 rounded-3xl p-10 md:p-14">
-            <h3 className="text-xs font-bold text-gray-500 tracking-widest uppercase mb-10 text-center">GESCHWINDIGKEIT: RENTCOIN AI VS. TRADITIONELL</h3>
+          <div className={`${dm('bg-zinc-800', 'bg-gray-100')} rounded-3xl p-10 md:p-14`}>
+            <h3 className={`text-xs font-bold ${dm('text-gray-500', 'text-gray-600')} tracking-widest uppercase mb-10 text-center`}>{t.ai.speed}</h3>
             <div className="grid grid-cols-3 gap-6 text-center">
               {[
-                { process: "Bewertung", ai: "48h", trad: "2–4 Wochen" },
-                { process: "Due Diligence", ai: "2–4 Tage", trad: "4–8 Wochen" },
-                { process: "Dokumente", ai: "Auto", trad: "Manuell" },
+                { process: t.ai.valuation, ai: "48h", trad: "2–4 Wochen" },
+                { process: t.ai.dueDiligence, ai: "2–4 Tage", trad: "4–8 Wochen" },
+                { process: t.ai.documents, ai: t.ai.auto, trad: t.ai.manual },
               ].map((row, i) => (
                 <div key={i}>
-                  <p className="text-gray-500 text-xs mb-4 font-bold uppercase tracking-widest">{row.process}</p>
+                  <p className={`${dm('text-gray-500', 'text-gray-600')} text-xs mb-4 font-bold uppercase tracking-widest`}>{row.process}</p>
                   <p className="text-3xl md:text-5xl font-black text-green-400 mb-2">{row.ai}</p>
-                  <p className="text-sm text-gray-400 line-through">{row.trad}</p>
+                  <p className={`text-sm ${dm('text-gray-400', 'text-gray-500')} line-through`}>{row.trad}</p>
                 </div>
               ))}
             </div>
@@ -1462,72 +1460,71 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ KODEX ════════════ */}
-      <section id="codex" className="py-32 md:py-44 px-6 bg-zinc-900 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+      <section id="codex" className={`py-32 md:py-44 px-6 ${dm('bg-zinc-900', 'bg-gray-50')} relative overflow-hidden`}>
+        <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent`} />
 
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-green-500 font-bold tracking-widest uppercase text-xs mb-6">
-            Rentcoin Kodex
+          <p className={`text-center ${dm('text-green-500', 'text-green-600')} font-bold tracking-widest uppercase text-xs mb-6`}>
+            {t.codex.title}
           </p>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 text-center leading-none tracking-tight">
-            UNSER <span className="text-green-500">REGELWERK.</span>
+          <h2 className={`text-5xl md:text-7xl font-black ${dm('text-white', 'text-gray-900')} mb-6 text-center leading-none tracking-tight`}>
+            {t.codex.subtitle}
           </h2>
-          <p className="text-center text-gray-500 text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed">
-            EU-Regulierung, SPV-Struktur und dezentrale Governance —
-            der Rahmen für sicheres Investieren.
+          <p className={`text-center ${dm('text-gray-500', 'text-gray-600')} text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed`}>
+            {t.codex.description}
           </p>
 
           <div className="grid md:grid-cols-3 gap-6 mb-16">
             {[
               {
                 icon: <Scale size={32} className="text-green-500" />,
-                title: "ECSP-REGULIERUNG",
-                desc: "Phase 1 mit lizenzierten Partnern. Ziel: ECSP-Lizenz (European Crowdfunding Service Provider). Keine BaFin-Vollbanklizenz nötig.",
+                title: t.codex.ecspRegulation,
+                desc: t.codex.phase1,
                 accent: "bg-zinc-700",
               },
               {
                 icon: <Building2 size={32} className="text-green-400" />,
-                title: "SPV-STRUKTUR",
-                desc: "Jede Immobilie wird über eine eigene Zweckgesellschaft gehalten. Grundbuch sichert dein Investment — vollständig rechtlich geschützt.",
+                title: t.codex.spvStructure,
+                desc: t.codex.spvDescription,
                 accent: "bg-green-500",
               },
               {
                 icon: <Users size={32} className="text-green-500" />,
-                title: "DAO-GOVERNANCE",
-                desc: "RENT Token-Holder haben Stimmrechte. Wesentliche Entscheidungen werden dezentral abgestimmt — Verkauf, Reinvestment, Strategie.",
+                title: t.codex.daoGovernance,
+                desc: t.codex.daoDescription,
                 accent: "bg-zinc-700",
               },
             ].map((card, i) => (
-              <div key={i} className="bg-zinc-950 rounded-3xl overflow-hidden shadow-sm border border-zinc-800 hover:shadow-lg transition-all duration-500 group">
+              <div key={i} className={`${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')} rounded-3xl overflow-hidden shadow-sm border hover:shadow-lg transition-all duration-500 group`}>
                 <div className={`h-1.5 ${card.accent}`} />
                 <div className="p-10">
-                  <div className="w-14 h-14 rounded-2xl bg-zinc-900 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className={`w-14 h-14 rounded-2xl ${dm('bg-zinc-900', 'bg-gray-100')} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                     {card.icon}
                   </div>
-                  <h3 className="text-lg font-black text-white mb-4 tracking-tight">{card.title}</h3>
-                  <p className="text-gray-500 leading-relaxed text-sm">{card.desc}</p>
+                  <h3 className={`text-lg font-black ${dm('text-white', 'text-gray-900')} mb-4 tracking-tight`}>{card.title}</h3>
+                  <p className={`${dm('text-gray-500', 'text-gray-600')} leading-relaxed text-sm`}>{card.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Principles — dark block */}
-          <div className="bg-zinc-800 rounded-3xl p-10 md:p-14">
-            <h3 className="text-xs font-bold text-gray-500 tracking-widest uppercase mb-10 text-center">UNSERE PRINZIPIEN</h3>
+          <div className={`${dm('bg-zinc-800', 'bg-gray-100')} rounded-3xl p-10 md:p-14`}>
+            <h3 className={`text-xs font-bold ${dm('text-gray-500', 'text-gray-600')} tracking-widest uppercase mb-10 text-center`}>{t.codex.principles}</h3>
             <div className="grid md:grid-cols-2 gap-8">
               {[
-                { title: "Investorenschutz", desc: "90/10 Mietausschüttung — 90% für Investoren, 10% Verwaltung." },
-                { title: "Keine versteckten Gebühren", desc: "Alle Kosten vorab offengelegt und unveränderlich im Smart Contract." },
-                { title: "Grundbuch-gesichert", desc: "Jede SPV im deutschen Grundbuch eingetragen — dein reales Eigentum." },
-                { title: "Open Reporting", desc: "Quartalsbericht: Mieteinnahmen, Kosten, Bewertung, Performance." },
+                { title: t.codex.investorProtection, desc: t.codex.rentalDistribution },
+                { title: t.codex.noHiddenFees, desc: t.codex.costsDisclosed },
+                { title: t.codex.landRegistrySecured, desc: t.codex.spvRegistration },
+                { title: t.codex.openReporting, desc: t.codex.quarterlyReport },
               ].map((p, i) => (
                 <div key={i} className="flex gap-5">
                   <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Check size={14} className="text-white" />
                   </div>
                   <div>
-                    <p className="font-bold text-white mb-1">{p.title}</p>
-                    <p className="text-gray-400 text-sm leading-relaxed">{p.desc}</p>
+                    <p className={`font-bold ${dm('text-white', 'text-gray-900')} mb-1`}>{p.title}</p>
+                    <p className={`${dm('text-gray-400', 'text-gray-600')} text-sm leading-relaxed`}>{p.desc}</p>
                   </div>
                 </div>
               ))}
@@ -1601,7 +1598,7 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ FOOTER ════════════ */}
-      <footer className={`py-16 px-6 ${dm('bg-zinc-800 text-gray-400', 'bg-gray-100 text-gray-600')}`}>
+      <footer className={`py-16 px-6 ${dm('bg-zinc-800 text-gray-400', 'bg-gray-50 text-gray-600')}`}>
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-10 mb-12">
             {/* Brand */}
@@ -1646,18 +1643,18 @@ export default function RentcoinLandingPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">
-                Rechtliches
+              <h4 className={`font-bold ${dm('text-white', 'text-gray-900')} mb-4 text-sm uppercase tracking-wider`}>
+                {t.footer.legal}
               </h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="#" className="hover:text-white transition">
-                    Impressum
+                  <a href="#" className={`${dm('hover:text-white', 'hover:text-gray-900')} transition`}>
+                    {t.footer.imprint}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white transition">
-                    Datenschutz
+                  <a href="#" className={`${dm('hover:text-white', 'hover:text-gray-900')} transition`}>
+                    {t.footer.privacy}
                   </a>
                 </li>
                 <li>
@@ -1669,10 +1666,10 @@ export default function RentcoinLandingPage() {
             </div>
           </div>
 
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
-            <p>&copy; 2026 Rentcoin. Alle Rechte vorbehalten.</p>
-            <p className="text-gray-400">
-              Rentcoin ist ein Produkt der Rentcoin GmbH i.G., Hamburg.
+          <div className={`border-t ${dm('border-gray-800', 'border-gray-200')} pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs`}>
+            <p>{t.footer.copyright}</p>
+            <p className={dm('text-gray-400', 'text-gray-600')}>
+              {t.footer.company}
             </p>
           </div>
         </div>
