@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase";
 import { translations } from "./translations";
 import { trackEvent, Events } from "./analytics";
+import { useProperties } from "./useProperties";
 import {
   Building2,
   TrendingUp,
@@ -167,6 +168,7 @@ export default function RentcoinLandingPage() {
   // Language and theme state
   const [lang, setLang] = useState("de");
   const [darkMode, setDarkMode] = useState(true);
+  const { properties: dbProperties } = useProperties();
   const t = translations[lang];
   const dm = (dark, light) => darkMode ? dark : light;
 
@@ -624,148 +626,82 @@ export default function RentcoinLandingPage() {
             {t.properties.description}
           </p>
 
-          <div className="grid lg:grid-cols-2 gap-10">
-            {/* ── Property 1: Mispelstieg 13 ── */}
-            <div className={`rounded-2xl border overflow-hidden hover:shadow-xl transition-shadow duration-300 ${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')}`}>
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=500&fit=crop"
-                  alt="Einfamilienhaus Mispelstieg 13, Hamburg"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-5">
-                  <p className="text-white text-lg font-bold">Mispelstieg 13</p>
-                  <div className="flex items-center gap-1 text-gray-400 text-sm">
-                    <MapPin size={14} />
-                    <span>Hamburg-Wandsbek</span>
-                  </div>
-                </div>
-                <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                  {t.properties.comingSoon}
-                </div>
-                <div className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full ${dm('bg-zinc-950/90 text-white', 'bg-gray-200 text-gray-800')}`}>
-                  {t.properties.types.singleFamily}
-                </div>
-              </div>
-              <div className={`p-6 ${darkMode ? '' : 'bg-white'}`}>
-                <div className="grid grid-cols-2 gap-3 mb-5">
-                  {[
-                    { label: t.properties.fields.estimatedReturn, value: "5–7% p.a.", accent: true },
-                    { label: t.properties.fields.propertyValue, value: "850.000€", accent: false },
-                    { label: t.properties.fields.monthlyRental, value: "1.850€", accent: false },
-                    { label: t.properties.fields.tokenPrice, value: "100€", accent: false },
-                  ].map((d, i) => (
-                    <div
-                      key={i}
-                      className={`rounded-xl p-3 ${
-                        d.accent
-                          ? dm('bg-green-950 border border-green-900', 'bg-green-50 border border-green-200')
-                          : dm('bg-zinc-900 border border-zinc-800', 'bg-gray-50 border border-gray-200')
-                      }`}
-                    >
-                      <p className={`text-xs mb-1 ${d.accent ? 'text-green-600' : dm('text-gray-500', 'text-gray-500')}`}>{d.label}</p>
-                      <p
-                        className={`text-xl font-extrabold ${
-                          d.accent ? "text-green-400" : dm('text-white', 'text-gray-900')
-                        }`}
-                      >
-                        {d.value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mb-5">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>{t.properties.fields.tokenization}</span>
-                    <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>12% {t.properties.fields.completed}</span>
-                  </div>
-                  <div className={`w-full rounded-full h-3 overflow-hidden ${dm('bg-gray-700', 'bg-gray-300')}`}>
-                    <div
-                      className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full transition-all duration-1000"
-                      style={{ width: propertyVis ? "12%" : "0%" }}
-                    />
-                  </div>
-                </div>
-                <Link
-                  to="/property/mispelstieg-13"
-                  className="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
-                >
-                  {t.properties.fields.viewDetails}
-                  <ArrowRight size={16} />
-                </Link>
-              </div>
-            </div>
+          <div className={`grid ${dbProperties.length >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-10`}>
+            {dbProperties.map((prop) => {
+              const typeLabel = lang === "de" ? prop.type.de : prop.type.en;
+              const statusLabel = prop.status === "coming-soon" ? t.properties.comingSoon
+                : prop.status === "active" ? (t.properties.new || "Aktiv")
+                : (lang === "de" ? "Bald verfügbar" : "Coming Soon");
+              const fmtValue = (v) => v >= 1000000 ? `${(v / 1000000).toFixed(2).replace('.', ',')} Mio. €` : `${v.toLocaleString("de-DE")}€`;
 
-            {/* ── Property 2: Turmstraße 5 ── */}
-            <div className={`rounded-2xl border overflow-hidden hover:shadow-xl transition-shadow duration-300 ${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')}`}>
-              <div className="relative h-64 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=500&fit=crop"
-                  alt="Mehrfamilienhaus Turmstraße 5, Berlin"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-5">
-                  <p className="text-white text-lg font-bold">Turmstraße 5</p>
-                  <div className="flex items-center gap-1 text-gray-400 text-sm">
-                    <MapPin size={14} />
-                    <span>Berlin-Moabit</span>
-                  </div>
-                </div>
-                <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                  {t.properties.new}
-                </div>
-                <div className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full ${dm('bg-zinc-950/90 text-white', 'bg-gray-200 text-gray-800')}`}>
-                  {t.properties.types.multiFamily}
-                </div>
-              </div>
-              <div className={`p-6 ${darkMode ? '' : 'bg-white'}`}>
-                <div className="grid grid-cols-2 gap-3 mb-5">
-                  {[
-                    { label: t.properties.fields.estimatedReturn, value: "6–8% p.a.", accent: true },
-                    { label: t.properties.fields.propertyValue, value: "1.250.000€", accent: false },
-                    { label: t.properties.fields.monthlyRental, value: "4.200€", accent: false },
-                    { label: t.properties.fields.tokenPrice, value: "100€", accent: false },
-                  ].map((d, i) => (
-                    <div
-                      key={i}
-                      className={`rounded-xl p-3 ${
-                        d.accent
-                          ? dm('bg-green-950 border border-green-900', 'bg-green-50 border border-green-200')
-                          : dm('bg-zinc-900 border border-zinc-800', 'bg-gray-50 border border-gray-200')
-                      }`}
-                    >
-                      <p className={`text-xs mb-1 ${d.accent ? 'text-green-600' : dm('text-gray-500', 'text-gray-500')}`}>{d.label}</p>
-                      <p
-                        className={`text-xl font-extrabold ${
-                          d.accent ? "text-green-400" : dm('text-white', 'text-gray-900')
-                        }`}
-                      >
-                        {d.value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mb-5">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>{t.properties.fields.tokenization}</span>
-                    <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>5% {t.properties.fields.completed}</span>
-                  </div>
-                  <div className={`w-full rounded-full h-3 overflow-hidden ${dm('bg-gray-700', 'bg-gray-300')}`}>
-                    <div
-                      className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full transition-all duration-1000"
-                      style={{ width: propertyVis ? "5%" : "0%" }}
+              return (
+                <div key={prop.id} className={`rounded-2xl border overflow-hidden hover:shadow-xl transition-shadow duration-300 ${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')}`}>
+                  <div className="relative h-64 overflow-hidden">
+                    <img
+                      src={prop.image}
+                      alt={`${typeLabel} ${prop.address}, ${prop.city}`}
+                      className="w-full h-full object-cover"
                     />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-5">
+                      <p className="text-white text-lg font-bold">{prop.address}</p>
+                      <div className="flex items-center gap-1 text-gray-400 text-sm">
+                        <MapPin size={14} />
+                        <span>{prop.city}{prop.district ? `-${prop.district}` : ''}</span>
+                      </div>
+                    </div>
+                    <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                      {statusLabel}
+                    </div>
+                    <div className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full ${dm('bg-zinc-950/90 text-white', 'bg-gray-200 text-gray-800')}`}>
+                      {typeLabel}
+                    </div>
+                  </div>
+                  <div className={`p-6 ${darkMode ? '' : 'bg-white'}`}>
+                    <div className="grid grid-cols-2 gap-3 mb-5">
+                      {[
+                        { label: t.properties.fields.estimatedReturn, value: `${prop.estimatedReturn} p.a.`, accent: true },
+                        { label: t.properties.fields.propertyValue, value: fmtValue(prop.propertyValue), accent: false },
+                        { label: t.properties.fields.monthlyRental, value: `${prop.monthlyRental.toLocaleString("de-DE")}€`, accent: false },
+                        { label: t.properties.fields.tokenPrice, value: `${prop.tokenPrice}€`, accent: false },
+                      ].map((d, i) => (
+                        <div
+                          key={i}
+                          className={`rounded-xl p-3 ${
+                            d.accent
+                              ? dm('bg-green-950 border border-green-900', 'bg-green-50 border border-green-200')
+                              : dm('bg-zinc-900 border border-zinc-800', 'bg-gray-50 border border-gray-200')
+                          }`}
+                        >
+                          <p className={`text-xs mb-1 ${d.accent ? 'text-green-600' : dm('text-gray-500', 'text-gray-500')}`}>{d.label}</p>
+                          <p className={`text-xl font-extrabold ${d.accent ? "text-green-400" : dm('text-white', 'text-gray-900')}`}>
+                            {d.value}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mb-5">
+                      <div className="flex justify-between text-sm mb-2">
+                        <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>{t.properties.fields.tokenization}</span>
+                        <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>{prop.tokenizationPercent}% {t.properties.fields.completed}</span>
+                      </div>
+                      <div className={`w-full rounded-full h-3 overflow-hidden ${dm('bg-gray-700', 'bg-gray-300')}`}>
+                        <div
+                          className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full transition-all duration-1000"
+                          style={{ width: propertyVis ? `${prop.tokenizationPercent}%` : "0%" }}
+                        />
+                      </div>
+                    </div>
+                    <Link
+                      to={`/property/${prop.id}`}
+                      className="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
+                    >
+                      {t.properties.fields.viewDetails}
+                      <ArrowRight size={16} />
+                    </Link>
                   </div>
                 </div>
-                <Link
-                  to="/property/turmstrasse-5"
-                  className="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
-                >
-                  {t.properties.fields.viewDetails}
-                  <ArrowRight size={16} />
-                </Link>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </section>

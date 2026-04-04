@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { translations } from "./translations";
-import { properties } from "./propertyData";
+import { useProperty } from "./useProperties";
 import { trackEvent, Events } from "./analytics";
 import {
   ArrowLeft,
@@ -11,6 +11,7 @@ import {
   CheckCircle,
   Sun,
   Moon,
+  Loader2,
 } from "lucide-react";
 
 export default function PropertyDetailPage() {
@@ -21,13 +22,21 @@ export default function PropertyDetailPage() {
   const t = translations[lang];
   const dm = (dark, light) => (darkMode ? dark : light);
 
-  const property = properties.find((p) => p.id === id);
+  const { property, loading } = useProperty(id);
 
   useEffect(() => {
     if (property) {
       trackEvent(Events.PROPERTY_VIEW, { property: property.id });
     }
   }, [property]);
+
+  if (loading) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${dm('bg-black', 'bg-white')}`}>
+        <Loader2 className="w-8 h-8 animate-spin text-green-500" />
+      </div>
+    );
+  }
 
   if (!property) {
     return (
