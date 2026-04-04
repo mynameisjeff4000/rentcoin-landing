@@ -1067,258 +1067,305 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ TOKENOMICS ════════════ */}
-      <section id="tokenomics" className="py-24 md:py-32 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <SectionLabel color="text-green-600">Tokenomics</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
-            Der RENT Token
+      <section id="tokenomics" className="py-32 md:py-44 px-6 bg-white relative overflow-hidden">
+        {/* Subtle decorative elements */}
+        <div className="absolute top-20 right-0 w-96 h-96 bg-green-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
+        <div className="absolute bottom-20 left-0 w-80 h-80 bg-blue-50 rounded-full blur-3xl opacity-40 pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto relative">
+          <p className="text-center text-green-600 font-bold tracking-widest uppercase text-xs mb-6 letter-spacing-4">
+            Tokenomics
+          </p>
+          <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 text-center leading-none tracking-tight">
+            DER <span className="text-green-500">RENT</span> TOKEN.
           </h2>
-          <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
-            ERC-20 Token auf Polygon PoS — gedeckt durch reale Immobilienwerte. 1 Milliarde Total Supply, faire Verteilung, echte Utility.
+          <p className="text-center text-gray-500 text-lg md:text-xl mb-20 max-w-2xl mx-auto leading-relaxed">
+            ERC-20 auf Polygon PoS — gedeckt durch reale Immobilienwerte.
+            Faire Verteilung, echte Utility.
           </p>
 
-          {/* Token Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+          {/* Token Stats — clean pill-style */}
+          <div className="flex flex-wrap justify-center gap-4 mb-20">
             {[
-              { label: "Total Supply", value: "1 Mrd. RC", icon: <Coins size={20} className="text-green-600" /> },
-              { label: "Blockchain", value: "Polygon PoS", icon: <Globe size={20} className="text-blue-600" /> },
-              { label: "Standard", value: "ERC-20", icon: <Layers size={20} className="text-purple-600" /> },
-              { label: "Akzeptiert", value: "EUR, BTC, ETH", icon: <Wallet size={20} className="text-orange-600" /> },
+              { label: "Total Supply", value: "1 Mrd. RC" },
+              { label: "Blockchain", value: "Polygon PoS" },
+              { label: "Standard", value: "ERC-20" },
+              { label: "Akzeptiert", value: "EUR · BTC · ETH" },
             ].map((s, i) => (
-              <div key={i} className="bg-gray-50 rounded-xl p-5 border border-gray-200 text-center">
-                <div className="flex justify-center mb-3">{s.icon}</div>
-                <p className="text-xs text-gray-500 mb-1">{s.label}</p>
-                <p className="text-lg font-extrabold text-blue-900">{s.value}</p>
+              <div key={i} className="bg-gray-50 rounded-full px-7 py-4 flex items-center gap-3 border border-gray-100">
+                <span className="text-sm text-gray-400">{s.label}</span>
+                <span className="text-sm font-bold text-gray-900">{s.value}</span>
               </div>
             ))}
           </div>
 
-          {/* Token Distribution */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 md:p-10 mb-12 text-white">
-            <h3 className="text-xl font-bold mb-8 text-center">Token-Verteilung</h3>
-            <div className="grid md:grid-cols-2 gap-x-10 gap-y-5">
+          {/* Token Distribution — modern dark card */}
+          <div className="bg-gray-950 rounded-3xl p-10 md:p-14 mb-16">
+            <h3 className="text-2xl font-black text-white mb-2 text-center tracking-tight">TOKEN-VERTEILUNG</h3>
+            <p className="text-gray-500 text-sm text-center mb-12">1.000.000.000 RENT Token — transparent allokiert</p>
+
+            {/* Visual bar */}
+            <div className="h-4 rounded-full overflow-hidden flex mb-10">
+              <div className="bg-green-500 h-full" style={{ width: "45%" }} />
+              <div className="bg-blue-500 h-full" style={{ width: "25%" }} />
+              <div className="bg-amber-500 h-full" style={{ width: "10%" }} />
+              <div className="bg-pink-500 h-full" style={{ width: "10%" }} />
+              <div className="bg-purple-500 h-full" style={{ width: "5%" }} />
+              <div className="bg-indigo-400 h-full" style={{ width: "5%" }} />
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {[
-                { name: "Investoren (Public Sale + Private)", pct: 45, color: "bg-green-500" },
-                { name: "Team & Gründer (3J Vesting)", pct: 25, color: "bg-blue-500" },
-                { name: "Unternehmensreserve", pct: 10, color: "bg-orange-500" },
-                { name: "Community & Academy", pct: 10, color: "bg-pink-500" },
-                { name: "Staking Rewards", pct: 5, color: "bg-purple-500" },
-                { name: "Berater & Partner (36M Vesting)", pct: 5, color: "bg-indigo-400" },
+                { name: "Investoren", detail: "Public + Private Sale", pct: 45, color: "bg-green-500" },
+                { name: "Team & Gründer", detail: "3 Jahre Vesting", pct: 25, color: "bg-blue-500" },
+                { name: "Reserve", detail: "Unternehmensreserve", pct: 10, color: "bg-amber-500" },
+                { name: "Community", detail: "Academy & Rewards", pct: 10, color: "bg-pink-500" },
+                { name: "Staking", detail: "Staking Rewards Pool", pct: 5, color: "bg-purple-500" },
+                { name: "Berater", detail: "36M Vesting", pct: 5, color: "bg-indigo-400" },
               ].map((d, i) => (
-                <div key={i}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-slate-300">{d.name}</span>
-                    <span className="text-sm font-bold">{d.pct}%</span>
-                  </div>
-                  <div className="h-2.5 bg-slate-700 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${d.color}`} style={{ width: `${d.pct}%` }} />
+                <div key={i} className="flex items-start gap-3">
+                  <div className={`w-3 h-3 rounded-full ${d.color} mt-1.5 flex-shrink-0`} />
+                  <div>
+                    <p className="text-white font-bold text-sm">{d.pct}% — {d.name}</p>
+                    <p className="text-gray-500 text-xs">{d.detail}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Token Utility + Stabilization */}
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-green-50 rounded-2xl p-8 border border-green-200">
-              <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-2">
-                <Coins size={24} className="text-green-600" /> Token Utility
-              </h3>
-              <ul className="space-y-4">
+          {/* Utility + Stabilization — side by side clean */}
+          <div className="grid md:grid-cols-2 gap-6 mb-16">
+            <div className="rounded-3xl p-10 border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center mb-6">
+                <Coins size={24} className="text-green-600" />
+              </div>
+              <h3 className="text-2xl font-black text-gray-900 mb-6 tracking-tight">TOKEN UTILITY</h3>
+              <div className="space-y-5">
                 {[
                   "Frühzugang zu neuen Objekten",
                   "Stimmrechte auf DAO-Ebene",
                   "Vergünstigte Gebühren (bis 30%)",
-                  "Academy-Zugang (Fortbildung)",
+                  "Academy-Zugang",
                   "Beta-Funktionen vor Release",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check size={18} className="text-green-600 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{item}</span>
-                  </li>
+                  <div key={i} className="flex items-center gap-4">
+                    <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                      <Check size={12} className="text-white" />
+                    </div>
+                    <span className="text-gray-700 text-sm font-medium">{item}</span>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-200">
-              <h3 className="text-xl font-bold text-blue-900 mb-6 flex items-center gap-2">
-                <Shield size={24} className="text-blue-600" /> Stabilisierung
-              </h3>
-              <ul className="space-y-4">
+
+            <div className="rounded-3xl p-10 border border-gray-100 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6">
+                <Shield size={24} className="text-blue-600" />
+              </div>
+              <h3 className="text-2xl font-black text-gray-900 mb-6 tracking-tight">STABILISIERUNG</h3>
+              <div className="space-y-5">
                 {[
                   { title: "90-Tage Haltefrist", desc: "nach Erstkauf" },
-                  { title: "Staking-Belohnungen", desc: "5% Pool für Beliehung" },
-                  { title: "Buy-Back-Programm", desc: "10% der Gewinne automatisch" },
-                  { title: "Liquiditätsreserve", desc: "5% aller Verkaufserlöse" },
+                  { title: "Staking-Belohnungen", desc: "5% Pool" },
+                  { title: "Buy-Back-Programm", desc: "10% der Gewinne" },
+                  { title: "Liquiditätsreserve", desc: "5% Verkaufserlöse" },
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check size={18} className="text-blue-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <span className="font-bold text-gray-900">{item.title}</span>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
+                  <div key={i} className="flex items-center gap-4">
+                    <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+                      <Check size={12} className="text-white" />
                     </div>
-                  </li>
+                    <div>
+                      <span className="text-gray-900 text-sm font-bold">{item.title}</span>
+                      <span className="text-gray-400 text-sm ml-2">{item.desc}</span>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
 
-          {/* Revenue Model */}
-          <div className="mt-12 bg-gray-50 rounded-2xl p-8 border border-gray-200">
-            <h3 className="text-xl font-bold text-blue-900 mb-6 text-center">Ertragsmodell</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { name: "Verwaltungsgebühren", value: "0,5% p.a.", pct: "60%" },
-                { name: "Transaktionsgebühren", value: "0,5–1,5%", pct: "30%" },
-                { name: "Partnerprovisionen", value: "Variable", pct: "7%" },
-                { name: "White-Label", value: "Modular", pct: "3%" },
-              ].map((r, i) => (
-                <div key={i} className="bg-white rounded-xl p-5 border border-gray-200 text-center">
-                  <p className="text-sm text-gray-500 mb-1">{r.name}</p>
-                  <p className="text-xl font-extrabold text-blue-900">{r.value}</p>
-                  <p className="text-xs text-gray-400 mt-1">~{r.pct} Umsatzanteil</p>
-                </div>
-              ))}
-            </div>
+          {/* Revenue Model — minimal grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { name: "Verwaltung", value: "0,5%", sub: "p.a. · ~60% Umsatz" },
+              { name: "Transaktion", value: "0,5–1,5%", sub: "pro Trade · ~30% Umsatz" },
+              { name: "Partner", value: "Variabel", sub: "Provisionen · ~7%" },
+              { name: "White-Label", value: "Modular", sub: "Lizenzgebühren · ~3%" },
+            ].map((r, i) => (
+              <div key={i} className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors">
+                <p className="text-3xl md:text-4xl font-black text-gray-900 mb-1">{r.value}</p>
+                <p className="text-sm font-bold text-gray-700 mb-1">{r.name}</p>
+                <p className="text-xs text-gray-400">{r.sub}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ════════════ TRANSPARENZ ════════════ */}
-      <section
-        id="transparency"
-        className="py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #f0f7ff 0%, #fff 100%)" }}
-      >
+      <section id="transparency" className="py-32 md:py-44 px-6 bg-gray-50 relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
         <div className="max-w-6xl mx-auto">
-          <SectionLabel color="text-blue-600">Transparenz</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
-            100% nachvollziehbar
+          <p className="text-center text-blue-600 font-bold tracking-widest uppercase text-xs mb-6">
+            Transparenz
+          </p>
+          <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 text-center leading-none tracking-tight">
+            100% <span className="text-green-500">NACHVOLLZIEHBAR.</span>
           </h2>
-          <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
-            Jeder Schritt — von der Akquise bis zur Ausschüttung — ist transparent dokumentiert. Keine Black Box.
+          <p className="text-center text-gray-500 text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed">
+            Jeder Schritt — von der Akquise bis zur Ausschüttung —
+            ist transparent dokumentiert. Keine Black Box.
           </p>
 
-          {/* Deal Flow Pipeline */}
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm mb-12">
-            <h3 className="text-lg font-bold text-blue-900 mb-6 text-center">Deal Flow — Wie Immobilien ausgewählt werden</h3>
+          {/* Deal Flow Pipeline — horizontal flow */}
+          <div className="mb-20">
+            <h3 className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-8 text-center">DEAL FLOW PIPELINE</h3>
             <div className="flex flex-col md:flex-row gap-3 items-stretch">
               {[
-                { step: "1", name: "Akquise", desc: "Qualifizierte Immobilien identifizieren" },
-                { step: "2", name: "AI-Bewertung", desc: "Automatisierte Marktanalyse" },
-                { step: "3", name: "Due Diligence", desc: "Juristische & finanzielle Prüfung" },
-                { step: "4", name: "Tokenisierung", desc: "Smart Contract Deployment" },
-                { step: "5", name: "Investoren", desc: "Kauf über Plattform" },
+                { step: "01", name: "Akquise", desc: "Qualifizierte Objekte identifizieren" },
+                { step: "02", name: "AI-Bewertung", desc: "Automatisierte Marktanalyse" },
+                { step: "03", name: "Due Diligence", desc: "Juristische & finanzielle Prüfung" },
+                { step: "04", name: "Tokenisierung", desc: "Smart Contract Deployment" },
+                { step: "05", name: "Investoren", desc: "Kauf über Plattform" },
               ].map((s, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center">
-                  <div className="bg-green-50 border border-green-200 rounded-xl p-4 w-full text-center flex-1">
-                    <div className="w-8 h-8 rounded-full bg-green-500 text-white font-bold text-sm flex items-center justify-center mx-auto mb-2">{s.step}</div>
-                    <p className="font-bold text-gray-900 text-sm">{s.name}</p>
-                    <p className="text-xs text-gray-600 mt-1">{s.desc}</p>
+                <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-2">
+                  <div className="bg-white rounded-2xl p-6 w-full text-center shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex-1">
+                    <p className="text-3xl font-black text-green-500 mb-2">{s.step}</p>
+                    <p className="font-bold text-gray-900 text-sm mb-1">{s.name}</p>
+                    <p className="text-xs text-gray-400">{s.desc}</p>
                   </div>
-                  {i < 4 && <ArrowRight size={18} className="text-gray-300 mt-2 hidden md:block rotate-0 md:rotate-0" />}
+                  {i < 4 && <ArrowRight size={16} className="text-gray-300 flex-shrink-0 hidden md:block" />}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Fee Comparison */}
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div className="bg-white rounded-2xl p-8 border border-gray-200">
-              <h3 className="font-bold text-blue-900 mb-4 flex items-center gap-2">
-                <Eye size={20} className="text-green-600" /> Rentcoin Gebühren
-              </h3>
-              <ul className="space-y-3 text-sm">
-                <li className="flex justify-between py-2 border-b border-gray-100"><span className="text-gray-600">Verwaltungsgebühr</span><span className="font-bold text-green-600">0,5% p.a.</span></li>
-                <li className="flex justify-between py-2 border-b border-gray-100"><span className="text-gray-600">Transaktionsgebühr</span><span className="font-bold text-green-600">0,5–1,5%</span></li>
-                <li className="flex justify-between py-2"><span className="text-gray-600">Versteckte Kosten</span><span className="font-bold text-green-600">Keine</span></li>
-              </ul>
+          {/* Fee Comparison — bold visual */}
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            <div className="bg-white rounded-3xl p-10 shadow-sm border border-gray-100">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-3 h-3 rounded-full bg-green-500" />
+                <h3 className="font-black text-gray-900 text-lg tracking-tight">RENTCOIN</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center py-3 border-b border-gray-50">
+                  <span className="text-gray-500 text-sm">Verwaltungsgebühr</span>
+                  <span className="text-2xl font-black text-green-500">0,5%</span>
+                </div>
+                <div className="flex justify-between items-center py-3 border-b border-gray-50">
+                  <span className="text-gray-500 text-sm">Transaktionsgebühr</span>
+                  <span className="text-2xl font-black text-green-500">0,5–1,5%</span>
+                </div>
+                <div className="flex justify-between items-center py-3">
+                  <span className="text-gray-500 text-sm">Versteckte Kosten</span>
+                  <span className="text-2xl font-black text-green-500">Keine</span>
+                </div>
+              </div>
             </div>
-            <div className="bg-gray-50 rounded-2xl p-8 border border-gray-200">
-              <h3 className="font-bold text-gray-500 mb-4">Traditionelle Immobilien</h3>
-              <ul className="space-y-3 text-sm">
-                <li className="flex justify-between py-2 border-b border-gray-200"><span className="text-gray-600">Makler / Broker</span><span className="font-bold text-red-500">3–7%</span></li>
-                <li className="flex justify-between py-2 border-b border-gray-200"><span className="text-gray-600">Verwaltung</span><span className="font-bold text-red-500">1–3% p.a.</span></li>
-                <li className="flex justify-between py-2"><span className="text-gray-600">Gesamtkosten</span><span className="font-bold text-red-500">4–10%</span></li>
-              </ul>
+
+            <div className="bg-white rounded-3xl p-10 shadow-sm border border-gray-100 opacity-60">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-3 h-3 rounded-full bg-gray-300" />
+                <h3 className="font-black text-gray-400 text-lg tracking-tight">TRADITIONELL</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center py-3 border-b border-gray-50">
+                  <span className="text-gray-400 text-sm">Makler / Broker</span>
+                  <span className="text-2xl font-black text-red-400 line-through">3–7%</span>
+                </div>
+                <div className="flex justify-between items-center py-3 border-b border-gray-50">
+                  <span className="text-gray-400 text-sm">Verwaltung</span>
+                  <span className="text-2xl font-black text-red-400 line-through">1–3%</span>
+                </div>
+                <div className="flex justify-between items-center py-3">
+                  <span className="text-gray-400 text-sm">Gesamtkosten</span>
+                  <span className="text-2xl font-black text-red-400 line-through">4–10%</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
-            <p className="text-lg">
-              <span className="font-bold text-blue-900">Rentcoin Vorteil:</span>{" "}
-              <span className="text-green-700 font-extrabold text-xl">&lt;1,5% Gesamtkosten</span>{" "}
-              <span className="text-gray-600">— bis zu 80% günstiger als traditionelle Wege</span>
+          {/* Bottom callout */}
+          <div className="text-center">
+            <p className="text-4xl md:text-5xl font-black text-gray-900 mb-2">
+              &lt;1,5% <span className="text-green-500">Gesamtkosten</span>
             </p>
+            <p className="text-gray-400 text-lg">Bis zu 80% günstiger als traditionelle Wege</p>
           </div>
         </div>
       </section>
 
       {/* ════════════ AI ════════════ */}
-      <section
-        id="ai"
-        className="py-24 md:py-32 px-6 bg-white"
-      >
-        <div className="max-w-6xl mx-auto">
-          <SectionLabel color="text-purple-600">Technologie</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
-            AI-gestützte Immobilienanalyse
+      <section id="ai" className="py-32 md:py-44 px-6 bg-white relative overflow-hidden">
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-50 rounded-full blur-3xl opacity-40 pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto relative">
+          <p className="text-center text-purple-600 font-bold tracking-widest uppercase text-xs mb-6">
+            Technologie
+          </p>
+          <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 text-center leading-none tracking-tight">
+            AI-GESTÜTZTE<br /><span className="text-green-500">ANALYSE.</span>
           </h2>
-          <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
-            Wir nutzen State-of-the-Art KI, um Immobilien schneller, genauer und günstiger zu bewerten als jeder Mensch.
+          <p className="text-center text-gray-500 text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed">
+            State-of-the-Art KI bewertet Immobilien schneller,
+            genauer und günstiger als traditionelle Methoden.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-3 gap-6 mb-20">
             {[
               {
-                icon: <Target size={28} className="text-purple-600" />,
+                icon: <Target size={28} className="text-green-500" />,
+                num: "01",
                 title: "Automatisierte Bewertung",
                 desc: "ML-Modelle analysieren Marktdaten, Vergleichsobjekte und Makro-Trends für präzise Preisfindung.",
-                items: ["Marktdaten-Integration", "Preisprognosen (6-12 Monate)", "Vergleichswertanalyse"],
+                items: ["Marktdaten-Integration", "Preisprognosen 6-12M", "Vergleichswertanalyse"],
               },
               {
-                icon: <FileText size={28} className="text-purple-600" />,
+                icon: <FileText size={28} className="text-green-500" />,
+                num: "02",
                 title: "Deal Scoring",
-                desc: "Jedes potenzielle Objekt wird automatisch nach Risiko, Rendite und Standort bewertet.",
-                items: ["Automatische Risikobewertung", "Standort-Analyse (A/B/C Lage)", "Rendite-Projektion"],
+                desc: "Automatische Bewertung nach Risiko, Rendite und Standortqualität.",
+                items: ["Risikobewertung", "Standort A/B/C Lage", "Rendite-Projektion"],
               },
               {
-                icon: <Zap size={28} className="text-purple-600" />,
+                icon: <Zap size={28} className="text-green-500" />,
+                num: "03",
                 title: "Dokumentenprüfung",
-                desc: "OCR + NLP analysieren Verträge, Grundbuchauszüge und Finanzberichte in Minuten statt Wochen.",
-                items: ["OCR + NLP für Verträge", "Grundbuchauszüge analysieren", "Fraud Detection"],
+                desc: "OCR + NLP analysieren Verträge und Grundbuchauszüge in Minuten statt Wochen.",
+                items: ["OCR + NLP Verträge", "Grundbuch-Analyse", "Fraud Detection"],
               },
             ].map((card, i) => (
-              <div key={i} className="bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-all duration-300">
-                <div className="w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center mb-5">
-                  {card.icon}
-                </div>
-                <h3 className="text-xl font-bold text-blue-900 mb-3">{card.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-5">{card.desc}</p>
-                <ul className="space-y-2">
+              <div key={i} className="group bg-gray-50 rounded-3xl p-10 border border-gray-100 hover:bg-white hover:shadow-lg hover:border-green-100 transition-all duration-500">
+                <p className="text-5xl font-black text-gray-100 group-hover:text-green-100 transition-colors mb-6">{card.num}</p>
+                <h3 className="text-xl font-black text-gray-900 mb-3 tracking-tight">{card.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed mb-6">{card.desc}</p>
+                <div className="space-y-3">
                   {card.items.map((item, j) => (
-                    <li key={j} className="flex items-center gap-2 text-sm text-gray-700">
-                      <Check size={14} className="text-green-600 flex-shrink-0" />
-                      {item}
-                    </li>
+                    <div key={j} className="flex items-center gap-3 text-sm">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
+                      <span className="text-gray-600">{item}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Speed Comparison */}
-          <div className="bg-gradient-to-br from-purple-900 to-blue-900 rounded-2xl p-8 md:p-10 text-white">
-            <h3 className="text-xl font-bold mb-8 text-center">Geschwindigkeit: Rentcoin AI vs. Traditionell</h3>
-            <div className="grid grid-cols-3 gap-4 text-center">
+          {/* Speed Comparison — clean stat blocks */}
+          <div className="bg-gray-950 rounded-3xl p-10 md:p-14">
+            <h3 className="text-xs font-bold text-gray-500 tracking-widest uppercase mb-10 text-center">GESCHWINDIGKEIT: RENTCOIN AI VS. TRADITIONELL</h3>
+            <div className="grid grid-cols-3 gap-6 text-center">
               {[
-                { process: "Bewertung", ai: "48 Stunden", trad: "2–4 Wochen" },
+                { process: "Bewertung", ai: "48h", trad: "2–4 Wochen" },
                 { process: "Due Diligence", ai: "2–4 Tage", trad: "4–8 Wochen" },
-                { process: "Dokumentenprüfung", ai: "Automatisch", trad: "Manuell" },
+                { process: "Dokumente", ai: "Auto", trad: "Manuell" },
               ].map((row, i) => (
                 <div key={i}>
-                  <p className="text-purple-300 text-xs mb-3 font-semibold uppercase tracking-wider">{row.process}</p>
-                  <p className="text-xl md:text-2xl font-extrabold text-green-400 mb-1">{row.ai}</p>
-                  <p className="text-sm text-purple-300 line-through">{row.trad}</p>
+                  <p className="text-gray-500 text-xs mb-4 font-bold uppercase tracking-widest">{row.process}</p>
+                  <p className="text-3xl md:text-5xl font-black text-green-400 mb-2">{row.ai}</p>
+                  <p className="text-sm text-gray-600 line-through">{row.trad}</p>
                 </div>
               ))}
             </div>
@@ -1327,71 +1374,72 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ KODEX ════════════ */}
-      <section
-        id="codex"
-        className="py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #f8fbff 0%, #fff 100%)" }}
-      >
+      <section id="codex" className="py-32 md:py-44 px-6 bg-gray-50 relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
         <div className="max-w-6xl mx-auto">
-          <SectionLabel color="text-blue-600">Rentcoin Kodex</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-5 text-center leading-tight">
-            Unser Regelwerk
+          <p className="text-center text-blue-600 font-bold tracking-widest uppercase text-xs mb-6">
+            Rentcoin Kodex
+          </p>
+          <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 text-center leading-none tracking-tight">
+            UNSER <span className="text-green-500">REGELWERK.</span>
           </h2>
-          <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
-            Der Rentcoin Kodex definiert unsere Prinzipien: EU-Regulierung, SPV-Struktur und dezentrale Governance.
+          <p className="text-center text-gray-500 text-lg md:text-xl mb-24 max-w-2xl mx-auto leading-relaxed">
+            EU-Regulierung, SPV-Struktur und dezentrale Governance —
+            der Rahmen für sicheres Investieren.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
             {[
               {
                 icon: <Scale size={32} className="text-blue-600" />,
-                title: "ECSP-Regulierung",
-                desc: "Wir arbeiten in Phase 1 mit lizenzierten Partnern und streben eine ECSP-Lizenz (European Crowdfunding Service Provider) an. Keine BaFin-Vollbanklizenz nötig.",
-                color: "from-blue-500 to-blue-700",
+                title: "ECSP-REGULIERUNG",
+                desc: "Phase 1 mit lizenzierten Partnern. Ziel: ECSP-Lizenz (European Crowdfunding Service Provider). Keine BaFin-Vollbanklizenz nötig.",
+                accent: "bg-blue-500",
               },
               {
                 icon: <Building2 size={32} className="text-green-600" />,
-                title: "SPV-Struktur",
-                desc: "Jede Immobilie wird über eine eigene Zweckgesellschaft (SPV) gehalten. Das Grundbuch sichert dein Investment — vollständig rechtlich geschützt.",
-                color: "from-green-500 to-green-700",
+                title: "SPV-STRUKTUR",
+                desc: "Jede Immobilie wird über eine eigene Zweckgesellschaft gehalten. Grundbuch sichert dein Investment — vollständig rechtlich geschützt.",
+                accent: "bg-green-500",
               },
               {
                 icon: <Users size={32} className="text-purple-600" />,
-                title: "DAO-Governance",
-                desc: "RENT Token-Holder haben Stimmrechte. Wesentliche Entscheidungen — wie Objektverkauf oder Reinvestment — werden dezentral abgestimmt.",
-                color: "from-purple-500 to-purple-700",
+                title: "DAO-GOVERNANCE",
+                desc: "RENT Token-Holder haben Stimmrechte. Wesentliche Entscheidungen werden dezentral abgestimmt — Verkauf, Reinvestment, Strategie.",
+                accent: "bg-purple-500",
               },
             ].map((card, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300">
-                <div className={`h-2 bg-gradient-to-r ${card.color}`} />
-                <div className="p-8">
-                  <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center mb-5">
+              <div key={i} className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-500 group">
+                <div className={`h-1.5 ${card.accent}`} />
+                <div className="p-10">
+                  <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                     {card.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">{card.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{card.desc}</p>
+                  <h3 className="text-lg font-black text-gray-900 mb-4 tracking-tight">{card.title}</h3>
+                  <p className="text-gray-500 leading-relaxed text-sm">{card.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Principles */}
-          <div className="bg-blue-900 rounded-2xl p-8 md:p-10 text-white">
-            <h3 className="text-xl font-bold mb-8 text-center">Unsere Prinzipien</h3>
-            <div className="grid md:grid-cols-2 gap-6">
+          {/* Principles — dark block */}
+          <div className="bg-gray-950 rounded-3xl p-10 md:p-14">
+            <h3 className="text-xs font-bold text-gray-500 tracking-widest uppercase mb-10 text-center">UNSERE PRINZIPIEN</h3>
+            <div className="grid md:grid-cols-2 gap-8">
               {[
                 { title: "Investorenschutz", desc: "90/10 Mietausschüttung — 90% für Investoren, 10% Verwaltung." },
-                { title: "Keine versteckten Gebühren", desc: "Alle Kosten sind vorab offengelegt und unveränderlich im Smart Contract." },
-                { title: "Grundbuch-gesichert", desc: "Jede SPV wird im deutschen Grundbuch eingetragen — dein reales Eigentum." },
-                { title: "Open Reporting", desc: "Quartalsbericht mit Mieteinnahmen, Kosten, Bewertung und Performance." },
+                { title: "Keine versteckten Gebühren", desc: "Alle Kosten vorab offengelegt und unveränderlich im Smart Contract." },
+                { title: "Grundbuch-gesichert", desc: "Jede SPV im deutschen Grundbuch eingetragen — dein reales Eigentum." },
+                { title: "Open Reporting", desc: "Quartalsbericht: Mieteinnahmen, Kosten, Bewertung, Performance." },
               ].map((p, i) => (
-                <div key={i} className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-1">
-                    <Check size={16} className="text-white" />
+                <div key={i} className="flex gap-5">
+                  <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check size={14} className="text-white" />
                   </div>
                   <div>
-                    <p className="font-bold mb-1">{p.title}</p>
-                    <p className="text-blue-200 text-sm leading-relaxed">{p.desc}</p>
+                    <p className="font-bold text-white mb-1">{p.title}</p>
+                    <p className="text-gray-400 text-sm leading-relaxed">{p.desc}</p>
                   </div>
                 </div>
               ))}
