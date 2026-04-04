@@ -76,7 +76,7 @@ export default function PropertyDetailPage() {
       </header>
 
       {/* ── Hero Section ── */}
-      <section className="relative h-96 md:h-screen/2 overflow-hidden">
+      <section className="relative h-72 md:h-[50vh] overflow-hidden">
         <img
           src={property.image}
           alt={property.address}
