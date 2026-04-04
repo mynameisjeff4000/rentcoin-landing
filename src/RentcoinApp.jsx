@@ -1019,14 +1019,49 @@ function SellPropertyPage() {
     beschreibung: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Objekt eingereicht! Unser AI-System wird es in 48 Stunden analysieren.");
-    setFormData({ objektart: "", street: "", plz: "", city: "", wert: "", flaeche: "", baujahr: "", einheiten: "", mieteinnahmen: "", beschreibung: "" });
+    setLoading(true);
+    setError("");
+    setSuccess(false);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const { error: insertError } = await supabase
+        .from("property_submissions")
+        .insert({
+          user_id: session?.user?.id || null,
+          object_type: formData.objektart,
+          address: formData.street,
+          plz: formData.plz,
+          city: formData.city,
+          estimated_value: formData.wert ? parseFloat(formData.wert) : null,
+          area_sqm: formData.flaeche ? parseFloat(formData.flaeche) : null,
+          built_year: formData.baujahr ? parseInt(formData.baujahr) : null,
+          units: formData.einheiten ? parseInt(formData.einheiten) : 1,
+          monthly_rent: formData.mieteinnahmen ? parseFloat(formData.mieteinnahmen) : null,
+          description: formData.beschreibung || null,
+        });
+
+      if (insertError) throw insertError;
+
+      setSuccess(true);
+      setFormData({ objektart: "", street: "", plz: "", city: "", wert: "", flaeche: "", baujahr: "", einheiten: "", mieteinnahmen: "", beschreibung: "" });
+    } catch (err) {
+      setError(err.message || "Es gab einen Fehler beim Einreichen des Objekts.");
+      console.error("Submission error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -1036,6 +1071,19 @@ function SellPropertyPage() {
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-6">
           <h2 className="text-lg font-bold mb-6">Objekt-Details einreichen</h2>
+
+          {success && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-green-800 font-medium">Objekt erfolgreich eingereicht! Unser AI-System wird es in 48 Stunden analysieren.</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-800 font-medium">{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">Objektart</label>
@@ -1097,8 +1145,19 @@ function SellPropertyPage() {
               </div>
             </div>
 
-            <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">
-              Objekt einreichen
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Wird eingereicht...
+                </>
+              ) : (
+                "Objekt einreichen"
+              )}
             </button>
           </form>
         </div>
