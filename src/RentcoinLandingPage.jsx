@@ -469,20 +469,18 @@ export default function RentcoinLandingPage() {
         />
 
         <div className="relative max-w-4xl mx-auto text-center pt-20">
-          <p className="text-green-400 font-semibold tracking-wider uppercase text-sm mb-4">
-            Die Zukunft des Immobilieninvestments
+          <p className={`text-green-400 font-semibold tracking-wider uppercase text-sm mb-4 ${dm('text-green-400', 'text-green-600')}`}>
+            {t.hero.title}
           </p>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
-            Immobilien-Investment
+          <h1 className={`text-5xl md:text-7xl font-extrabold mb-6 leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.hero.subtitle.split(' ').slice(0, -2).join(' ')}
             <br />
             <span className="text-green-400">ab {heroCount}&euro;</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto">
-            Rentcoin macht den Immobilienmarkt für alle zugänglich.
-            Investiere in digitale Immobilienanteile — transparent,
-            flexibel, renditeorientiert.
+          <p className={`text-xl md:text-2xl mb-10 leading-relaxed max-w-2xl mx-auto ${dm('text-gray-300', 'text-gray-600')}`}>
+            {t.hero.description}
           </p>
 
           {/* Trust Badges */}
@@ -495,11 +493,11 @@ export default function RentcoinLandingPage() {
             ].map((badge) => (
               <div
                 key={badge}
-                className="flex items-center gap-2 bg-zinc-950/10 rounded-full px-4 py-2"
+                className={`flex items-center gap-2 rounded-full px-4 py-2 ${dm('bg-zinc-950/10', 'bg-gray-100')}`}
                 style={{ backdropFilter: "blur(4px)" }}
               >
                 <CheckCircle size={16} className="text-green-400 flex-shrink-0" />
-                <span className="text-white text-sm font-medium">{badge}</span>
+                <span className={`text-sm font-medium ${dm('text-white', 'text-gray-800')}`}>{badge}</span>
               </div>
             ))}
           </div>
@@ -510,24 +508,24 @@ export default function RentcoinLandingPage() {
               onClick={() => scrollTo("tokenomics")}
               className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center gap-2 shadow-lg shadow-green-500/30"
             >
-              Alles erfahren
+              {t.hero.learnMore}
               <ArrowRight size={20} />
             </button>
             <button
               onClick={() => scrollTo("solution")}
-              className="text-white font-medium py-4 px-6 rounded-xl text-lg hover:bg-zinc-950/10 transition inline-flex items-center gap-2"
+              className={`font-medium py-4 px-6 rounded-xl text-lg hover:bg-zinc-950/10 transition inline-flex items-center gap-2 ${dm('text-white', 'text-gray-700')}`}
             >
-              So funktioniert es
+              {t.hero.howItWorks}
               <ChevronDown size={20} />
             </button>
           </div>
 
           {/* social proof pill */}
-          <div className="mt-12 inline-flex items-center gap-3 bg-zinc-950/10 rounded-full px-5 py-2" style={{ backdropFilter: "blur(4px)" }}>
+          <div className={`mt-12 inline-flex items-center gap-3 rounded-full px-5 py-2 ${dm('bg-zinc-950/10', 'bg-gray-100')}`} style={{ backdropFilter: "blur(4px)" }}>
             <div className="flex items-center gap-2">
               <Shield size={16} className="text-green-400" />
-              <p className="text-gray-300 text-sm">
-                EU-reguliert · Grundbuch-gesichert · Blockchain-transparent
+              <p className={`text-sm ${dm('text-gray-300', 'text-gray-600')}`}>
+                {t.hero.features}
               </p>
             </div>
           </div>
@@ -540,18 +538,17 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ PROBLEM ════════════ */}
-      <section id="problem" className="py-24 md:py-32 px-6 bg-zinc-950">
+      <section id="problem" className={`py-24 md:py-32 px-6 ${dm('bg-zinc-950', 'bg-white')}`}>
         <div
           ref={problemRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(problemVis)}`}
         >
-          <SectionLabel color="text-red-400">Das Problem</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-5 text-center leading-tight">
-            Der Immobilienmarkt ist nicht kaputt — <span className="text-red-400">er ist unfair</span>
+          <SectionLabel color="text-red-400">{t.problem.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-5 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.problem.subtitle.split(' — ')[0]} — <span className="text-red-400">{t.problem.subtitle.split(' — ')[1]}</span>
           </h2>
-          <p className="text-center text-gray-400 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
-            Immobilien sind die stabilste Anlage der Welt — aber nur für
-            wenige zugänglich. Das ändern wir mit Blockchain-Technologie.
+          <p className={`text-center text-lg mb-16 max-w-2xl mx-auto leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>
+            {t.problem.description}
           </p>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -560,7 +557,7 @@ export default function RentcoinLandingPage() {
                 icon: <Euro size={36} className="text-red-400" />,
                 stat: t.problem.barriers[0].title,
                 title: t.problem.barriers[0].label,
-                desc: "40% der Deutschen können sich kein Immobilien-Investment leisten. Der Markt bleibt den Reichen vorbehalten.",
+                desc: t.problem.barriers[0].desc,
               },
               {
                 icon: <Clock size={36} className="text-red-400" />,
@@ -572,21 +569,21 @@ export default function RentcoinLandingPage() {
                 icon: <EyeOff size={36} className="text-red-400" />,
                 stat: t.problem.barriers[2].title,
                 title: t.problem.barriers[2].label,
-                desc: "Traditionelle Immobilienfonds sind Black Boxes. Wohin dein Geld fließt, erfährst du meist nie.",
+                desc: t.problem.barriers[2].desc,
               },
             ].map((c, i) => (
               <div
                 key={i}
-                className={`relative bg-zinc-900 rounded-2xl p-8 border border-zinc-800 hover:shadow-lg transition-all duration-500 group ${staggerFade(problemStagger[i])}`}
+                className={`relative rounded-2xl p-8 border hover:shadow-lg transition-all duration-500 group ${staggerFade(problemStagger[i])} ${dm('bg-zinc-900 border-zinc-800', 'bg-white border-gray-200')}`}
               >
                 <div className="mb-5">{c.icon}</div>
-                <p className="text-3xl font-extrabold text-white mb-1">
+                <p className={`text-3xl font-extrabold mb-1 ${dm('text-white', 'text-gray-900')}`}>
                   {c.stat}
                 </p>
-                <h3 className="text-xl font-bold text-gray-200 mb-3">
+                <h3 className={`text-xl font-bold mb-3 ${dm('text-gray-200', 'text-gray-800')}`}>
                   {c.title}
                 </h3>
-                <p className="text-gray-400 leading-relaxed">{c.desc}</p>
+                <p className={`leading-relaxed ${dm('text-gray-400', 'text-gray-500')}`}>{c.desc}</p>
               </div>
             ))}
           </div>
@@ -597,19 +594,22 @@ export default function RentcoinLandingPage() {
       <section
         id="solution"
         className="py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #18181b 0%, #09090b 100%)" }}
+        style={{
+          background: darkMode
+            ? "linear-gradient(180deg, #18181b 0%, #09090b 100%)"
+            : "linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)",
+        }}
       >
         <div
           ref={solutionRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(solutionVis)}`}
         >
-          <SectionLabel color="text-green-400">Die Lösung</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-5 text-center leading-tight">
-            In 3 Schritten zum Immobilieninvestor
+          <SectionLabel color="text-green-400">{t.solution.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-5 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.solution.subtitle}
           </h2>
-          <p className="text-center text-gray-400 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
-            Kein Notar, kein Makler, kein Papierkram. Investiere ab
-            100€ — direkt von deinem Smartphone.
+          <p className={`text-center text-lg mb-16 max-w-2xl mx-auto leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>
+            {t.solution.description}
           </p>
 
           <div className="grid md:grid-cols-3 gap-10 relative">
@@ -621,13 +621,13 @@ export default function RentcoinLandingPage() {
                 step: 1,
                 icon: <Home size={32} className="text-white" />,
                 title: t.solution.steps[0].title,
-                desc: "Durchstöbere geprüfte Immobilien mit vollständigen Daten, Fotos und Renditeprognosen.",
+                desc: t.solution.steps[0].desc,
               },
               {
                 step: 2,
                 icon: <Wallet size={32} className="text-white" />,
                 title: t.solution.steps[1].title,
-                desc: "Investiere ab 100€ in digitale Immobilienanteile. Bezahle per Überweisung oder Karte.",
+                desc: t.solution.steps[1].desc,
               },
               {
                 step: 3,
@@ -641,15 +641,15 @@ export default function RentcoinLandingPage() {
                 className={`relative text-center group transition-all duration-500 ${staggerFade(solutionStagger[i])}`}
               >
                 <div className="relative z-10 w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
-                  {s.icon}
+                  <span className={`text-white ${darkMode ? '' : 'text-gray-900'}`}>{s.icon}</span>
                 </div>
                 <span className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-2 bg-green-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center z-20">
                   {s.step}
                 </span>
-                <h3 className="text-xl font-bold text-white mb-3">
+                <h3 className={`text-xl font-bold mb-3 ${dm('text-white', 'text-gray-900')}`}>
                   {s.title}
                 </h3>
-                <p className="text-gray-400 leading-relaxed">{s.desc}</p>
+                <p className={`leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>{s.desc}</p>
               </div>
             ))}
           </div>
@@ -657,22 +657,22 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ PROPERTIES ════════════ */}
-      <section id="property" className="py-24 md:py-32 px-6 bg-zinc-950">
+      <section id="property" className={`py-24 md:py-32 px-6 ${dm('bg-zinc-950', 'bg-white')}`}>
         <div
           ref={propertyRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(propertyVis)}`}
         >
-          <SectionLabel color="text-green-500">Unsere Objekte</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 text-center leading-tight">
-            Investiere in echte Immobilien
+          <SectionLabel color="text-green-500">{t.properties.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-6 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.properties.subtitle}
           </h2>
-          <p className="text-center text-gray-400 text-lg mb-16 max-w-2xl mx-auto leading-relaxed">
-            Handverlesene Immobilien mit attraktiver Rendite — vollständig geprüft und transparent dokumentiert.
+          <p className={`text-center text-lg mb-16 max-w-2xl mx-auto leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>
+            {t.properties.description}
           </p>
 
           <div className="grid lg:grid-cols-2 gap-10">
             {/* ── Property 1: Mispelstieg 13 ── */}
-            <div className="bg-zinc-950 rounded-2xl border border-zinc-800 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <div className={`rounded-2xl border overflow-hidden hover:shadow-xl transition-shadow duration-300 ${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')}`}>
               <div className="relative h-64 overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=500&fit=crop"
@@ -687,13 +687,13 @@ export default function RentcoinLandingPage() {
                   </div>
                 </div>
                 <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                  Bald verfügbar
+                  {t.properties.comingSoon}
                 </div>
-                <div className="absolute top-4 right-4 bg-zinc-950/90 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  Einfamilienhaus
+                <div className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full ${dm('bg-zinc-950/90 text-white', 'bg-gray-200 text-gray-800')}`}>
+                  {t.properties.types.singleFamily}
                 </div>
               </div>
-              <div className="p-6">
+              <div className={`p-6 ${darkMode ? '' : 'bg-white'}`}>
                 <div className="grid grid-cols-2 gap-3 mb-5">
                   {[
                     { label: t.properties.fields.estimatedReturn, value: "5–7% p.a.", accent: true },
@@ -705,14 +705,14 @@ export default function RentcoinLandingPage() {
                       key={i}
                       className={`rounded-xl p-3 ${
                         d.accent
-                          ? "bg-green-950 border border-green-900"
-                          : "bg-zinc-900 border border-zinc-800"
+                          ? dm('bg-green-950 border border-green-900', 'bg-green-50 border border-green-200')
+                          : dm('bg-zinc-900 border border-zinc-800', 'bg-gray-50 border border-gray-200')
                       }`}
                     >
-                      <p className="text-xs text-gray-500 mb-1">{d.label}</p>
+                      <p className={`text-xs mb-1 ${d.accent ? 'text-green-600' : dm('text-gray-500', 'text-gray-500')}`}>{d.label}</p>
                       <p
                         className={`text-xl font-extrabold ${
-                          d.accent ? "text-green-400" : "text-white"
+                          d.accent ? "text-green-400" : dm('text-white', 'text-gray-900')
                         }`}
                       >
                         {d.value}
@@ -722,10 +722,10 @@ export default function RentcoinLandingPage() {
                 </div>
                 <div className="mb-5">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-400 font-medium">Tokenisierung</span>
-                    <span className="text-white font-bold">12% abgeschlossen</span>
+                    <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>Tokenisierung</span>
+                    <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>12% abgeschlossen</span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                  <div className={`w-full rounded-full h-3 overflow-hidden ${dm('bg-gray-700', 'bg-gray-300')}`}>
                     <div
                       className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full transition-all duration-1000"
                       style={{ width: propertyVis ? "12%" : t.problem.barriers[2].title }}
@@ -736,14 +736,14 @@ export default function RentcoinLandingPage() {
                   onClick={() => scrollTo("tokenomics")}
                   className="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
                 >
-                  Details ansehen
+                  {t.properties.fields.viewDetails}
                   <ArrowRight size={16} />
                 </button>
               </div>
             </div>
 
             {/* ── Property 2: Turmstraße 5 ── */}
-            <div className="bg-zinc-950 rounded-2xl border border-zinc-800 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <div className={`rounded-2xl border overflow-hidden hover:shadow-xl transition-shadow duration-300 ${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')}`}>
               <div className="relative h-64 overflow-hidden">
                 <img
                   src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=500&fit=crop"
@@ -758,13 +758,13 @@ export default function RentcoinLandingPage() {
                   </div>
                 </div>
                 <div className="absolute top-4 left-4 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                  Neu
+                  {t.properties.new}
                 </div>
-                <div className="absolute top-4 right-4 bg-zinc-950/90 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  Mehrfamilienhaus
+                <div className={`absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full ${dm('bg-zinc-950/90 text-white', 'bg-gray-200 text-gray-800')}`}>
+                  {t.properties.types.multiFamily}
                 </div>
               </div>
-              <div className="p-6">
+              <div className={`p-6 ${darkMode ? '' : 'bg-white'}`}>
                 <div className="grid grid-cols-2 gap-3 mb-5">
                   {[
                     { label: t.properties.fields.estimatedReturn, value: "6–8% p.a.", accent: true },
@@ -776,14 +776,14 @@ export default function RentcoinLandingPage() {
                       key={i}
                       className={`rounded-xl p-3 ${
                         d.accent
-                          ? "bg-green-950 border border-green-900"
-                          : "bg-zinc-900 border border-zinc-800"
+                          ? dm('bg-green-950 border border-green-900', 'bg-green-50 border border-green-200')
+                          : dm('bg-zinc-900 border border-zinc-800', 'bg-gray-50 border border-gray-200')
                       }`}
                     >
-                      <p className="text-xs text-gray-500 mb-1">{d.label}</p>
+                      <p className={`text-xs mb-1 ${d.accent ? 'text-green-600' : dm('text-gray-500', 'text-gray-500')}`}>{d.label}</p>
                       <p
                         className={`text-xl font-extrabold ${
-                          d.accent ? "text-green-400" : "text-white"
+                          d.accent ? "text-green-400" : dm('text-white', 'text-gray-900')
                         }`}
                       >
                         {d.value}
@@ -793,10 +793,10 @@ export default function RentcoinLandingPage() {
                 </div>
                 <div className="mb-5">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-400 font-medium">Tokenisierung</span>
-                    <span className="text-white font-bold">5% abgeschlossen</span>
+                    <span className={`font-medium ${dm('text-gray-400', 'text-gray-600')}`}>Tokenisierung</span>
+                    <span className={`font-bold ${dm('text-white', 'text-gray-900')}`}>5% abgeschlossen</span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+                  <div className={`w-full rounded-full h-3 overflow-hidden ${dm('bg-gray-700', 'bg-gray-300')}`}>
                     <div
                       className="bg-gradient-to-r from-green-500 to-green-400 h-3 rounded-full transition-all duration-1000"
                       style={{ width: propertyVis ? "5%" : t.problem.barriers[2].title }}
@@ -807,7 +807,7 @@ export default function RentcoinLandingPage() {
                   onClick={() => scrollTo("tokenomics")}
                   className="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2 text-sm"
                 >
-                  Details ansehen
+                  {t.properties.fields.viewDetails}
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -817,16 +817,24 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ MAP ════════════ */}
-      <section id="map" className="py-24 md:py-32 px-6" style={{ background: "linear-gradient(180deg, #18181b 0%, #09090b 100%)" }}>
+      <section
+        id="map"
+        className="py-24 md:py-32 px-6"
+        style={{
+          background: darkMode
+            ? "linear-gradient(180deg, #18181b 0%, #09090b 100%)"
+            : "linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)",
+        }}
+      >
         <div className={`max-w-6xl mx-auto`}>
-          <SectionLabel color="text-green-500">Standorte</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 text-center leading-tight">
-            Unsere Immobilien auf der Karte
+          <SectionLabel color="text-green-500">{t.map.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-6 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.map.subtitle}
           </h2>
-          <p className="text-center text-gray-400 text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
-            Alle Rentcoin-Objekte auf einen Blick — aktuell in Hamburg und Berlin.
+          <p className={`text-center text-lg mb-12 max-w-2xl mx-auto leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>
+            {t.map.description}
           </p>
-          <div className="rounded-2xl overflow-hidden border border-zinc-800 shadow-lg" style={{ height: "480px" }}>
+          <div className={`rounded-2xl overflow-hidden border shadow-lg ${dm('border-zinc-800', 'border-gray-200')}`} style={{ height: "480px" }}>
             <PropertyMap />
           </div>
           <div className="flex flex-wrap justify-center gap-6 mt-8">
@@ -834,11 +842,11 @@ export default function RentcoinLandingPage() {
               { city: "Hamburg", address: "Mispelstieg 13", type: t.properties.types.singleFamily },
               { city: "Berlin", address: "Turmstraße 5", type: t.properties.types.multiFamily },
             ].map((p, i) => (
-              <div key={i} className="flex items-center gap-3 bg-zinc-950 rounded-xl px-5 py-3 border border-zinc-800 shadow-sm">
+              <div key={i} className={`flex items-center gap-3 rounded-xl px-5 py-3 border shadow-sm ${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')}`}>
                 <div className="w-3 h-3 rounded-full bg-green-500" />
                 <div>
-                  <p className="text-white font-bold text-sm">{p.address}, {p.city}</p>
-                  <p className="text-gray-500 text-xs">{p.type}</p>
+                  <p className={`font-bold text-sm ${dm('text-white', 'text-gray-900')}`}>{p.address}, {p.city}</p>
+                  <p className={`text-xs ${dm('text-gray-500', 'text-gray-500')}`}>{p.type}</p>
                 </div>
               </div>
             ))}
@@ -850,24 +858,28 @@ export default function RentcoinLandingPage() {
       <section
         id="compare"
         className="py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #18181b 0%, #09090b 100%)" }}
+        style={{
+          background: darkMode
+            ? "linear-gradient(180deg, #18181b 0%, #09090b 100%)"
+            : "linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)",
+        }}
       >
         <div
           ref={compareRef}
           className={`max-w-4xl mx-auto transition-all duration-700 ${fade(compareVis)}`}
         >
-          <SectionLabel color="text-green-500">Vergleich</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-16 text-center leading-tight">
-            Traditionell vs. Rentcoin
+          <SectionLabel color="text-green-500">{t.comparison.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-16 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.comparison.subtitle}
           </h2>
 
-          <div className="overflow-x-auto rounded-xl border border-zinc-800">
+          <div className={`overflow-x-auto rounded-xl border ${dm('border-zinc-800', 'border-gray-200')}`}>
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr>
-                  <th className="py-4 px-5 text-gray-500 font-medium text-sm bg-zinc-900" />
-                  <th className="py-4 px-5 text-gray-500 font-medium text-sm bg-zinc-900">
-                    Traditionell
+                  <th className={`py-4 px-5 font-medium text-sm ${dm('text-gray-500 bg-zinc-900', 'text-gray-600 bg-gray-50')}`} />
+                  <th className={`py-4 px-5 font-medium text-sm ${dm('text-gray-500 bg-zinc-900', 'text-gray-600 bg-gray-50')}`}>
+                    {t.comparison.traditional}
                   </th>
                   <th className="py-4 px-5 text-sm font-bold text-white bg-green-500">
                     Rentcoin
@@ -883,12 +895,12 @@ export default function RentcoinLandingPage() {
                   [t.comparison.payouts, "Jährlich / gar nicht", "Monatlich"],
                   [t.comparison.voting, "Keine", "Stimmrecht pro Anteil"],
                 ].map(([label, trad, rc], i) => (
-                  <tr key={i} className={i % 2 === 0 ? "bg-zinc-950" : "bg-zinc-900"}>
-                    <td className="py-4 px-5 font-medium text-gray-300 text-sm">
+                  <tr key={i} className={i % 2 === 0 ? dm("bg-zinc-950", "bg-white") : dm("bg-zinc-900", "bg-gray-50")}>
+                    <td className={`py-4 px-5 font-medium text-sm ${dm('text-gray-300', 'text-gray-700')}`}>
                       {label}
                     </td>
-                    <td className="py-4 px-5 text-gray-500 text-sm">{trad}</td>
-                    <td className="py-4 px-5 font-bold text-green-400 text-sm bg-zinc-800">
+                    <td className={`py-4 px-5 text-sm ${dm('text-gray-500', 'text-gray-600')}`}>{trad}</td>
+                    <td className={`py-4 px-5 font-bold text-green-400 text-sm ${dm('bg-zinc-800', 'bg-green-50')}`}>
                       <span className="inline-flex items-center gap-1">
                         <CheckCircle size={14} className="text-green-500" />
                         {rc}
@@ -903,18 +915,17 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ CALCULATOR ════════════ */}
-      <section id="calculator" className="py-24 md:py-32 px-6 bg-zinc-950">
+      <section id="calculator" className={`py-24 md:py-32 px-6 ${dm('bg-zinc-950', 'bg-white')}`}>
         <div
           ref={calcRef}
           className={`max-w-4xl mx-auto transition-all duration-700 ${fade(calcVis)}`}
         >
-          <SectionLabel color="text-green-400">Renditerechner</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-5 text-center leading-tight">
-            Was wäre dein Investment wert?
+          <SectionLabel color="text-green-400">{t.calculator.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-5 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.calculator.subtitle}
           </h2>
-          <p className="text-center text-gray-400 text-lg mb-12 max-w-xl mx-auto leading-relaxed">
-            Simuliere dein Immobilieninvestment mit Einmalanlage und
-            monatlichem Sparplan. Basierend auf 6% durchschnittlicher Jahresrendite.
+          <p className={`text-center text-lg mb-12 max-w-xl mx-auto leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>
+            {t.calculator.description}
           </p>
 
           <div className="grid md:grid-cols-2 gap-10">
@@ -962,40 +973,39 @@ export default function RentcoinLandingPage() {
             <div className={`bg-gradient-to-br ${dm("from-zinc-800 to-zinc-700", "from-gray-100 to-gray-200")} rounded-2xl p-8 ${dm("text-white", "text-gray-900")}`}>
               <div className="space-y-5">
                 <div>
-                  <p className="text-gray-400 text-sm mb-1">Gesamt investiert</p>
+                  <p className={`text-sm mb-1 ${dm('text-gray-400', 'text-gray-600')}`}>{t.calculator.totalInvested}</p>
                   <p className="text-2xl font-extrabold">
                     {totalInvested.toLocaleString("de-DE")}€
                   </p>
-                  <p className="text-gray-500 text-xs mt-1">
-                    {investAmount.toLocaleString("de-DE")}€ Einmalanlage + {(monthlyContrib * totalMonths).toLocaleString("de-DE")}€ Sparplan
+                  <p className={`text-xs mt-1 ${dm('text-gray-500', 'text-gray-600')}`}>
+                    {investAmount.toLocaleString("de-DE")}€ {t.calculator.lumpSum} + {(monthlyContrib * totalMonths).toLocaleString("de-DE")}€ {t.calculator.monthlySavings}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-400 text-sm mb-1">
-                    Geschätzter Wert nach {investYears} Jahren
+                  <p className={`text-sm mb-1 ${dm('text-gray-400', 'text-gray-600')}`}>
+                    {t.calculator.estimatedValue} {investYears} {investYears === 1 ? t.calculator.year : t.calculator.years}
                   </p>
                   <p className="text-4xl font-extrabold text-green-400">
                     {Math.round(futureValue).toLocaleString("de-DE")}€
                   </p>
                 </div>
-                <div className="border-t border-zinc-700 pt-4 grid grid-cols-2 gap-4">
+                <div className={`border-t pt-4 grid grid-cols-2 gap-4 ${dm('border-zinc-700', 'border-gray-300')}`}>
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Gesamtrendite</p>
+                    <p className={`text-xs mb-1 ${dm('text-gray-400', 'text-gray-600')}`}>{t.calculator.totalReturn}</p>
                     <p className="text-xl font-bold text-green-400">
                       +{Math.round(totalReturn).toLocaleString("de-DE")}€
                     </p>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-xs mb-1">Monatl. Ertrag (dann)</p>
+                    <p className={`text-xs mb-1 ${dm('text-gray-400', 'text-gray-600')}`}>{t.calculator.monthlyIncome}</p>
                     <p className="text-xl font-bold">
                       {monthlyIncome.toFixed(2).replace(".", ",")}€
                     </p>
                   </div>
                 </div>
               </div>
-              <p className="text-gray-500 text-xs mt-6">
-                * Prognose basierend auf 6% p.a. Keine Anlageberatung.
-                Vergangene Ergebnisse sind keine Garantie.
+              <p className={`text-xs mt-6 ${dm('text-gray-500', 'text-gray-600')}`}>
+                * {t.calculator.disclaimer}
               </p>
             </div>
           </div>
@@ -1006,51 +1016,34 @@ export default function RentcoinLandingPage() {
       <section
         id="benefits"
         className="py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #18181b 0%, #09090b 100%)" }}
+        style={{
+          background: darkMode
+            ? "linear-gradient(180deg, #18181b 0%, #09090b 100%)"
+            : "linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)",
+        }}
       >
         <div
           ref={benefitsRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(benefitsVis)}`}
         >
-          <SectionLabel color="text-green-500">Vorteile</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-16 text-center leading-tight">
-            Warum Rentcoin?
+          <SectionLabel color="text-green-500">{t.benefits.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-16 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.benefits.subtitle}
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: <PieChart size={28} className="text-white" />,
-                title: t.hero.investFrom,
-                desc: "Kein Vermögen nötig. Starte mit einem Betrag, der für dich passt.",
-              },
-              {
-                icon: <BarChart3 size={28} className="text-white" />,
-                title: "Monatliche Rendite",
-                desc: "Mieteinnahmen werden automatisch jeden Monat ausgeschüttet.",
-              },
-              {
-                icon: <ArrowUpRight size={28} className="text-white" />,
-                title: "Jederzeit handeln",
-                desc: "Verkaufe deine Anteile auf dem Sekundärmarkt — in Minuten, nicht Monaten.",
-              },
-              {
-                icon: <Lock size={28} className="text-white" />,
-                title: "100% Transparent",
-                desc: "Alle Finanzen, Mietverträge und Entscheidungen sind einsehbar.",
-              },
-            ].map((b, i) => (
+            {t.benefits.items.map((b, i) => (
               <div
                 key={i}
-                className={`bg-zinc-950 rounded-2xl p-6 border border-zinc-800 hover:border-green-800 hover:shadow-lg transition-all duration-500 group ${staggerFade(benefitsStagger[i])}`}
+                className={`rounded-2xl p-6 border hover:shadow-lg transition-all duration-500 group ${dm('bg-zinc-950 border-zinc-800 hover:border-green-800', 'bg-white border-gray-200 hover:border-green-400')} ${staggerFade(benefitsStagger[i])}`}
               >
-                <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4 group-hover:bg-zinc-700 transition">
-                  {b.icon}
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:transition ${dm('bg-zinc-800 group-hover:bg-zinc-700', 'bg-gray-100 group-hover:bg-gray-200')}`}>
+                  <span className={darkMode ? 'text-white' : 'text-gray-900'}>{b.icon || '✓'}</span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">
+                <h3 className={`text-lg font-bold mb-2 ${dm('text-white', 'text-gray-900')}`}>
                   {b.title}
                 </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{b.desc}</p>
+                <p className={`text-sm leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>{b.desc}</p>
               </div>
             ))}
           </div>
@@ -1058,66 +1051,47 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ TESTIMONIALS ════════════ */}
-      <section id="testimonials" className="py-24 md:py-32 px-6 bg-zinc-950">
+      <section id="testimonials" className={`py-24 md:py-32 px-6 ${dm('bg-zinc-950', 'bg-white')}`}>
         <div
           ref={testimonialRef}
           className={`max-w-6xl mx-auto transition-all duration-700 ${fade(testimonialVis)}`}
         >
-          <SectionLabel color="text-green-400">Stimmen</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-16 text-center leading-tight">
-            Was unsere Community sagt
+          <SectionLabel color="text-green-400">{t.testimonials.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-16 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.testimonials.subtitle}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Sonja K.",
-                role: "Freelancerin, Berlin",
-                text: "Endlich kann ich auch mit kleinem Budget in Immobilien investieren. Die Transparenz und monatlichen Ausschüttungen überzeugen mich.",
-                stars: 5,
-              },
-              {
-                name: "Thomas M.",
-                role: "Ingenieur, München",
-                text: "Ich habe jahrelang nach einer Alternative zu klassischen Immobilienfonds gesucht. Rentcoin ist genau das — einfach, fair und verständlich.",
-                stars: 5,
-              },
-              {
-                name: "Alex R.",
-                role: "Student, Hamburg",
-                text: "Mit 100€ monatlich baue ich mir langsam ein Immobilienportfolio auf. Das hätte ich vorher nie für möglich gehalten.",
-                stars: 5,
-              },
-            ].map((t, i) => (
+            {t.testimonials.items.map((item, idx) => (
               <div
-                key={i}
-                className={`bg-zinc-900 rounded-2xl p-8 border border-zinc-800 hover:shadow-lg transition-all duration-500 flex flex-col ${staggerFade(testimonialStagger[i])}`}
+                key={idx}
+                className={`rounded-2xl p-8 border hover:shadow-lg transition-all duration-500 flex flex-col ${dm('bg-zinc-900 border-zinc-800', 'bg-white border-gray-200')} ${staggerFade(testimonialStagger[idx])}`}
               >
                 <div className="flex items-center gap-1 mb-4">
-                  {Array.from({ length: t.stars }).map((_, j) => (
+                  {Array.from({ length: item.stars }).map((_, j) => (
                     <Star key={j} size={16} className="text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
-                <p className="text-gray-300 leading-relaxed mb-6 flex-1 italic">
-                  "{t.text}"
+                <p className={`leading-relaxed mb-6 flex-1 italic ${dm('text-gray-300', 'text-gray-700')}`}>
+                  "{item.text}"
                 </p>
                 <div className="flex items-center gap-3">
                   <div
                     className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-sm"
                   >
-                    {t.name[0]}
+                    {item.name[0]}
                   </div>
                   <div>
-                    <p className="text-white font-bold text-sm">{t.name}</p>
-                    <p className="text-gray-500 text-xs">{t.role}</p>
+                    <p className={`font-bold text-sm ${dm('text-white', 'text-gray-900')}`}>{item.name}</p>
+                    <p className={`text-xs ${dm('text-gray-500', 'text-gray-500')}`}>{item.role}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <p className="text-center text-gray-400 text-xs mt-8">
-            * Testimonials von Early-Access-Nutzern aus unserer Warteliste-Community.
+          <p className={`text-center text-xs mt-8 ${dm('text-gray-400', 'text-gray-600')}`}>
+            * {t.testimonials.disclaimer}
           </p>
         </div>
       </section>
@@ -1126,51 +1100,55 @@ export default function RentcoinLandingPage() {
       <section
         id="team"
         className="py-24 md:py-32 px-6"
-        style={{ background: "linear-gradient(180deg, #18181b 0%, #09090b 100%)" }}
+        style={{
+          background: darkMode
+            ? "linear-gradient(180deg, #18181b 0%, #09090b 100%)"
+            : "linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)",
+        }}
       >
         <div
           ref={teamRef}
           className={`max-w-4xl mx-auto transition-all duration-700 ${fade(teamVis)}`}
         >
-          <SectionLabel color="text-green-500">Das Team</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-5 text-center leading-tight">
-            Die Köpfe hinter Rentcoin
+          <SectionLabel color="text-green-500">{t.team.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-5 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.team.subtitle}
           </h2>
-          <p className="text-center text-gray-400 text-lg mb-16 max-w-xl mx-auto leading-relaxed">
-            Zwei Gründer, eine Mission: Immobilieninvestments für alle zugänglich machen.
+          <p className={`text-center text-lg mb-16 max-w-xl mx-auto leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>
+            {t.team.description}
           </p>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
             {[
               {
                 name: "Leonidas",
-                role: "Tech & Produkt",
+                role: t.team.roles.tech,
                 icon: <Code size={24} className="text-white" />,
-                desc: "Product Owner Digital Services mit Leidenschaft für FinTech und dezentrale Systeme.",
+                desc: t.team.bios.leonidas,
                 color: "from-zinc-700 to-zinc-900",
               },
               {
                 name: "Dew Mazumder",
-                role: "Immobilien & Operations",
+                role: t.team.roles.operations,
                 icon: <Briefcase size={24} className="text-white" />,
-                desc: "Immobilienexperte mit tiefem Marktwissen und einem Netzwerk in der Branche.",
+                desc: t.team.bios.dew,
                 color: "from-green-600 to-green-800",
               },
             ].map((m, i) => (
               <div
                 key={i}
-                className="bg-zinc-950 rounded-2xl p-8 border border-zinc-800 hover:shadow-lg transition-all duration-300 text-center"
+                className={`rounded-2xl p-8 border hover:shadow-lg transition-all duration-300 text-center ${dm('bg-zinc-950 border-zinc-800', 'bg-white border-gray-200')}`}
               >
                 <div
                   className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${m.color} flex items-center justify-center mx-auto mb-5 shadow-lg`}
                 >
                   {m.icon}
                 </div>
-                <h3 className="text-xl font-bold text-white mb-1">{m.name}</h3>
+                <h3 className={`text-xl font-bold mb-1 ${dm('text-white', 'text-gray-900')}`}>{m.name}</h3>
                 <p className="text-green-400 font-semibold text-sm mb-4">
                   {m.role}
                 </p>
-                <p className="text-gray-400 text-sm leading-relaxed">{m.desc}</p>
+                <p className={`text-sm leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>{m.desc}</p>
               </div>
             ))}
           </div>
@@ -1178,21 +1156,20 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ TOKENOMICS ════════════ */}
-      <section id="tokenomics" className="py-32 md:py-44 px-6 bg-zinc-950 relative overflow-hidden">
+      <section id="tokenomics" className={`py-32 md:py-44 px-6 ${dm('bg-zinc-950', 'bg-white')} relative overflow-hidden`}>
         {/* Subtle decorative elements */}
-        <div className="absolute top-20 right-0 w-96 h-96 bg-green-950 rounded-full blur-3xl opacity-60 pointer-events-none" />
-        <div className="absolute bottom-20 left-0 w-80 h-80 bg-zinc-800 rounded-full blur-3xl opacity-40 pointer-events-none" />
+        <div className={`absolute top-20 right-0 w-96 h-96 rounded-full blur-3xl opacity-60 pointer-events-none ${dm('bg-green-950', 'bg-green-100')}`} />
+        <div className={`absolute bottom-20 left-0 w-80 h-80 rounded-full blur-3xl opacity-40 pointer-events-none ${dm('bg-zinc-800', 'bg-gray-200')}`} />
 
         <div className="max-w-6xl mx-auto relative">
           <p className="text-center text-green-400 font-bold tracking-widest uppercase text-xs mb-6 letter-spacing-4">
-            Tokenomics
+            {t.tokenomics.title}
           </p>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-6 text-center leading-none tracking-tight">
-            DER <span className="text-green-500">RENT</span> TOKEN.
+          <h2 className={`text-5xl md:text-7xl font-black mb-6 text-center leading-none tracking-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.tokenomics.headline.split('RENT')[0]}<span className="text-green-500">RENT</span>{t.tokenomics.headline.split('RENT')[1]}
           </h2>
-          <p className="text-center text-gray-500 text-lg md:text-xl mb-20 max-w-2xl mx-auto leading-relaxed">
-            ERC-20 auf Polygon PoS — gedeckt durch reale Immobilienwerte.
-            Faire Verteilung, echte Utility.
+          <p className={`text-center text-lg md:text-xl mb-20 max-w-2xl mx-auto leading-relaxed ${dm('text-gray-500', 'text-gray-600')}`}>
+            {t.tokenomics.description}
           </p>
 
           {/* Token Stats — clean pill-style */}
@@ -1200,20 +1177,20 @@ export default function RentcoinLandingPage() {
             {[
               { label: t.tokenomics.totalSupply, value: "1 Mrd. RC" },
               { label: t.tokenomics.blockchain, value: "Polygon PoS" },
-              { label: "Standard", value: "ERC-20" },
-              { label: "Akzeptiert", value: "EUR · BTC · ETH" },
+              { label: t.tokenomics.standard, value: "ERC-20" },
+              { label: t.tokenomics.accepted, value: "EUR · BTC · ETH" },
             ].map((s, i) => (
-              <div key={i} className="bg-zinc-900 rounded-full px-7 py-4 flex items-center gap-3 border border-zinc-800">
-                <span className="text-sm text-gray-400">{s.label}</span>
-                <span className="text-sm font-bold text-white">{s.value}</span>
+              <div key={i} className={`rounded-full px-7 py-4 flex items-center gap-3 border ${dm('bg-zinc-900 border-zinc-800', 'bg-gray-100 border-gray-200')}`}>
+                <span className={`text-sm ${dm('text-gray-400', 'text-gray-600')}`}>{s.label}</span>
+                <span className={`text-sm font-bold ${dm('text-white', 'text-gray-900')}`}>{s.value}</span>
               </div>
             ))}
           </div>
 
           {/* Token Distribution — modern dark card */}
-          <div className="bg-zinc-800 rounded-3xl p-10 md:p-14 mb-16">
-            <h3 className="text-2xl font-black text-white mb-2 text-center tracking-tight">TOKEN-VERTEILUNG</h3>
-            <p className="text-gray-500 text-sm text-center mb-12">1.000.000.000 RENT Token — transparent allokiert</p>
+          <div className={`rounded-3xl p-10 md:p-14 mb-16 ${dm('bg-zinc-800', 'bg-gray-100')}`}>
+            <h3 className={`text-2xl font-black mb-2 text-center tracking-tight ${dm('text-white', 'text-gray-900')}`}>{t.tokenomics.distribution}</h3>
+            <p className={`text-sm text-center mb-12 ${dm('text-gray-500', 'text-gray-600')}`}>{t.tokenomics.totalTokens}</p>
 
             {/* Visual bar */}
             <div className="h-4 rounded-full overflow-hidden flex mb-10">
@@ -1226,19 +1203,12 @@ export default function RentcoinLandingPage() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              {[
-                { name: "Investoren", detail: "Public + Private Sale", pct: 45, color: "bg-green-500" },
-                { name: "Team & Gründer", detail: "3 Jahre Vesting", pct: 25, color: "bg-zinc-700" },
-                { name: "Reserve", detail: "Unternehmensreserve", pct: 10, color: "bg-amber-500" },
-                { name: "Community", detail: "Academy & Rewards", pct: 10, color: "bg-pink-500" },
-                { name: "Staking", detail: "Staking Rewards Pool", pct: 5, color: "bg-zinc-700" },
-                { name: "Berater", detail: "36M Vesting", pct: 5, color: "bg-indigo-400" },
-              ].map((d, i) => (
+              {t.tokenomics.allocation.map((d, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className={`w-3 h-3 rounded-full ${d.color} mt-1.5 flex-shrink-0`} />
                   <div>
-                    <p className="text-white font-bold text-sm">{d.pct}% — {d.name}</p>
-                    <p className="text-gray-500 text-xs">{d.detail}</p>
+                    <p className={`font-bold text-sm ${dm('text-white', 'text-gray-900')}`}>{d.pct}% — {d.name}</p>
+                    <p className={`text-xs ${dm('text-gray-500', 'text-gray-600')}`}>{d.detail}</p>
                   </div>
                 </div>
               ))}
@@ -1560,47 +1530,18 @@ export default function RentcoinLandingPage() {
       </section>
 
       {/* ════════════ FAQ ════════════ */}
-      <section id="faq" className="py-24 md:py-32 px-6 bg-zinc-950">
+      <section id="faq" className={`py-24 md:py-32 px-6 ${dm('bg-zinc-950', 'bg-white')}`}>
         <div
           ref={faqRef}
           className={`max-w-3xl mx-auto transition-all duration-700 ${fade(faqVis)}`}
         >
-          <SectionLabel color="text-green-500">Häufige Fragen</SectionLabel>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-16 text-center leading-tight">
-            FAQ
+          <SectionLabel color="text-green-500">{t.faq.title}</SectionLabel>
+          <h2 className={`text-4xl md:text-5xl font-extrabold mb-16 text-center leading-tight ${dm('text-white', 'text-gray-900')}`}>
+            {t.faq.title}
           </h2>
 
           <div className="space-y-4">
-            {[
-              {
-                q: "Was genau kaufe ich bei Rentcoin?",
-                a: "Du erwirbst digitale Anteile an einer realen Immobilie. Diese Anteile repräsentieren deinen Miteigentümeranteil und berechtigen dich zu monatlichen Mietausschüttungen sowie Mitbestimmungsrechten.",
-              },
-              {
-                q: "Ist mein Investment sicher?",
-                a: "Jede Immobilie wird über eine Zweckgesellschaft (SPV) gehalten und im Grundbuch eingetragen. Dein Investment ist durch reale Immobilienwerte gedeckt. Wir arbeiten mit lizenzierten Partnern und unter EU-Regulierung.",
-              },
-              {
-                q: "Wie erhalte ich meine Rendite?",
-                a: "Mieteinnahmen werden monatlich nach Abzug von Betriebskosten und Verwaltungsgebühren anteilig an alle Investoren ausgeschüttet — direkt auf dein Bankkonto.",
-              },
-              {
-                q: "Kann ich meine Anteile wieder verkaufen?",
-                a: "Ja. Über unseren Sekundärmarkt können Anteile jederzeit an andere Investoren verkauft werden. Das bietet dir Flexibilität, die traditionelle Immobilien nicht haben.",
-              },
-              {
-                q: "Wie viel kostet mich das?",
-                a: "Wir berechnen 0,5% p.a. auf das verwaltete Vermögen sowie 0,5–1,5% Transaktionsgebühren beim Kauf/Verkauf. Das ist deutlich günstiger als traditionelle Immobilienfonds (3–7%).",
-              },
-              {
-                q: "Ab welchem Betrag kann ich investieren?",
-                a: "Ab 100€ kannst du dein erstes Immobilieninvestment tätigen. Es gibt keine Mindestlaufzeit.",
-              },
-              {
-                q: "Ist Rentcoin reguliert?",
-                a: "Ja. Wir arbeiten in Phase 1 mit lizenzierten Partnern und streben langfristig eine ECSP-Lizenz (European Crowdfunding Service Provider) an. Alle Investments unterliegen der EU-Regulierung.",
-              },
-            ].map((item, i) => (
+            {t.faq.items.map((item, i) => (
               <FaqItem key={i} question={item.q} answer={item.a} darkMode={darkMode} />
             ))}
           </div>
@@ -1612,46 +1553,48 @@ export default function RentcoinLandingPage() {
         id="register"
         className="py-24 md:py-32 px-6"
         style={{
-          background: `linear-gradient(135deg, ${BRAND.dark} 0%, ${BRAND.darkMid} 100%)`,
+          background: darkMode
+            ? `linear-gradient(135deg, ${BRAND.dark} 0%, ${BRAND.darkMid} 100%)`
+            : "linear-gradient(135deg, #ffffff 0%, #f9fafb 100%)",
         }}
       >
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left: Text */}
             <div className="text-center md:text-left">
-              <div className="inline-flex items-center gap-2 bg-green-500/20 rounded-full px-4 py-1 mb-6">
+              <div className={`inline-flex items-center gap-2 rounded-full px-4 py-1 mb-6 ${dm('bg-green-500/20', 'bg-green-100')}`}>
                 <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-green-400 text-sm font-medium">Jetzt registrieren</span>
+                <span className={`text-sm font-medium ${dm('text-green-400', 'text-green-600')}`}>{t.register.callout}</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
-                Werde Teil von Rentcoin
+              <h2 className={`text-4xl md:text-5xl font-extrabold mb-4 leading-tight ${dm('text-white', 'text-gray-900')}`}>
+                {t.register.title}
               </h2>
-              <p className="text-xl text-gray-400 mb-8 leading-relaxed">
-                Erstelle dein Konto und entdecke die Zukunft des Immobilieninvestments — transparent, digital, ab 100€.
+              <p className={`text-xl mb-8 leading-relaxed ${dm('text-gray-400', 'text-gray-600')}`}>
+                {t.register.description}
               </p>
               <div className="space-y-4">
                 {[
-                  "Kostenlose Registrierung",
-                  "Zugang zu allen Immobilien-Daten",
-                  "Portfolio-Übersicht & Renditerechner",
-                  "Keine versteckten Kosten",
+                  t.register.freeRegistration,
+                  t.register.accessPropertyData,
+                  t.register.portfolioOverview,
+                  t.register.noHiddenCosts,
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <CheckCircle size={18} className="text-green-400 flex-shrink-0" />
-                    <span className="text-gray-300">{item}</span>
+                    <span className={dm('text-gray-300', 'text-gray-700')}>{item}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Right: Auth Form */}
-            <LandingAuthForm darkMode={darkMode} t={t} />
+            <LandingAuthForm darkMode={darkMode} lang={lang} />
           </div>
         </div>
       </section>
 
       {/* ════════════ FOOTER ════════════ */}
-      <footer className="bg-zinc-800 text-gray-400 py-16 px-6">
+      <footer className={`py-16 px-6 ${dm('bg-zinc-800 text-gray-400', 'bg-gray-100 text-gray-600')}`}>
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-10 mb-12">
             {/* Brand */}
@@ -1660,38 +1603,37 @@ export default function RentcoinLandingPage() {
                 <div className="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center text-white font-bold text-sm">
                   R
                 </div>
-                <span className="text-xl font-bold text-white">Rentcoin</span>
+                <span className={`text-xl font-bold ${dm('text-white', 'text-gray-900')}`}>Rentcoin</span>
               </div>
               <p className="text-sm leading-relaxed max-w-sm">
-                Digitale Immobilienanteile für alle. Wir demokratisieren den
-                Immobilienmarkt — transparent, flexibel, ab 100€.
+                {t.footer.tagline}
               </p>
             </div>
 
             {/* Links */}
             <div>
-              <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">
-                Produkt
+              <h4 className={`font-bold mb-4 text-sm uppercase tracking-wider ${dm('text-white', 'text-gray-900')}`}>
+                {t.footer.product}
               </h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <button onClick={() => scrollTo("tokenomics")} className="hover:text-white transition">
-                    Tokenomics
+                  <button onClick={() => scrollTo("tokenomics")} className={`transition ${dm('hover:text-white', 'hover:text-gray-900')}`}>
+                    {t.nav.tokenomics}
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => scrollTo("transparency")} className="hover:text-white transition">
-                    Transparenz
+                  <button onClick={() => scrollTo("transparency")} className={`transition ${dm('hover:text-white', 'hover:text-gray-900')}`}>
+                    {t.nav.transparency}
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => scrollTo("codex")} className="hover:text-white transition">
-                    Kodex
+                  <button onClick={() => scrollTo("codex")} className={`transition ${dm('hover:text-white', 'hover:text-gray-900')}`}>
+                    {t.nav.codex}
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => scrollTo("faq")} className="hover:text-white transition">
-                    FAQ
+                  <button onClick={() => scrollTo("faq")} className={`transition ${dm('hover:text-white', 'hover:text-gray-900')}`}>
+                    {t.nav.faq}
                   </button>
                 </li>
               </ul>
@@ -1733,7 +1675,8 @@ export default function RentcoinLandingPage() {
 }
 
 /* ───────── Landing Page Auth Form ───────── */
-function LandingAuthForm({ darkMode, t }) {
+function LandingAuthForm({ darkMode, lang }) {
+  const t = translations[lang];
   const navigate = useNavigate();
   const dm = (dark, light) => darkMode ? dark : light;
   const [isLogin, setIsLogin] = useState(false);
@@ -1767,8 +1710,8 @@ function LandingAuthForm({ darkMode, t }) {
   };
 
   return (
-    <div className={`${dm("bg-zinc-950", "bg-gray-50")} rounded-2xl shadow-2xl p-8`}>
-      <h3 className={`text-2xl font-bold ${dm("text-white", "text-gray-900")} mb-6`}>
+    <div className={`${darkMode ? "bg-zinc-950" : "bg-gray-50"} rounded-2xl shadow-2xl p-8`}>
+      <h3 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"} mb-6`}>
         {isLogin ? t.auth.signIn : t.auth.createAccount}
       </h3>
 
@@ -1786,7 +1729,7 @@ function LandingAuthForm({ darkMode, t }) {
             placeholder={t.auth.fullName}
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full border border-zinc-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-700 outline-none"
+            className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-700 outline-none ${darkMode ? 'border-zinc-800 bg-zinc-950 text-white' : 'border-gray-300 bg-white text-gray-900'}`}
             required
           />
         )}
@@ -1795,7 +1738,7 @@ function LandingAuthForm({ darkMode, t }) {
           placeholder={t.auth.email}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border border-zinc-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-700 outline-none"
+          className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-700 outline-none ${dm('border-zinc-800 bg-zinc-950 text-white', 'border-gray-300 bg-white text-gray-900')}`}
           required
         />
         <input
@@ -1803,7 +1746,7 @@ function LandingAuthForm({ darkMode, t }) {
           placeholder={t.auth.password}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border border-zinc-800 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-700 outline-none"
+          className={`w-full border rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-700 outline-none ${dm('border-zinc-800 bg-zinc-950 text-white', 'border-gray-300 bg-white text-gray-900')}`}
           required
           minLength={6}
         />
@@ -1818,11 +1761,11 @@ function LandingAuthForm({ darkMode, t }) {
       </form>
 
       <div className="text-center">
-        <p className="text-gray-400 text-sm">
+        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           {isLogin ? t.auth.noAccount : t.auth.alreadyRegistered}{" "}
           <button
             onClick={() => { setIsLogin(!isLogin); setError(""); setSuccess(""); }}
-            className="text-green-400 hover:text-green-400 font-bold"
+            className={`font-bold ${darkMode ? 'text-green-400 hover:text-green-400' : 'text-green-600 hover:text-green-700'}`}
           >
             {isLogin ? t.register.title : t.nav.signUp}
           </button>
@@ -1912,24 +1855,25 @@ function PropertyMap() {
 }
 
 /* ───────── FAQ Accordion Component ───────── */
-function FaqItem({ question, answer }) {
+function FaqItem({ question, answer, darkMode }) {
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
+  const dm = (dark, light) => darkMode ? dark : light;
 
   return (
-    <div className="border border-zinc-800 rounded-xl overflow-hidden transition-all hover:border-green-800">
+    <div className={`border rounded-xl overflow-hidden transition-all ${dm('border-zinc-800 hover:border-green-800', 'border-gray-200 hover:border-green-400')}`}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between p-5 text-left"
+        className={`w-full flex items-center justify-between p-5 text-left ${dm('', 'bg-gray-50')}`}
         aria-expanded={open}
       >
-        <span className="font-bold text-white pr-4">{question}</span>
+        <span className={`font-bold pr-4 ${dm('text-white', 'text-gray-900')}`}>{question}</span>
         <span
           className={`flex-shrink-0 transition-transform duration-300 ${
             open ? "rotate-180" : ""
           }`}
         >
-          <ChevronDown size={20} className="text-white" />
+          <ChevronDown size={20} className={dm('text-white', 'text-gray-700')} />
         </span>
       </button>
       <div
@@ -1940,7 +1884,7 @@ function FaqItem({ question, answer }) {
           opacity: open ? 1 : 0,
         }}
       >
-        <div className="px-5 pb-5 text-gray-400 leading-relaxed text-sm">
+        <div className={`px-5 pb-5 leading-relaxed text-sm ${dm('text-gray-400', 'text-gray-600')}`}>
           {answer}
         </div>
       </div>
