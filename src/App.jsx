@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import RentcoinLandingPage from "./RentcoinLandingPage";
+import PropertyDetailPage from "./PropertyDetailPage";
 import RentcoinApp from "./RentcoinApp";
 
 /* Handle Supabase auth callback: when email confirmation redirects to
@@ -27,6 +28,7 @@ export default function App() {
       <AuthRedirectHandler />
       <Routes>
         <Route path="/" element={<RentcoinLandingPage />} />
+        <Route path="/property/:id" element={<PropertyDetailPage />} />
         <Route path="/app/*" element={<RentcoinApp />} />
       </Routes>
     </BrowserRouter>
