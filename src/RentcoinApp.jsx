@@ -349,10 +349,10 @@ function PropertyDetailPage() {
                 <button key={v} onClick={() => setBuyAmount(v)} className={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${buyAmount === v ? "border-green-500 bg-green-50 text-green-700" : "border-gray-200 text-gray-500"}`}>{v}€</button>
               ))}
             </div>
-            <button onClick={() => setShowBuyModal(true)} disabled={property.status !== "Aktiv"} className={`w-full py-3 rounded-xl font-bold text-white transition ${property.status === "Aktiv" ? "bg-green-600 hover:bg-green-700" : "bg-gray-300 cursor-not-allowed"}`}>
-              {property.status === "Aktiv" ? `${fmt(buyAmount)} € investieren` : "Demnächst verfügbar"}
+            <button disabled className="w-full py-3 rounded-xl font-bold text-white bg-gray-300 cursor-not-allowed">
+              Coming Soon
             </button>
-            <p className="text-xs text-gray-400 text-center mt-2">Blockchain-gesichert · Kein Lock-in · Sofort handelbar</p>
+            <p className="text-xs text-gray-400 text-center mt-2">Der Kauf wird nach Plattform-Launch freigeschaltet</p>
           </div>
         </div>
       </div>

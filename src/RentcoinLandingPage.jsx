@@ -283,12 +283,12 @@ export default function RentcoinLandingPage() {
                 )}
               </button>
             ))}
-            <button
-              onClick={() => scrollTo("tokenomics")}
+            <Link
+              to="/app"
               className="bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 px-5 rounded-lg transition"
             >
-              Mehr erfahren
-            </button>
+              Anmelden
+            </Link>
           </div>
 
           {/* Mobile burger */}
